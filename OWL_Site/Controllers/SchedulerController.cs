@@ -48,10 +48,10 @@ namespace OWL_Site.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            aspnetdbEntities db = new aspnetdbEntities();
-            var data = db.AspNetUsers;
-            IEnumerable<AspNetUser> filteredresult = data;
-            ViewBag.Users = filteredresult;
+            //aspnetdbEntities db = new aspnetdbEntities();
+            //var data = db.AspNetUsers;
+            //IEnumerable<AspNetUser> filteredresult = data;
+            //ViewBag.Users = filteredresult;
             return View();
         }
 
@@ -67,7 +67,7 @@ namespace OWL_Site.Controllers
             //var init = GetAllPB().FirstOrDefault(m => m.Id == rid);
             //meeting.OpLink = string.Concat("https://", "10.129.15.129", "/webapp/?conference=", init.Sammaccount, "&name=Operator&bw=512&join=1");
             //List<object> attend = meeting.Attendees.Select(att => GetAllPB().FirstOrDefault(m => m.Id == att)).Cast<object>().ToList();
-            //meeting.InitName = init.Sammaccount;
+            meeting.InitName = init.Sammaccount;
             //meeting.InitFullname = init.DispName;
             if (meeting.Start < DateTime.Today + TimeSpan.FromHours(3))
             { Debug.WriteLine("@@@"); }
