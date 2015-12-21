@@ -38,8 +38,15 @@
         <ObjectGroup Name="DefaultConnection-Deployment" Order="1" Enabled="True">
           <Destination Path="" />
           <Object Type="DbFullSql" Enabled="True">
-            <PreSource Path="Data Source=84.253.116.84%3bInitial Catalog=aspnetdb%3bUser ID=sa%3bPassword=Ciscocisco123" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
+            <PreSource Path="Data Source=84.253.116.84%3bInitial Catalog=aspnetdb%3bUser ID=sa%3bPassword=Ciscocisco123%3bMultipleActiveResultSets=True%3bApplication Name=EntityFramework" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
             <Source Path="obj\Debug\AutoScripts\DefaultConnection-Deployment_SchemaOnly.sql" Transacted="True" />
+          </Object>
+        </ObjectGroup>
+        <ObjectGroup Name="aspnetdbEntities-Deployment" Order="2" xmlns="" Enabled="True">
+          <Destination Path="" />
+          <Object Type="DbFullSql" Enabled="True">
+            <PreSource Path="Data Source=84.253.116.84%3bInitial Catalog=aspnetdb%3bUser ID=sa%3bPassword=Ciscocisco123%3bApplication Name=EntityFramework" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
+            <Source Path="obj\Debug\AutoScripts\aspnetdbEntities-Deployment_SchemaOnly.sql" Transacted="True" />
           </Object>
         </ObjectGroup>
       </Objects>
@@ -778,6 +785,7 @@
     <Content Include="Content\prettify.css" />
     <Content Include="Content\Site_old.css" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -867,6 +875,12 @@
     <Content Include="Content\DataTables\css\dataTables.responsive.scss" />
     <Content Include="Content\DataTables\css\mixins.scss" />
     <Content Include="bin\OWL_Site.dll.config" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Properties\PublishProfiles\OWL_Sile.pubxml" />
     <Content Include="Scripts\angular-animate.min.js.map" />
     <Content Include="Scripts\angular-aria.min.js.map" />
@@ -2481,6 +2495,7 @@
     <Content Include="Views\VideoRecords\VideoRecords.cshtml" />
     <Content Include="Views\Scheduler\Index.cshtml" />
     <Content Include="Views\Statistics\Statistics.cshtml" />
+    <Content Include="Views\Scheduler\EditorTemplates\CustomEditorTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

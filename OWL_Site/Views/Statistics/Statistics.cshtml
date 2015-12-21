@@ -223,44 +223,26 @@
             document.getElementById("popup_block").className = "hide";
         };
     });
-    //(function ($) {
-    //    $('#div_stats').slimScroll({
-    //        height: '98%',
-    //        width: '100%',
-    //        margin: '30px',
-    //        size: '7px',
-    //        position: 'right',
-    //        color: '#332383',
-    //        distance: '0px'
-    //    });
-    //    $('#inner-content-div').slimScroll({
-    //        height: '100%',
-    //        width: '100%',
-    //        size: '7px',
-    //        position: 'right',
-    //        color: '#332383',
-    //        distance: '0px'
-    //    });
-    //})(jQuery);
     (function ($) {
-    $('#div_stats').slimScroll({
-        height: '98%',
-        width: '100%',
-        margin: '30px',
-        size: '7px',
-        position: 'right',
-        color: '#332383',
-        distance: '0px'
-    });
-    $('#inner-content-div').slimScroll({
-                height: '100%',
-                width: '100%',
-                size: '7px',
-                position: 'right',
-                color: '#332383',
-                distance: '0px'
-            });
+        $('#div_stats').slimScroll({
+            height: '98%',
+            width: '100%',
+            margin: '30px',
+            size: '7px',
+            position: 'right',
+            color: '#332383',
+            distance: '0px'
         });
+        $('#inner-content-div').slimScroll({
+            height: '100%',
+            width: '100%',
+            size: '7px',
+            position: 'right',
+            color: '#332383',
+            distance: '0px'
+        });
+    });
+    
     $(document).ready(function() {
         refresh_stats();
     });
