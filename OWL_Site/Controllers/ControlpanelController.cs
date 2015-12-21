@@ -109,8 +109,12 @@ namespace OWL_Site.Controllers
             ViewData["dispnm"] = dispname;
             aspnetdbEntities db = new aspnetdbEntities();
             var curvmr=db.AllVmrs.FirstOrDefault(v => v.name == confname);
-            string pinc = curvmr.pin;
-            ViewData["pinc"] = pinc;
+            if (curvmr != null)
+            {
+                string pinc = curvmr.pin;
+                ViewData["pinc"] = pinc;
+                Debug.WriteLine(pinc);
+            }
             return View();
             
         }

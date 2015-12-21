@@ -1,9 +1,4 @@
 ﻿
-@model OWL_Site.Models.AspNetUser
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
 <div id="div_stats" class="control_grid">
     <table id="table_stats" class="display">
         <thead>
@@ -48,7 +43,7 @@
 <script type="text/javascript">
     var oStatisticsTable;
     var oParticipantsTable;
-    var cobaMgntAddress = "10.129.15.128";
+    var cobaMgntAddress = '@MvcApplication.set.CobaMngAddress';
     var var_id;
 
     function stats_table() {
@@ -228,7 +223,6 @@
             document.getElementById("popup_block").className = "hide";
         };
     });
-
     (function ($) {
         $('#div_stats').slimScroll({
             height: '98%',
@@ -247,7 +241,8 @@
             color: '#332383',
             distance: '0px'
         });
-    })(jQuery);
+    });
+    
     $(document).ready(function() {
         refresh_stats();
     });

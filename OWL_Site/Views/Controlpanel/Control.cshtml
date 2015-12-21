@@ -343,7 +343,7 @@
             color: '#332383',
             distance: '0px'
         });
-    })(jQuery);
+    });
 
 
     // className strings
@@ -863,10 +863,10 @@
         node: "84.253.116.75",
         conference: "@ViewData["confnm"]",
         display_name: "@ViewData["dispnm"]",
-        role: "HOST",
+        role: "GUEST",
         token: null,
         participant_uuid: null,
-        pin: "@ViewData["pinc"]",
+        pin: "",
         event_source: null,
         conference_participants: {},
         token_refresh: null,
@@ -893,7 +893,7 @@
             if (this.request_token()) {
                 if (this.start_events()) {
                     var conference_status = this.get_request("conference_status");
-                    if (conference_status["status"] == 200) {
+                    if (conference_status["status"] === 200) {
                         if (conference_status["data"]["result"]["locked"]) {
                             this.locked = true;
                             document.getElementById("conflock").className = class_conference_lock_on;
@@ -963,7 +963,7 @@
             this.conference_participants = {};
 
             this.release_token();
-            if (this.recorded == true) {
+            if (this.recorded === true) {
                 this.record();
             }
 
@@ -987,7 +987,7 @@
             var data = { "display_name": this.display_name };
             var response = this.post_request("request_token", data);
             console.log("response " + response["status"]);
-            if (response["status"] == 200) {
+            if (response["status"] === 200) {
                 this.token = response["data"]["result"]["token"];
                 this.participant_uuid = response["data"]["result"]["participant_uuid"];
                 this.role = response["data"]["result"]["role"];

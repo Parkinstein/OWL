@@ -3,11 +3,9 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
-    <!--This bundle was moved by the Telerik VS Extensions for compatibility reasons-->
     @Scripts.Render("~/bundles/jquery")
     <link href="@Url.Content("~/Content/kendo/2015.3.930/kendo.common.min.css")" rel="stylesheet" type="text/css"/>
     <link href="@Url.Content("~/Content/kendo/2015.3.930/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css"/>
@@ -17,13 +15,14 @@
     <link href="@Url.Content("~/Content/font-awesome.min.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/DataTables/css/jquery.dataTables.min.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/prettify.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css"/>
     <script src="@Url.Content("~/Scripts/jquery-1.11.3.min.js")"></script>
     <script src="@Url.Content("~/Scripts/modernizr-2.8.3.js")"></script>
     <script src="@Url.Content("~/Scripts/modernizr-2.6.2.js")"></script>
-    @*<script src="@Url.Content("~/Scripts/bootstrap.js")"></script>*@
     <script src="@Url.Content("~/Scripts/respond.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery.slimscroll.js")"></script>
+    <script src="@Url.Content("~/Scripts/prettify.js")"></script>
     <script src="@Url.Content("~/Scripts/kendo/2015.3.930/jquery.min.js")"></script>
     <script src="@Url.Content("~/Scripts/kendo/2015.3.930/jszip.min.js")"></script>
     <script src="@Url.Content("~/Scripts/kendo/2015.3.930/kendo.all.min.js")"></script>
@@ -58,7 +57,7 @@
                         <li class="divider"></li>
                         <li class ="icon-sched">@Html.ActionLink("Планирование конференций", "Index", "Scheduler")</li>
                         <li class="divider"></li>
-                        <li class ="icon-stat">@Html.ActionLink("Статистика", "Index", "Scheduler")</li>
+                        <li class ="icon-stat">@Html.ActionLink("Статистика", "Statistics", "Statistics")</li>
                     </ul>
                 </li>
                 <li>@Html.ActionLink("Телефонная книга", "Phonebook", "Phonebook")</li>
@@ -78,18 +77,11 @@
     @RenderBody()
     <hr/>
     <footer>
-        <p>&copy;1773 - @DateTime.Now.Year – Портал управления системой "СОВА"</p>
+        <p>&copy;@DateTime.Now.Year – Портал управления системой "СОВА"</p>
     </footer>
 </div>
-
-
 @Scripts.Render("~/bundles/bootstrap")
 @RenderSection("scripts", required: false)
-@RenderSection("Scripts", false)
 </body>
 </html>
-<style>
-
-
-</style>
 
