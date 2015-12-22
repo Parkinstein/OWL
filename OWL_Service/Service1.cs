@@ -148,17 +148,14 @@ namespace OWL_Service
                     }
                     catch (Exception exe)
                     {
-                        
                         Debug.WriteLine(exe.InnerException);
                     }
-                    
                 }
                 if (locusr.Contains(domenuser.Sammaccount))
                 {
                     var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
                     var manager1 = new UserManager<ApplicationUser>(store);
                     var user =  manager1.FindByName(domenuser.Sammaccount);
-
                     user.DispName = domenuser.DispName;
                     user.Group = domenuser.Group;
                     user.H323_addr = domenuser.H323_addr;
@@ -171,7 +168,6 @@ namespace OWL_Service
                     user.Tel_mob = domenuser.Tel_mob;
                     var result = await manager1.UpdateAsync(user);
                 }
-
             }
             foreach (var lokuser in locrecords)
             {
@@ -183,17 +179,13 @@ namespace OWL_Service
                         var manager1 = new UserManager<ApplicationUser>(store);
                         var user = manager1.FindByName(lokuser.Sammaccount);
                         string[] deletegr = new string[] { "Admin", "User" };
-                        var result1 = manager.RemoveFromRolesAsync(user.Id, deletegr);
-                        var result = await manager1.DeleteAsync(user);
+                        await manager.RemoveFromRolesAsync(user.Id, deletegr);
+                        await manager1.DeleteAsync(user);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        Debug.WriteLine(ex.InnerException);
                     }
-                    
-
                 }
-
             }
         }
         private async Task<ActionResult> Register(ApplicationUser model)
@@ -210,11 +202,9 @@ namespace OWL_Service
                     Sammaccount = model.Sammaccount,
                     Surname = model.Surname,
                     Group = model.Group
-                    
                 };
                 var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
                 IdentityResult result = await manager.CreateAsync(user,"1Q2w3e4r!");
-                
                 if (result.Succeeded)
                 {
                     if (model.Group == "Admins")
@@ -239,18 +229,11 @@ namespace OWL_Service
                             Debug.WriteLine(user.Id);
                             Debug.WriteLine(e1.InnerException);
                         }
-                        
                     }
                     cont.SaveChanges();
-
-                    Debug.WriteLine(user.DispName+"   ");
                 }
                 else
                 {
-                    foreach (var err in result.Errors)
-                    {
-                        Debug.WriteLine(err);
-                    }
                 }
             }
             return null;
@@ -267,7 +250,7 @@ namespace OWL_Service
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             string reply = client.DownloadString(confapi);
             string reply1 = Win1251ToUTF8(reply);
-            if (reply.ToString() != null)
+            if (!String.IsNullOrEmpty(reply))
             {
                 All_VM_obj = JsonConvert.DeserializeObject<AllVMRS.VmrParent>(reply1);
                 All_Vmrs = All_VM_obj.obj;
@@ -316,7 +299,6 @@ namespace OWL_Service
                     }
                     catch (Exception ex)
                     {
-
                         Debug.WriteLine(ex.InnerException);
                     }
                 }
