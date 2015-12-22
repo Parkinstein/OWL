@@ -19,7 +19,7 @@
                         </ul>
                     </div>
                     <div style="min-height: 10px; width: 100%"></div>
-                    <div id="waitingroom" class="roster_list">
+                    <div id="waitingroom" class="roster_list_waiting">
                         <ul class="roster_entry_ul">
                             <div class="roster_entry_ul_header">
                                 <b>Комната ожидания</b>
@@ -45,17 +45,13 @@
                                         <option value="guest">гость</option>
                                         <option value="host">хост</option>
                                     </select>
-                                </div>
-                                <div class="dialdiv_alias">
-                                    <label class="dialdiv_header">Имя локальное </label>
-                                    <input id="localalias" value="" class="form-control dial_alias">
                                     <br />
-                                    <label class="dialdiv_header">Адрес </label>
+                                    <label class="dialdiv_header">Адрес вызываемого абонента</label>
                                     <input id="remotealias" value="" class="form-control dial_alias">
                                 </div>
+                                <input id="dial" type="button" onclick="user.dial()" value="Вызвать" class="dialdiv_button" />
+                                <input id="dial" type="button" onclick="display_pb()" value="Добавить из адресной книги" class="dialdiv_button" />
                             </div>
-                            <input id="dial" type="button" onclick="user.dial()" value="Вызвать" class="dialdiv_button" />
-                            <input id="dial" type="button" onclick="display_pb()" value="Добавить из адресной книги" class="dialdiv_button" />
                         </fieldset>
                     </div>
                 </td>
@@ -862,11 +858,12 @@
     var user = {
         node: "84.253.116.75",
         conference: "@ViewData["confnm"]",
+        conference: "apilugin",
         display_name: "@ViewData["dispnm"]",
-        role: "GUEST",
+        role: "HOST",
         token: null,
         participant_uuid: null,
-        pin: "",
+        pin: "@ViewData["pinc"]",
         event_source: null,
         conference_participants: {},
         token_refresh: null,

@@ -6,7 +6,7 @@
             <tr>
                 <th>Имя виртуальной переговорной комнаты</th>
                 <th>Дата начала мероприятия</th>
-                <th>Блокировка мероприятия</th>
+                <th>Комната заблокирована?</th>
                 <th>Участники</th>
                 <th>Управление</th>
             </tr>
@@ -99,7 +99,7 @@
                     "targets": -1,
                     "data": "name",
                     "render": function(data) {
-                        return '<a href="Controlpanel/Control?confname=' + data + '&dispname=' + 'Test' + '">Управление</a>';
+                        return '<a href="Controlpanel/Control?confname=' + data + '&dispname=' + uname + '">Управление</a>';
                     }
                 },
             ],
@@ -157,7 +157,7 @@
                 "serverSide": true,
                 "ajax": {
                     "type": "POST",
-                    "url": "/Admin/ActiveParts_Ajax?Confname=" + confName + "",
+                    "url": "/Controlpanel/ActiveParts_Ajax?Confname=" + confName + "",
                     "contentType": 'application/json; charset=utf-8',
                     "data": function(data) { return data = JSON.stringify(data); }
                 },

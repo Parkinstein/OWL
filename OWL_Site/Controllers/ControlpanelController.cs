@@ -14,6 +14,8 @@ namespace OWL_Site.Controllers
     {
         public List<ActiveConfsModel.AConfs> AllConfs;
         public ActiveConfsModel.ResponseParent AllConfs_wm;
+        public List<ActivePartsModel.AParts> AllParts;
+        public ActivePartsModel.ResponseParent AllParts_wm;
 
         private string Win1251ToUTF8(string source)
         {
@@ -29,6 +31,64 @@ namespace OWL_Site.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        public ActionResult ActiveParts_Ajax(ActiveConference.DTResult param, string confname)
+        {
+            IEnumerable<ActivePartsModel.AParts> filteredresult;
+
+            if (!string.IsNullOrEmpty(param.Search.Value))
+            {
+                filteredresult = GetActiveParts(confname).Where(c => c.display_name.Contains(param.Search.Value));
+            }
+            else
+            {
+                filteredresult = GetActiveParts(confname);
+            }
+
+            return Json(new
+            {
+                recordsTotal = GetActiveParts(confname).Count(),
+                recordsFiltered = filteredresult.Count(),
+                data = filteredresult,
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        List<ActivePartsModel.AParts> GetActiveParts(string confname)
+        {
+            try
+            {
+                AllParts = new List<ActivePartsModel.AParts>();
+                Uri statusapi =
+                    new Uri("https://" + MvcApplication.set.CobaMngAddress +
+                            "/api/admin/status/v1/participant/?conference=" + confname);
+                WebClient client = new WebClient();
+                client.Credentials = new NetworkCredential("admin", "NKCTelemed");
+                client.Headers.Add("auth", "admin,NKCTelemed");
+                client.Headers.Add("veryfy", "False");
+                ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+                string reply = client.DownloadString(statusapi);
+                string reply1 = Win1251ToUTF8(reply);
+                if (!String.IsNullOrEmpty(reply))
+                {
+                    Debug.WriteLine(reply);
+                    AllParts_wm = JsonConvert.DeserializeObject<ActivePartsModel.ResponseParent>(reply1);
+                    AllParts = AllParts_wm.obj;
+                    AllParts.FindAll(p => p.has_media);
+                    foreach (var part in AllParts)
+                    {
+                        Debug.WriteLine(part.display_name);
+                    }
+                    
+                }
+                return AllParts;
+            }
+            catch (Exception errException)
+            {
+                Debug.WriteLine(errException.Message);
+            }
+            return AllParts;
         }
 
         #region GetActiveConfs
@@ -52,12 +112,14 @@ namespace OWL_Site.Controllers
                 data = filteredresult,
             }, JsonRequestBehavior.AllowGet);
         }
+
         private IEnumerable<ActiveConfsModel.AConfs> GetData()
         {
             var data = GetActiveConfs();
 
             return data;
         }
+
         public List<ActiveConfsModel.AConfs> GetActiveConfs()
         {
             try
@@ -105,17 +167,15 @@ namespace OWL_Site.Controllers
         #endregion
         public ActionResult Control(string confname, string dispname)
         {
-            
-            ViewData["dispnm"] = dispname;
             aspnetdbEntities db = new aspnetdbEntities();
-            var curvmr=db.AllVmrs.FirstOrDefault(v => v.name == confname);
-            var curalias = db.VmrAliases.FirstOrDefault(v => v.vmid == curvmr.Id);
+            var curvmr = db.AllVmrs.FirstOrDefault(v => v.name == confname);
+            var curalias = db.VmrAliases.FirstOrDefault(c => c.vmid == curvmr.Id);
+
             if (curvmr != null)
             {
-                string pinc = curvmr.pin;
-                ViewData["pinc"] = pinc;
+                ViewData["dispnm"] = dispname;
+                ViewData["pinc"] = curvmr.pin;
                 ViewData["confnm"] = curalias.alias;
-                Debug.WriteLine(pinc);
             }
             return View();
             
