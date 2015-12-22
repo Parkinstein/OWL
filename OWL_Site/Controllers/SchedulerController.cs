@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -21,9 +22,7 @@ namespace OWL_Site.Controllers
     public sealed class SchedulerController : Controller
     {
         private SchedulerMeetingService meetingService;
-
-        public string spisok;
-
+        private string gp,gpmail;
         public static string oplink;
         public static IEnumerable<MeetingViewModel> meetings_all, mettingsFiltered;
 
@@ -41,38 +40,30 @@ namespace OWL_Site.Controllers
         public JsonResult GetVmRs([DataSourceRequest] DataSourceRequest request)
         {
             aspnetdbEntities db = new aspnetdbEntities();
-            var data = db.AllVmrs;
+            var data = db.AllVmrs.Where(m => m.service_type == "conference");
             return Json(data.ToDataSourceResult(request));
         }
 
         [Authorize]
         public ActionResult Index()
         {
-            //aspnetdbEntities db = new aspnetdbEntities();
-            //var data = db.AspNetUsers;
-            //IEnumerable<AspNetUser> filteredresult = data;
-            //ViewBag.Users = filteredresult;
-            return View();
+           return View();
         }
 
         public JsonResult Meetings_Create([DataSourceRequest] DataSourceRequest request, MeetingViewModel meeting)
         {
             RegexUtilities util = new RegexUtilities();
             aspnetdbEntities db = new aspnetdbEntities();
-            var rooms = db.AllVmrs;
             var init = GetAllPB().FirstOrDefault(m => m.Sammaccount == User.Identity.Name);
             if (meeting.RoomID == 0)
             {
                 meeting.RoomID = 1;
             }
             var roomalias = db.VmrAliases.FirstOrDefault(m => m.vmid == meeting.RoomID);
-
+            var currentroom = db.AllVmrs.FirstOrDefault(m => m.Id == meeting.RoomID);
             meeting.OpLink = string.Concat("https://", MvcApplication.set.CobaCfgAddress, "/webapp/?conference=", roomalias.alias, "&name=Operator&bw=512&join=1");
-            //List<object> attend = meeting.Attendees.Select(att => GetAllPB().FirstOrDefault(m => m.Id == att)).Cast<object>().ToList();
-            if (meeting.Start < DateTime.Today + TimeSpan.FromHours(3))
-            { Debug.WriteLine("@@@"); }
             List<AspNetUser> emaillist = new List<AspNetUser>();
-            emaillist.Add(init);
+            //emaillist.Add(init);
             StringBuilder strB = new StringBuilder();
             foreach (var att in meeting.Attendees)
             {
@@ -81,6 +72,16 @@ namespace OWL_Site.Controllers
             }
             List<string> AddAtt = new List<string>();
             if (meeting.AddAttend != null) { AddAtt = (meeting.AddAttend.Split((",").ToCharArray())).ToList(); }
+            if (!String.IsNullOrEmpty(currentroom.guest_pin))
+            {
+                gpmail = "PIN для входа: " + currentroom.guest_pin;
+                gp = "&pin="+ currentroom.guest_pin;
+            }
+            if (String.IsNullOrEmpty(currentroom.guest_pin))
+            {
+                gpmail = "";
+                gp = "&role=guest";
+            }
             foreach (var aa in AddAtt)
             {
                 strB.Append(aa + ";" + aa + Environment.NewLine);
@@ -93,25 +94,22 @@ namespace OWL_Site.Controllers
                 }
                 else { }
             }
-
             foreach (var mail in emaillist)
             {
-                Debug.WriteLine(mail.Email);
-                if (mail.DispName.Contains(" "))
-                {
-                    mail.DispName = mail.DispName.Replace(" ", "%20");
-                }
-                else { }
-                string link = "https://" + MvcApplication.set.CobaCfgAddress + "/webapp/?conference=" + roomalias.alias + "&name=" +
-                              Uri.EscapeDataString(mail.DispName) + "&bw=512&join=1";
-                string body = "Уважамый(ая), " + mail.DispName + "!" + Environment.NewLine + meeting.Start +
-                              TimeSpan.FromHours(3) + " состоится конференция на тему \"" + meeting.Title + "\"." +
-                              Environment.NewLine + "Инициатор конференции: " + init.DispName + Environment.NewLine +
-                              "В указанное время, для участия в конференции, просьба перейти по ссылке: " +
-                              Environment.NewLine + link;
+                string link = "<a href =\"" + "https://" + MvcApplication.set.CobaCfgAddress + "/webapp/?conference=" + 
+                    roomalias.alias + "&name=" + Uri.EscapeDataString(mail.DispName) + "&bw=512" + gp + "&join=1" +
+                    "\">ссылке</a>";
+                string body = "Уважамый(ая), " + mail.DispName + " !<br>" +  (meeting.Start +
+                              TimeSpan.FromHours(3)).ToString("U") + " состоится конференция на тему \"" + 
+                              meeting.Title + "\"." + "<br>"  + "Инициатор конференции: " + init.DispName + "<br>"  +
+                              "В указанное время, для участия в конференции, просьба перейти по " +
+                              link + "<br><br>"+"<b><i>Данные для самостоятельного входа:<i><b><br> Адрес сервера: " + 
+                              "https://" + MvcApplication.set.CobaCfgAddress + "/" + "<br>" +
+                              "Имя конференции: "+roomalias.alias+"<br>"+gpmail+"<br>"+"SIP-адрес: "+ 
+                              roomalias.alias+"@"+ MvcApplication.set.CobaCfgAddress;
                 try
                 {
-                    Sendmail(mail.Email, meeting.Title, body);
+                    Sendmail(mail.Email, "NEW: " + meeting.Title, body);
                 }
                 catch (Exception e)
                 {
@@ -120,8 +118,9 @@ namespace OWL_Site.Controllers
                     Debug.WriteLine(e.HResult);
                 }
            }
+            #region old
 
-            //if (ModelState.IsValid)
+//if (ModelState.IsValid)
             //{
             //    var owner = AccountController.currentuser;
             //    var filename = "meeting-" + owner.GivenName + "-" +
@@ -160,6 +159,8 @@ namespace OWL_Site.Controllers
             //    }
             //    
             //}
+
+            #endregion
             meetingService.Insert(meeting, ModelState);
             return Json(new[] { meeting }.ToDataSourceResult(request, ModelState));
         }
@@ -168,6 +169,81 @@ namespace OWL_Site.Controllers
             if (ModelState.IsValid)
             {
                 meetingService.Delete(meeting, ModelState);
+                RegexUtilities util = new RegexUtilities();
+                aspnetdbEntities db = new aspnetdbEntities();
+                var init = GetAllPB().FirstOrDefault(m => m.Sammaccount == User.Identity.Name);
+                var currentroom = db.AllVmrs.FirstOrDefault(m => m.Id == meeting.RoomID);
+                List<AspNetUser> emaillist = new List<AspNetUser>();
+                StringBuilder strB = new StringBuilder();
+                var roomalias = db.VmrAliases.FirstOrDefault(m => m.vmid == meeting.RoomID);
+                foreach (var att in meeting.Attendees)
+                {
+                    AspNetUser attemail = (GetAllPB().FirstOrDefault(m => m.Id == att));
+                    emaillist.Add(attemail);
+                }
+                List<string> AddAtt = new List<string>();
+                if (meeting.AddAttend != null) { AddAtt = (meeting.AddAttend.Split((",").ToCharArray())).ToList(); }
+                if (meeting.AddAttend != null)
+                {
+                    AddAtt = (meeting.AddAttend.Split((",").ToCharArray())).ToList();
+                }
+                if (!String.IsNullOrEmpty(currentroom.guest_pin))
+                {
+                    gpmail = "PIN для входа: " + currentroom.guest_pin;
+                    gp = "&pin=" + currentroom.guest_pin;
+                }
+                if (String.IsNullOrEmpty(currentroom.guest_pin))
+                {
+                    gpmail = "";
+                    gp = "&role=guest";
+                }
+                foreach (var aa in AddAtt)
+                {
+                    strB.Append(aa + ";" + aa + Environment.NewLine);
+                    if (util.IsValidEmail(aa))
+                    {
+                        AspNetUser ar = new AspNetUser();
+                        ar.Email = aa;
+                        ar.DispName = aa;
+                        emaillist.Add(ar);
+                    }
+                    else { }
+                }
+                foreach (var mail in emaillist)
+                {
+                    string body = "Уважамый(ая), " + mail.DispName + " !<br>" + "Конференция \"" + meeting.Title +
+                                  "\" была отменена пользователем " + init.DispName + ". <br>";
+                    try
+                    {
+                        Sendmail(mail.Email, "DEL: " + meeting.Title, body);
+                    }
+                    catch (Exception e)
+                    {
+
+                        Debug.WriteLine(e.Message);
+                        Debug.WriteLine(e.HResult);
+                    }
+                }
+                //}
+                //foreach (var aa in AddAtt)
+                //{
+                //    strB.Append(aa + ";" + aa + Environment.NewLine);
+                //}
+                ////var owner = applicationDbContext.Users.FirstOrDefault(p => p.UserConfID == roomID);
+                //var filename = "meeting-" + AccountController.Uname + "-" +
+                //                   (meeting.Start + TimeSpan.FromHours(3)).ToString("dd-MM-yyyy_hh-mm") + ".csv";
+                //string path = Path.Combine(Server.MapPath("~/Content/OpFiles/CSV"), filename);
+                //Debug.WriteLine(path);
+                //meeting.FileLink = "Content/OpFiles/CSV/" + filename;
+                //meetingService.Update(meeting, ModelState);
+
+                //using (FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate))
+                //{
+                //    using (StreamWriter streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
+                //    {
+                //        streamWriter.Write(strB.ToString());
+                //    }
+                //}
             }
             return Json(new[] { meeting }.ToDataSourceResult(request, ModelState));
         }
@@ -198,32 +274,63 @@ namespace OWL_Site.Controllers
             {
                 meetingService.Update(meeting, ModelState);
                 RegexUtilities util = new RegexUtilities();
-                var idf = GetAllPB().FirstOrDefault(m => m.Sammaccount == User.Identity.Name);
-                //var init = GetAllPB().FirstOrDefault(m => m.Id == rid);
-                //meeting.OpLink = string.Concat("https://", "10.129.15.129", "/webapp/?conference=", init.Sammaccount, "&name=Operator&bw=512&join=1");
-                //var attend = meeting.Attendees.Select(att => GetAllPB().FirstOrDefault(m => m.Id == att)).Cast<object>().ToList();
+                aspnetdbEntities db = new aspnetdbEntities();
+                var init = GetAllPB().FirstOrDefault(m => m.Sammaccount == User.Identity.Name);
+                var currentroom = db.AllVmrs.FirstOrDefault(m => m.Id == meeting.RoomID);
+                List<AspNetUser> emaillist = new List<AspNetUser>();
                 StringBuilder strB = new StringBuilder();
+                var roomalias = db.VmrAliases.FirstOrDefault(m => m.vmid == meeting.RoomID);
+                foreach (var att in meeting.Attendees)
+                {
+                    AspNetUser attemail = (GetAllPB().FirstOrDefault(m => m.Id == att));
+                    emaillist.Add(attemail);
+                }
                 List<string> AddAtt = new List<string>();
                 if (meeting.AddAttend != null) { AddAtt = (meeting.AddAttend.Split((",").ToCharArray())).ToList(); }
-                //foreach (int at in attend)
-                //{
-                //    string em = at.
-                //var init = AccountController.currentuser.DisplayName;
-                //var name = AccountController.currentuser;
-                ////spisok = string.Concat(name.PhoneNumber, ";", name.UserName);
-                //strB.Append(name.VoiceTelephoneNumber + ";" + name.DisplayName + Environment.NewLine);
-                //if (name.EmailAddress != null)
-                //{
-                //    string link = "https://" + "10.129.15.129" + "/webapp/?conference=" + init.UserConfID + "&name=" +
-                //                  Uri.EscapeDataString(name.UserName) + "&bw=512&join=1";
-                //    string body = "Уважамый(ая), " + name.UserName + "!" + Environment.NewLine +
-                //                  " конференция на тему \"" + meeting.Title + "\" переносится на " + meeting.Start +
-                //                  TimeSpan.FromHours(3) + Environment.NewLine + "Инициатор конференции: " +
-                //                  init.UserName + Environment.NewLine +
-                //                  "В указанное время, для участия в конференции, просьба перейти по ссылке: " +
-                //                  Environment.NewLine + link;
-                //    //Sendmail(name.Email, meeting.Title, body);
-                //}
+                if (meeting.AddAttend != null)
+                {
+                    AddAtt = (meeting.AddAttend.Split((",").ToCharArray())).ToList();
+                }
+                if (!String.IsNullOrEmpty(currentroom.guest_pin))
+                {
+                    gpmail = "PIN для входа: " + currentroom.guest_pin;
+                    gp = "&pin=" + currentroom.guest_pin;
+                }
+                if (String.IsNullOrEmpty(currentroom.guest_pin))
+                {
+                    gpmail = "";
+                    gp = "&role=guest";
+                }
+                foreach (var aa in AddAtt)
+                {
+                    strB.Append(aa + ";" + aa + Environment.NewLine);
+                    if (util.IsValidEmail(aa))
+                    {
+                        AspNetUser ar = new AspNetUser();
+                        ar.Email = aa;
+                        ar.DispName = aa;
+                        emaillist.Add(ar);
+                    }
+                    else { }
+                }
+                foreach (var mail in emaillist)
+                {
+                    string link = "<a href =\"" + "https://" + MvcApplication.set.CobaCfgAddress + "/webapp/?conference=" +
+                    roomalias.alias + "&name=" + Uri.EscapeDataString(mail.DispName) + "&bw=512" + gp + "&join=1" +
+                    "\">ссылке</a>";
+                    string body = "Уважамый(ая), " + mail.DispName + " !<br>" + "Параметры конференции \"" + meeting.Title + "\" были изменены." + "<br>" + "Время начала конференции: " + (meeting.Start +
+                                  TimeSpan.FromHours(3)).ToString("U") +"<br>" + "Инициатор конференции: " + init.DispName + "<br>" + "В указанное время, для участия в конференции, просьба перейти по " + link + "<br><br>" + "<b><i>Данные для самостоятельного входа:<i><b><br> Адрес сервера: " + "https://" + MvcApplication.set.CobaCfgAddress + "/" + "<br>" + "Имя конференции: " + roomalias.alias + "<br>" + gpmail + "<br>" + "SIP-адрес: " + roomalias.alias + "@" + MvcApplication.set.CobaCfgAddress;
+                    try
+                    {
+                        Sendmail(mail.Email, "UPD: " + meeting.Title, body);
+                    }
+                    catch (Exception e)
+                    {
+
+                        Debug.WriteLine(e.Message);
+                        Debug.WriteLine(e.HResult);
+                    }
+                }
                 //}
                 //foreach (var aa in AddAtt)
                 //{
@@ -247,27 +354,25 @@ namespace OWL_Site.Controllers
             }
             return Json(new[] { meeting }.ToDataSourceResult(request, ModelState));
         }
-
         public Task<ActionResult> Sendmail(string to, string subj, string body)
         {
             SmtpClient smtpClient = new SmtpClient(MvcApplication.set.AuthDnAddress, 25)
             {
                 UseDefaultCredentials = false,
                 EnableSsl = false,
-
                 Credentials = new NetworkCredential("cobaservice", "Ciscocisco123"),
 
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 Timeout = 20000
-
-
-
             };
             MailMessage mailMessage = new MailMessage()
             {
                 Priority = MailPriority.High,
-                From = new MailAddress("cobaservice@nkc.ru", "Планировщик системы видео-конференц-связи 'Сова'")
+                From = new MailAddress("putin@kremlin.ru", "Планировщик системы видео-конференц-связи 'Сова'")
             };
+            AlternateView alternateHtml = AlternateView.CreateAlternateViewFromString(body,
+                                                                            new ContentType("text/html"));
+            mailMessage.AlternateViews.Add(alternateHtml);
             mailMessage.To.Add(new MailAddress(to));
             mailMessage.Subject = subj;
             mailMessage.Body = body;
@@ -275,7 +380,6 @@ namespace OWL_Site.Controllers
             smtpClient.Send(mailMessage);
             return null;
         }
-
         public Task<ActionResult> RecordTask(string tasktitle, string taskapp, string stream_link, string pathflv, string comment, string acc_un, string accpass, DateTime task_start, DateTime task_end)
         {
             ScheduledTasks st = new ScheduledTasks();

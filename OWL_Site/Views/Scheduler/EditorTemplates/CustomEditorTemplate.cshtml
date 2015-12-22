@@ -170,8 +170,6 @@
     @(Html.Kendo().MultiSelectFor(m => m.Attendees)
           .DataTextField("name")
           .DataValueField("id")
-
-          //.ItemTemplate("#= name #")
           .Placeholder("Выбор участников")
           .Filter(FilterType.Contains)
           .ValuePrimitive(true)
@@ -191,13 +189,7 @@
                       schema.Data("Data")
                           .Total("Total");
                   });
-
-
-
-
           })
-
-
     )
 </div>
 

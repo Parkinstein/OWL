@@ -105,14 +105,16 @@ namespace OWL_Site.Controllers
         #endregion
         public ActionResult Control(string confname, string dispname)
         {
-            ViewData["confnm"] = confname;
+            
             ViewData["dispnm"] = dispname;
             aspnetdbEntities db = new aspnetdbEntities();
             var curvmr=db.AllVmrs.FirstOrDefault(v => v.name == confname);
+            var curalias = db.VmrAliases.FirstOrDefault(v => v.vmid == curvmr.Id);
             if (curvmr != null)
             {
                 string pinc = curvmr.pin;
                 ViewData["pinc"] = pinc;
+                ViewData["confnm"] = curalias.alias;
                 Debug.WriteLine(pinc);
             }
             return View();
