@@ -50,7 +50,7 @@ namespace PepuxFront.Controllers
                 HistoryVmrData = new List<VmrStats>();
                 Uri historyapi = new Uri("https://" + MvcApplication.set.CobaMngAddress + "/api/admin/history/v1/conference/?limit=100");
                 WebClient client = new WebClient();
-                client.Credentials = new NetworkCredential("admin", "ciscovoip");
+                client.Credentials = new NetworkCredential("admin", "NKCTelemed");
                 client.Headers.Add("auth", "admin,ciscovoip");
                 client.Headers.Add("veryfy", "False");
                 ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
@@ -80,7 +80,7 @@ namespace PepuxFront.Controllers
                 Uri participantsapi =
                     new Uri("https://" + MvcApplication.set.CobaMngAddress + "/api/admin/history/v1/participant/?conference=" + id);
                 WebClient client = new WebClient();
-                client.Credentials = new NetworkCredential("admin", "ciscovoip");
+                client.Credentials = new NetworkCredential("admin", "NKCTelemed");
                 client.Headers.Add("auth", "admin,ciscovoip");
                 client.Headers.Add("veryfy", "False");
                 ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
