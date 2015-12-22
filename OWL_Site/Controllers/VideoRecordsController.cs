@@ -40,7 +40,7 @@ namespace OWL_Site.Controllers
         {
             
 
-            if (!User.IsInRole("Admins"))
+            if (!User.IsInRole("Admin"))
             {
                 return Videorecs(User.Identity.Name);
             }

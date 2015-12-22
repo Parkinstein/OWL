@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.Entity.Migrations;
 using System.Diagnostics;
 using System.DirectoryServices;
 using System.Linq;
 using System.Net;
-using System.Security.Claims;
-using System.Security.Policy;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,9 +12,6 @@ using System.Timers;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
-using Microsoft.Owin.Security;
 using Newtonsoft.Json;
 
 namespace OWL_Service
@@ -97,17 +90,19 @@ namespace OWL_Service
                 dirSearcher.PropertiesToLoad.Add("displayName");
                 dirSearcher.PropertiesToLoad.Add("mail");
                 dirSearcher.PropertiesToLoad.Add("memberOf");
+                dirSearcher.PropertiesToLoad.Add("ipPhone");
                 SearchResultCollection resultCol = dirSearcher.FindAll();
                 foreach (SearchResult resul in resultCol)
                 {
                     ApplicationUser objSurveyUsers = new ApplicationUser();
                     objSurveyUsers.Name = GetProperty(resul, "givenName");
                     objSurveyUsers.Surname = GetProperty(resul, "sn"); 
-                    objSurveyUsers.Tel_int = GetProperty(resul, "telephoneNumber");
+                    objSurveyUsers.Tel_mob = GetProperty(resul, "telephoneNumber");
                     objSurveyUsers.Position = GetProperty(resul, "title"); 
                     objSurveyUsers.Email = GetProperty(resul, "mail"); 
                     objSurveyUsers.Sammaccount = GetProperty(resul, "sAMAccountName");
                     objSurveyUsers.DispName = GetProperty(resul, "displayName");
+                    objSurveyUsers.Tel_int = GetProperty(resul, "ipPhone");
                     if (GetProperty(resul, "memberOf").Contains("COBA_admin"))
                     {
                         grname = "Admins";
@@ -173,6 +168,7 @@ namespace OWL_Service
                     user.Surname = domenuser.Surname;
                     user.Email = domenuser.Email;
                     user.Tel_int = domenuser.Tel_int;
+                    user.Tel_mob = domenuser.Tel_mob;
                     var result = await manager1.UpdateAsync(user);
                 }
 
@@ -214,6 +210,7 @@ namespace OWL_Service
                     Sammaccount = model.Sammaccount,
                     Surname = model.Surname,
                     Group = model.Group
+                    
                 };
                 var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
                 IdentityResult result = await manager.CreateAsync(user,"1Q2w3e4r!");

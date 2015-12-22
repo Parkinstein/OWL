@@ -21,8 +21,8 @@ namespace OWL_Site.Models
         public string guest_pin { get; set; }
         public string guest_view { get; set; }
         public string host_view { get; set; }
-        public string max_callrate_in_ { get; set; }
-        public string max_callrate_out_ { get; set; }
+        public string max_callrate_in { get; set; }
+        public string max_callrate_out { get; set; }
         public string name { get; set; }
         public string participant_limit { get; set; }
         public string pin { get; set; }

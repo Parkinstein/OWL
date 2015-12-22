@@ -77,6 +77,7 @@ namespace OWL_Site
                 dirSearcher.PropertiesToLoad.Add("sAMAccountName");
                 dirSearcher.PropertiesToLoad.Add("displayName");
                 dirSearcher.PropertiesToLoad.Add("email");
+                dirSearcher.PropertiesToLoad.Add("ipPhone");
                 SearchResultCollection resultCol = dirSearcher.FindAll();
                 foreach (SearchResult resul in resultCol)
                 {
@@ -88,6 +89,7 @@ namespace OWL_Site
                     objSurveyUsers.Email = GetProperty(resul, "email"); //(String)resul.Properties["email"][0];
                     objSurveyUsers.Sammaccount = GetProperty(resul, "sAMAccountName"); //(String)resul.Properties["sAMAccountName"][0];
                     objSurveyUsers.DispName = GetProperty(resul, "displayName"); //(String)resul.Properties["displayName"][0];
+                    objSurveyUsers.DispName = GetProperty(resul, "ipPhone");
                     allreco.Add(objSurveyUsers);
                 }
                 foreach (var user in allreco)

@@ -20,33 +20,33 @@ and limitations under the License.
 */
 interface JQueryAjaxSettings {
     accepts?: any;
-    async?: bool;
+    async?: boolean;
     beforeSend?(jqXHR: JQueryXHR, settings: JQueryAjaxSettings);
-    cache?: bool;
+    cache?: boolean;
     complete?(jqXHR: JQueryXHR, textStatus: string);
     contents?: { [key: string]: any; };
     contentType?: string;
     context?: any;
     converters?: { [key: string]: any; };
-    crossDomain?: bool;
+    crossDomain?: boolean;
     data?: any;
     dataFilter?(data: any, ty: any): any;
     dataType?: string;
     error?(jqXHR: JQueryXHR, textStatus: string, errorThrow: string): any;
-    global?: bool;
+    global?: boolean;
     headers?: { [key: string]: any; };
-    ifModified?: bool;
-    isLocal?: bool;
+    ifModified?: boolean;
+    isLocal?: boolean;
     jsonp?: string;
     jsonpCallback?: any;
     mimeType?: string;
     password?: string;
-    processData?: bool;
+    processData?: boolean;
     scriptCharset?: string;
     statusCode?: { [key: string]: any; };
     success?(data: any, textStatus: string, jqXHR: JQueryXHR);
     timeout?: number;
-    traditional?: bool;
+    traditional?: boolean;
     type?: string;
     url?: string;
     username?: string;
@@ -70,11 +70,11 @@ interface JQueryCallback {
     disable(): any;
     empty(): any;
     fire(...arguments: any[]): any;
-    fired(): bool;
+    fired(): boolean;
     fireWith(context: any, ...args: any[]): any;
-    has(callback: any): bool;
+    has(callback: any): boolean;
     lock(): any;
-    locked(): bool;
+    locked(): boolean;
     remove(...callbacks: any[]): any;
 }
 
@@ -112,9 +112,9 @@ interface JQueryDeferred extends JQueryPromise {
 interface BaseJQueryEventObject extends Event {
     data: any;
     delegateTarget: Element;
-    isDefaultPrevented(): bool;
-    isImmediatePropogationStopped(): bool;
-    isPropogationStopped(): bool;
+    isDefaultPrevented(): boolean;
+    isImmediatePropogationStopped(): boolean;
+    isPropogationStopped(): boolean;
     namespace: string;
     preventDefault(): any;
     relatedTarget: Element;
@@ -129,10 +129,10 @@ interface BaseJQueryEventObject extends Event {
 
 interface JQueryInputEventObject extends BaseJQueryEventObject
 {
-    altKey: bool;
-    ctrlKey: bool;
-    metaKey: bool;
-    shiftKey: bool;
+    altKey: boolean;
+    ctrlKey: boolean;
+    metaKey: boolean;
+    shiftKey: boolean;
 }
 
 interface JQueryMouseEventObject extends JQueryInputEventObject
@@ -164,30 +164,30 @@ interface JQueryEventObject extends BaseJQueryEventObject, JQueryInputEventObjec
 */
 
 interface JQuerySupport {
-    ajax?: bool;
-    boxModel?: bool;
-    changeBubbles?: bool;
-    checkClone?: bool;
-    checkOn?: bool;
-    cors?: bool;
-    cssFloat?: bool;
-    hrefNormalized?: bool;
-    htmlSerialize?: bool;
-    leadingWhitespace?: bool;
-    noCloneChecked?: bool;
-    noCloneEvent?: bool;
-    opacity?: bool;
-    optDisabled?: bool;
-    optSelected?: bool;
-    scriptEval?(): bool;
-    style?: bool;
-    submitBubbles?: bool;
-    tbody?: bool;
+    ajax?: boolean;
+    boxModel?: boolean;
+    changeBubbles?: boolean;
+    checkClone?: boolean;
+    checkOn?: boolean;
+    cors?: boolean;
+    cssFloat?: boolean;
+    hrefNormalized?: boolean;
+    htmlSerialize?: boolean;
+    leadingWhitespace?: boolean;
+    noCloneChecked?: boolean;
+    noCloneEvent?: boolean;
+    opacity?: boolean;
+    optDisabled?: boolean;
+    optSelected?: boolean;
+    scriptEval?(): boolean;
+    style?: boolean;
+    submitBubbles?: boolean;
+    tbody?: boolean;
 }
 
 interface JQueryParam {
   (obj: any): string;
-  (obj: any, traditional: bool): string;
+  (obj: any, traditional: boolean): string;
 }
 
 /*
@@ -225,7 +225,7 @@ interface JQueryStatic {
     /****
      CORE
     *****/
-    holdReady(hold: bool): any;
+    holdReady(hold: boolean): any;
 
     (selector: string, context?: any): JQuery;
     (element: Element): JQuery;
@@ -236,7 +236,7 @@ interface JQueryStatic {
     (array: any[]): JQuery;
     (): JQuery;
 
-    noConflict(removeAll?: bool): Object;
+    noConflict(removeAll?: boolean): Object;
 
     when(...deferreds: any[]): JQueryPromise;
 
@@ -257,7 +257,7 @@ interface JQueryStatic {
 
     dequeue(element: Element, queueName?: string): any;
 
-    hasData(element: Element): bool;
+    hasData(element: Element): boolean;
 
     queue(element: Element, queueName?: string): any[];
     queue(element: Element, queueName: string, newQueueOrCallback: any): JQuery;
@@ -267,7 +267,7 @@ interface JQueryStatic {
     /*******
      EFFECTS
     ********/
-    fx: { tick: () => void; interval: number; stop: () => void; speeds: { slow: number; fast: number; }; off: bool; step: any; };
+    fx: { tick: () => void; interval: number; stop: () => void; speeds: { slow: number; fast: number; }; off: boolean; step: any; };
 
     /******
      EVENTS

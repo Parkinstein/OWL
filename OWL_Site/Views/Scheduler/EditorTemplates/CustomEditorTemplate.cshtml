@@ -4,7 +4,6 @@
     //required in order to render validation attributes
     ViewContext.FormContext = new FormContext();
 }
-
 @functions{
     public Dictionary<string, object> generateDatePickerAttributes(
            string elementId,
@@ -24,9 +23,6 @@
         return datePickerAttributes;
     }
 }
-
-
-
 <div class="k-edit-label">
     @(Html.Label("Тема"))
 </div>
@@ -48,7 +44,6 @@
     <span data-bind="text: startTimezone"></span>
     <span data-for="start" class="k-invalid-msg"></span>
 </div>
-
 <div class="k-edit-label">
     @(Html.Label("Окончание мероприятия"))
 </div>
@@ -72,15 +67,13 @@
     <span data-bind="text: endTimezone"></span>
     <span data-for="end" class="k-invalid-msg"></span>
 </div>
-
 <div class="k-edit-label">
     @(Html.Label("Весь день"))
 </div>
 <div data-container-for="isAllDay" class="k-edit-field">
     <input data-bind="checked: isAllDay" data-val="true" id="IsAllDay" name="IsAllDay" type="checkbox" />
 </div>
-
-<div class="endTimezoneRow">
+@*<div class="endTimezoneRow">
     <div class="k-edit-label"></div>
     <div class="k-edit-field">
         <label class="k-check">
@@ -104,29 +97,25 @@
             model.set("endTimezone", null);
         }
     });
-
     var endTimezone = '${data.endTimezone}';
-
     if (!endTimezone || endTimezone == "null") {
         $(".k-timezone-toggle").trigger('click');
     }
-</script>
-
+</script>*@
 <div class="k-edit-label">
-    @(Html.Label("Часовой пояс начала мероприятия"))
+    @(Html.Label("Часовой пояс"))
 </div>
 <div data-container-for="startTimezone" class="k-edit-field">
     @(Html.Kendo().TimezoneEditorFor(model => model.StartTimezone)
         .HtmlAttributes(new { data_bind = "value:startTimezone" }))
 </div>
-
-<div class="k-edit-label">
+@*<div class="k-edit-label">
     @(Html.Label("Часовой пояс окончания мероприятия"))
 </div>
 <div data-container-for="endTimezone" class="k-edit-field">
     @(Html.Kendo().TimezoneEditorFor(model => model.EndTimezone)
         .HtmlAttributes(new { data_bind = "value:endTimezone" }))
-</div>
+</div>*@
 
 <div class="k-edit-label">
     @(Html.Label("Настройки повтора"))
@@ -135,21 +124,17 @@
     @(Html.Kendo().RecurrenceEditorFor(model => model.RecurrenceRule)
         .HtmlAttributes(new { data_bind = "value:recurrenceRule" }))
 </div>
-
 <div data-container-for="RoomID" class="k-edit-field">
-    @if (User.IsInRole("Admin"))
-    {
         @(Html.Kendo().DropDownListFor(m => m.RoomID)
           .AutoBind(true)
           .DataTextField("name")
-          .DataValueField("id")
+          .DataValueField("Id")
+          .SelectedIndex(0)
           .Filter(FilterType.Contains)
-
           .Height(400)
           .DataSource(source =>
           {
               source.Custom()
-                  .ServerFiltering(true)
                   .Type("aspnetmvc-ajax")
                   .Transport(transport =>
                   {
@@ -162,40 +147,7 @@
                           .Total("Total");
                   });
           })
-
-
         )
-    }
-    @if (User.IsInRole("User"))
-    {
-        @(Html.Kendo().DropDownListFor(m => m.RoomID)
-              .AutoBind(true)
-              .DataTextField("name")
-              .DataValueField("id")
-              .Filter(FilterType.Contains)
-
-              .Height(400)
-              .DataSource(source =>
-              {
-                  source.Custom()
-                      .ServerFiltering(true)
-                      .Type("aspnetmvc-ajax")
-                      .Transport(transport =>
-                      {
-                          transport.Read("GetVmRs", "Scheduler");
-                      })
-
-                      .Schema(schema =>
-                      {
-                          schema.Data("Data")
-                              .Total("Total");
-                      });
-              })
-
-
-              )
-    }
-
 
     <script>
         function requestData(selector) {
@@ -209,13 +161,14 @@
             return { text: value };
         }
     </script>
+    <script></script>
 </div>
 <div class="k-edit-label">
     @(Html.Label("Участники"))
 </div>
 <div data-container-for="Attendees" class="k-edit-field">
     @(Html.Kendo().MultiSelectFor(m => m.Attendees)
-          .DataTextField("dispname")
+          .DataTextField("name")
           .DataValueField("id")
 
           //.ItemTemplate("#= name #")

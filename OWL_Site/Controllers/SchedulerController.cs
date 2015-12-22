@@ -34,8 +34,8 @@ namespace OWL_Site.Controllers
         public JsonResult GetUsers([DataSourceRequest] DataSourceRequest request)
         {
             aspnetdbEntities db = new aspnetdbEntities();
-            var data = db.AspNetUsers;
-            return Json(data.ToDataSourceResult(request));
+            var data = db.AspNetUsers.AsEnumerable();
+            return Json(data.ToDataSourceResult(request, o => new {id = o.Id,name = o.DispName}));
         }
 
         public JsonResult GetVmRs([DataSourceRequest] DataSourceRequest request)
@@ -61,23 +61,23 @@ namespace OWL_Site.Controllers
             aspnetdbEntities db = new aspnetdbEntities();
             var rooms = db.AllVmrs;
             var init = GetAllPB().FirstOrDefault(m => m.Sammaccount == User.Identity.Name);
+            if (meeting.RoomID == 0)
+            {
+                meeting.RoomID = 1;
+            }
             var roomalias = db.VmrAliases.FirstOrDefault(m => m.vmid == meeting.RoomID);
-            //meeting.RoomID = AccountController.UID;
-            //int rid = meeting.RoomID;
-            //var init = GetAllPB().FirstOrDefault(m => m.Id == rid);
-            //meeting.OpLink = string.Concat("https://", "10.129.15.129", "/webapp/?conference=", init.Sammaccount, "&name=Operator&bw=512&join=1");
+
+            meeting.OpLink = string.Concat("https://", MvcApplication.set.CobaCfgAddress, "/webapp/?conference=", roomalias.alias, "&name=Operator&bw=512&join=1");
             //List<object> attend = meeting.Attendees.Select(att => GetAllPB().FirstOrDefault(m => m.Id == att)).Cast<object>().ToList();
-            meeting.InitName = init.Sammaccount;
-            //meeting.InitFullname = init.DispName;
             if (meeting.Start < DateTime.Today + TimeSpan.FromHours(3))
             { Debug.WriteLine("@@@"); }
             List<AspNetUser> emaillist = new List<AspNetUser>();
-            //emaillist.Add(init);
+            emaillist.Add(init);
             StringBuilder strB = new StringBuilder();
             foreach (var att in meeting.Attendees)
             {
-                //AspNetUser attemail = (GetAllPB().FirstOrDefault(m => m.Id == att));
-                //emaillist.Add(attemail);
+                AspNetUser attemail = (GetAllPB().FirstOrDefault(m => m.Id == att));
+                emaillist.Add(attemail);
             }
             List<string> AddAtt = new List<string>();
             if (meeting.AddAttend != null) { AddAtt = (meeting.AddAttend.Split((",").ToCharArray())).ToList(); }
@@ -96,23 +96,22 @@ namespace OWL_Site.Controllers
 
             foreach (var mail in emaillist)
             {
-
+                Debug.WriteLine(mail.Email);
                 if (mail.DispName.Contains(" "))
                 {
                     mail.DispName = mail.DispName.Replace(" ", "%20");
                 }
                 else { }
-                //string link = "https://" + "10.129.15.129" + "/webapp/?conference=" + init.DispName + "&name=" +
-                //              Uri.EscapeDataString(mail.DispName) + "&bw=512&join=1";
-                //string body = "Уважамый(ая), " + mail.DispName + "!" + Environment.NewLine + meeting.Start +
-                //              TimeSpan.FromHours(3) + " состоится конференция на тему \"" + meeting.Title + "\"." +
-                //              Environment.NewLine + "Инициатор конференции: " + init.DispName + Environment.NewLine +
-                //              "В указанное время, для участия в конференции, просьба перейти по ссылке: " +
-                //              Environment.NewLine + link;
-                Debug.WriteLine(mail.Email);
+                string link = "https://" + MvcApplication.set.CobaCfgAddress + "/webapp/?conference=" + roomalias.alias + "&name=" +
+                              Uri.EscapeDataString(mail.DispName) + "&bw=512&join=1";
+                string body = "Уважамый(ая), " + mail.DispName + "!" + Environment.NewLine + meeting.Start +
+                              TimeSpan.FromHours(3) + " состоится конференция на тему \"" + meeting.Title + "\"." +
+                              Environment.NewLine + "Инициатор конференции: " + init.DispName + Environment.NewLine +
+                              "В указанное время, для участия в конференции, просьба перейти по ссылке: " +
+                              Environment.NewLine + link;
                 try
                 {
-                    //Sendmail(mail.email, meeting.Title, body);
+                    Sendmail(mail.Email, meeting.Title, body);
                 }
                 catch (Exception e)
                 {
@@ -183,7 +182,7 @@ namespace OWL_Site.Controllers
                     ViewBag.Rec = true;
                 }
             }
-            if (User.IsInRole("Admins"))
+            if (User.IsInRole("Admin"))
             {
               return Json(meetingService.GetAll().ToDataSourceResult(request));
             }
@@ -200,8 +199,6 @@ namespace OWL_Site.Controllers
                 meetingService.Update(meeting, ModelState);
                 RegexUtilities util = new RegexUtilities();
                 var idf = GetAllPB().FirstOrDefault(m => m.Sammaccount == User.Identity.Name);
-                //meeting.RoomID = AccountController.UID;
-                int rid = meeting.RoomID;
                 //var init = GetAllPB().FirstOrDefault(m => m.Id == rid);
                 //meeting.OpLink = string.Concat("https://", "10.129.15.129", "/webapp/?conference=", init.Sammaccount, "&name=Operator&bw=512&join=1");
                 //var attend = meeting.Attendees.Select(att => GetAllPB().FirstOrDefault(m => m.Id == att)).Cast<object>().ToList();
@@ -256,7 +253,7 @@ namespace OWL_Site.Controllers
             SmtpClient smtpClient = new SmtpClient(MvcApplication.set.AuthDnAddress, 25)
             {
                 UseDefaultCredentials = false,
-                EnableSsl = true,
+                EnableSsl = false,
 
                 Credentials = new NetworkCredential("cobaservice", "Ciscocisco123"),
 
@@ -309,7 +306,8 @@ namespace OWL_Site.Controllers
         }
         private IEnumerable<AspNetUser> GetAllPB()
         {
-            var data = GetPB();
+            aspnetdbEntities db = new aspnetdbEntities();
+            var data = db.AspNetUsers.AsEnumerable();
             return data;
         }
         public List<AspNetUser> GetPhBOw(string Owname) //get phonebook

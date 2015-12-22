@@ -55,7 +55,7 @@ namespace OWL_Site.Models
         public int RoomID { get; set; }
         //public int? StylistID { get; set; }
         public string OpLink { get; set; }
-        public IEnumerable<int> Attendees { get; set; }
+        public IEnumerable<string> Attendees { get; set; }
         public string AddAttend { get; set; }
         public string FileLink { get; set; }
         public bool Record { get; set; }
