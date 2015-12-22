@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
-using Microsoft.Ajax.Utilities;
 using OWL_Site.Models;
 using TaskScheduler;
 using Task = TaskScheduler.Task;
@@ -253,7 +252,7 @@ namespace OWL_Site.Controllers
             mettingsFiltered = meetings_all.AsEnumerable().Where(m => m.InitName == User.Identity.Name);
             foreach (var all in meetings_all)
             {
-                if (!all.Recfile.IsNullOrWhiteSpace())
+                if (!String.IsNullOrEmpty(all.Recfile))
                 {
                     ViewBag.Rec = true;
                 }
