@@ -18,20 +18,12 @@ namespace OWL_Site.Controllers
             return View();
         }
 
-        public ActionResult VideoRecords_Ajax(VideoRecords.DTResult param)
+        public ActionResult VideoRecords_Ajax()
         {
-            IEnumerable<VideoRecords.Object> filteredresult = GetRec();
-            List<VideoRecords.Object> list = new List<VideoRecords.Object>();
-            if (!String.IsNullOrEmpty(param.Search.Value))
-            {
-                filteredresult = GetRec().Where(c => (c.Conf.Contains(param.Search.Value) || c.PName.Contains(param.Search.Value)));
-            }
-
+            IEnumerable<VideoRecords.Object> result = GetRec();
             return Json(new
             {
-                recordsTotal = GetRec().Count(),
-                recordsFiltered = filteredresult.Count(),
-                data = filteredresult,
+               data = result,
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -40,7 +32,7 @@ namespace OWL_Site.Controllers
         {
             
 
-            if (!User.IsInRole("Admins"))
+            if (!User.IsInRole("Admin"))
             {
                 return Videorecs(User.Identity.Name);
             }
@@ -63,16 +55,7 @@ namespace OWL_Site.Controllers
         {
             DeleteRecordsFromDb(ids);
         }
-        //public ActionResult VideoRecDelete(string filepath)
-        //{
-        //    using (var client = new SshClient("10.157.5.87", "username", "password"))
-        //    {
-        //        client.Connect();
-        //        client.RunCommand("etc/init.d/networking restart");
-        //        client.Disconnect();
-        //    }
-        //    return null;
-        //}
+
         public List<VideoRecords.Object> Videorecs(string val)
         {
             //MySql.Data.MySqlClient.MySqlConnection conn;

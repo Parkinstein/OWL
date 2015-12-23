@@ -851,7 +851,7 @@ footer {
 .phonebook_button_delete {
     width: 20%;
     height: 24px;
-    margin: 1% 10% 1% 19%;
+    margin: 0px 0px 0px 40%;
     background-color: #3d3d6a;
     font-weight: bold;
     color: white;

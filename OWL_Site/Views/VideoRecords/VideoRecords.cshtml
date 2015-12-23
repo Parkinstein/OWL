@@ -9,7 +9,7 @@
 <script src="@Url.Content("~/Scripts/DataTables/datatables.select.min.js")"></script>
 <script src="@Url.Content("~/Scripts/moment-with-locales.min.js")"></script>
 
-<div class="control_grid">
+<div id="video_recs" class="control_grid">
     <table id="table_rec" class="display">
         <thead>
             <tr>
@@ -38,9 +38,8 @@
             "paging": true,
             "autoWidth": false,
             "processing": true,
-            "pageLength": 30,
+            "pageLength": 20,
             "lengthChange": false,
-            "serverSide": true,
             "select": {
                 "style": 'multi',
             },
@@ -131,4 +130,14 @@
         }
         setTimeout(refresh_rec, 500);
     };
+    $(function () {
+        $('#video_recs').slimScroll({
+            height: '98%',
+            width: '100%',
+            size: '7px',
+            position: 'right',
+            color: '#3d3d6a',
+            distance: '0px'
+        });
+    });
 </script>

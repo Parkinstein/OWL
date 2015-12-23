@@ -16,16 +16,5 @@ namespace OWL_Site.Models
             public DateTime Tfinish { get; set; }
             public string Link { get; set; }
         }
-        public class DTResult
-        {
-            public string recordsTotal { get; set; }
-            public string recordsFiltered { get; set; }
-            public DTSearch Search { get; set; }
-        }
-        public class DTSearch
-        {
-            public string Value { get; set; }
-            public bool Regex { get; set; }
-        }
     }
 }
