@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.DirectoryServices;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
+using System.Net.Mime;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,6 +64,7 @@ namespace OWL_Service
         {
             GetPhonebookUsers();
             GetVmrList();
+            GetNowMeeting();
         }
         public Setting Settings_Read()
         {
@@ -69,6 +72,8 @@ namespace OWL_Service
             set = db.Settings.FirstOrDefault();
             return set;
         }
+
+        #region SyncData
         public List<ApplicationUser> GetPhonebookUsers()
         {
             List<ApplicationUser> allreco = new List<ApplicationUser>();
@@ -332,6 +337,50 @@ namespace OWL_Service
             }
             return All_Vmrs;
         }
+        #endregion
+
+        #region CheckTimeMeeting
+
+        public void GetNowMeeting()
+        {
+            DateTime dt1 = DateTime.Now - TimeSpan.FromMinutes(180);
+            DateTime dt2 = DateTime.Now - TimeSpan.FromMinutes(120);
+            var soonmeet = databs.Meetings.Where(t => t.Start > dt1);
+            var diapmet = soonmeet.Where(s => s.Start < dt2);
+            foreach (var meet in diapmet)
+            {
+                Debug.WriteLine(meet.MeetingID);
+            }
+        }
+        public Task<ActionResult> Sendmail(string to, string subj, string body)
+        {
+            SmtpClient smtpClient = new SmtpClient(set.AuthDnAddress, 25)
+            {
+                UseDefaultCredentials = false,
+                EnableSsl = false,
+                Credentials = new NetworkCredential("cobaservice", "Ciscocisco123"),
+
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                Timeout = 20000
+            };
+            MailMessage mailMessage = new MailMessage()
+            {
+                Priority = MailPriority.High,
+                From = new MailAddress("putin@kremlin.ru", "Планировщик системы видео-конференц-связи 'Сова'")
+            };
+            AlternateView alternateHtml = AlternateView.CreateAlternateViewFromString(body,
+                                                                            new ContentType("text/html"));
+            mailMessage.AlternateViews.Add(alternateHtml);
+            mailMessage.To.Add(new MailAddress(to));
+            mailMessage.Subject = subj;
+            mailMessage.Body = body;
+
+            smtpClient.Send(mailMessage);
+            return null;
+        }
+
+        #endregion
+
         protected override void OnStop()
         {
             polling.Dispose();

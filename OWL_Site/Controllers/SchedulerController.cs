@@ -321,7 +321,7 @@ namespace OWL_Site.Controllers
                                   TimeSpan.FromHours(3)).ToString("U") +"<br>" + "Инициатор конференции: " + init.DispName + "<br>" + "В указанное время, для участия в конференции, просьба перейти по " + link + "<br><br>" + "<b><i>Данные для самостоятельного входа:<i><b><br> Адрес сервера: " + "https://" + MvcApplication.set.CobaCfgAddress + "/" + "<br>" + "Имя конференции: " + roomalias.alias + "<br>" + gpmail + "<br>" + "SIP-адрес: " + roomalias.alias + "@" + MvcApplication.set.CobaCfgAddress;
                     try
                     {
-                        Sendmail(mail.Email, "UPD: " + meeting.Title, body);
+                       Sendmail(mail.Email, "UPD: " + meeting.Title, body);
                     }
                     catch (Exception e)
                     {
