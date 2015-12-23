@@ -137,7 +137,13 @@
     <Compile Include="Ivr_Themes.cs">
       <DependentUpon>SystemData.tt</DependentUpon>
     </Compile>
-    <Compile Include="PrivateBook.cs">
+    <Compile Include="Meeting.cs">
+      <DependentUpon>SystemData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MeetingAttendee.cs">
+      <DependentUpon>SystemData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PrivatePhB.cs">
       <DependentUpon>SystemData.tt</DependentUpon>
     </Compile>
     <Compile Include="ProjectInstaller.cs">

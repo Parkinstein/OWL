@@ -242,6 +242,8 @@ namespace OWL_Service
         {
             All_Vmrs = new List<AllVMRS.AllVmrs>();
             aspnetdbEntities dtbs = new aspnetdbEntities();
+            List<int> remoteInts =new List<int>();
+            List<int> localInts = new List<int>();
             Uri confapi = new Uri("https://" + set.CobaMngAddress + "/api/admin/configuration/v1/conference/");
             WebClient client = new WebClient();
             client.Credentials = new NetworkCredential("admin", "NKCTelemed");
@@ -257,6 +259,7 @@ namespace OWL_Service
                 foreach (var vm in All_Vmrs)
                 {
                     AllVmr confroom = new AllVmr();
+                    remoteInts.Add(vm.id);
                     confroom.Id = vm.id;
                     confroom.allow_guests = vm.allow_guests;
                     confroom.description = vm.description;
@@ -264,8 +267,8 @@ namespace OWL_Service
                     confroom.guest_pin = vm.guest_pin;
                     confroom.guest_view = vm.guest_view;
                     confroom.host_view = vm.host_view;
-                    confroom.max_callrate_in_ = vm.max_callrate_in;
-                    confroom.max_callrate_out_ = vm.max_callrate_out;
+                    confroom.max_callrate_in = vm.max_callrate_in;
+                    confroom.max_callrate_out = vm.max_callrate_out;
                     confroom.name = vm.name;
                     confroom.participant_limit = vm.participant_limit;
                     confroom.pin = vm.pin;
@@ -300,6 +303,21 @@ namespace OWL_Service
                     catch (Exception ex)
                     {
                         Debug.WriteLine(ex.InnerException);
+                    }
+                }
+                foreach (var locrec in dtbs.AllVmrs)
+                {
+                    localInts.Add(locrec.Id);
+                }
+                foreach (var locint in localInts)
+                {
+                    if (!remoteInts.Contains(locint))
+                    {
+                        var delvmr = dtbs.AllVmrs.FirstOrDefault(v => v.Id == locint);
+                        var delalias = dtbs.VmrAliases.Where(a => a.vmid == delvmr.Id);
+                        dtbs.VmrAliases.RemoveRange(delalias);
+                        dtbs.AllVmrs.Remove(delvmr);
+                        Debug.WriteLine(delvmr.name);
                     }
                 }
                 try

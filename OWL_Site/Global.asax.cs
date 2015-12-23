@@ -26,6 +26,8 @@ namespace OWL_Site
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             Settings_Read();
             GetPhonebookUsers();
+            
+
 
             // Database.SetInitializer<ApplicationDbContext>(new ApplicationDbContext.DropCreateAlwaysInitializer());
         }
