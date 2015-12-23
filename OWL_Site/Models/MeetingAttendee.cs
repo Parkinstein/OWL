@@ -15,7 +15,7 @@ namespace OWL_Site.Models
     public partial class MeetingAttendee
     {
         public int MeetingID { get; set; }
-        public int AttendeeID { get; set; }
+        public string AttendeeID { get; set; }
     
         public virtual Meeting Meeting { get; set; }
     }

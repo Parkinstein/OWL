@@ -21,8 +21,8 @@
         <EntityTypeShape EntityType="aspnetdbModel.VmrAlias" Width="1.5" PointX="8.75" PointY="7.75" />
         <EntityTypeShape EntityType="aspnetdbModel.PrivatePhB" Width="1.5" PointX="11.375" PointY="0.75" />
         <EntityTypeShape EntityType="aspnetdbModel.AllVmr" Width="1.5" PointX="8.375" PointY="0.75" />
-        <EntityTypeShape EntityType="aspnetdbModel.Meeting" Width="1.5" PointX="8.375" PointY="11.125" />
         <EntityTypeShape EntityType="aspnetdbModel.MeetingAttendee" Width="1.5" PointX="10.625" PointY="12.875" />
+        <EntityTypeShape EntityType="aspnetdbModel.Meeting" Width="1.5" PointX="8.375" PointY="11.125" />
         <AssociationConnector Association="aspnetdbModel.FK_MeetingAtendee_Meeting" />
         <AssociationConnector Association="aspnetdbModel.FK_Meetings_Meetings" />
       </Diagram>

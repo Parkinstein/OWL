@@ -39,7 +39,6 @@
           .StartTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 10, 00, 00))
           .EndTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 19, 00, 00))
           .Height(600)
-
           .Timezone("Europe/Moscow")
           .MinorTickCount(4)
           .MajorTick(60)
@@ -57,6 +56,7 @@
           .Editable(editable =>
           {
               editable.TemplateName("CustomEditorTemplate");
+              
           })
           .DataSource(d => d
 

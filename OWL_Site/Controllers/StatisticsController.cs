@@ -51,7 +51,7 @@ namespace PepuxFront.Controllers
                 Uri historyapi = new Uri("https://" + MvcApplication.set.CobaMngAddress + "/api/admin/history/v1/conference/?limit=100");
                 WebClient client = new WebClient();
                 client.Credentials = new NetworkCredential("admin", "NKCTelemed");
-                client.Headers.Add("auth", "admin,ciscovoip");
+                client.Headers.Add("auth", "admin,NKCTelemed");
                 client.Headers.Add("veryfy", "False");
                 ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
                 HistoryVmrFull = JsonConvert.DeserializeObject<VmrStatsResponse>(Win1251ToUTF8(client.DownloadString(historyapi)));
@@ -81,7 +81,7 @@ namespace PepuxFront.Controllers
                     new Uri("https://" + MvcApplication.set.CobaMngAddress + "/api/admin/history/v1/participant/?conference=" + id);
                 WebClient client = new WebClient();
                 client.Credentials = new NetworkCredential("admin", "NKCTelemed");
-                client.Headers.Add("auth", "admin,ciscovoip");
+                client.Headers.Add("auth", "admin,NKCTelemed");
                 client.Headers.Add("veryfy", "False");
                 ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
                 HistoryParticipantsFull =

@@ -104,15 +104,13 @@
           <Property Name="vmid" Type="int" />
           <Property Name="intid" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'aspnetdb.dbo.MeetingAttendees' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="MeetingAttendees">
           <Key>
             <PropertyRef Name="MeetingID" />
             <PropertyRef Name="AttendeeID" />
           </Key>
           <Property Name="MeetingID" Type="int" Nullable="false" />
-          <Property Name="AttendeeID" Type="int" Nullable="false" />
+          <Property Name="AttendeeID" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Meetings">
           <Key>
@@ -121,15 +119,15 @@ warning 6002: The table/view 'aspnetdb.dbo.MeetingAttendees' does not have a pri
           <Property Name="MeetingID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Start" Type="datetime" Nullable="false" />
           <Property Name="End" Type="datetime" Nullable="false" />
-          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Title" Type="ntext" Nullable="false" />
+          <Property Name="Description" Type="ntext" />
           <Property Name="RoomID" Type="int" />
           <Property Name="IsAllDay" Type="bit" Nullable="false" />
-          <Property Name="RecurrenceRule" Type="nvarchar(max)" />
+          <Property Name="RecurrenceRule" Type="ntext" />
           <Property Name="RecurrenceID" Type="int" />
-          <Property Name="RecurrenceException" Type="nvarchar(max)" />
-          <Property Name="StartTimezone" Type="nvarchar(max)" />
-          <Property Name="EndTimezone" Type="nvarchar(max)" />
+          <Property Name="RecurrenceException" Type="ntext" />
+          <Property Name="StartTimezone" Type="ntext" />
+          <Property Name="EndTimezone" Type="ntext" />
           <Property Name="Oplink" Type="nvarchar(max)" />
           <Property Name="AddAttend" Type="nvarchar(max)" />
           <Property Name="FileLink" Type="nvarchar(max)" />
@@ -288,16 +286,11 @@ warning 6002: The table/view 'aspnetdb.dbo.MeetingAttendees' does not have a pri
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ivr_Themes" EntityType="Self.Ivr_Themes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MeetingAttendees" EntityType="Self.MeetingAttendees" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Meetings" EntityType="Self.Meetings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PrivatePhBs" EntityType="Self.PrivatePhBs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Settings" EntityType="Self.Settings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VmrAliases" EntityType="Self.VmrAliases" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="MeetingAttendees" EntityType="Self.MeetingAttendees" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [MeetingAttendees].[MeetingID] AS [MeetingID], 
-    [MeetingAttendees].[AttendeeID] AS [AttendeeID]
-    FROM [dbo].[MeetingAttendees] AS [MeetingAttendees]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
@@ -549,8 +542,8 @@ warning 6002: The table/view 'aspnetdb.dbo.MeetingAttendees' does not have a pri
           <EntitySet Name="VmrAliases" EntityType="aspnetdbModel.VmrAlias" />
           <EntitySet Name="PrivatePhBs" EntityType="aspnetdbModel.PrivatePhB" />
           <EntitySet Name="AllVmrs" EntityType="aspnetdbModel.AllVmr" />
-          <EntitySet Name="Meetings" EntityType="aspnetdbModel.Meeting" />
           <EntitySet Name="MeetingAttendees" EntityType="aspnetdbModel.MeetingAttendee" />
+          <EntitySet Name="Meetings" EntityType="aspnetdbModel.Meeting" />
           <AssociationSet Name="FK_MeetingAtendee_Meeting" Association="aspnetdbModel.FK_MeetingAtendee_Meeting">
             <End Role="Meeting" EntitySet="Meetings" />
             <End Role="MeetingAttendee" EntitySet="MeetingAttendees" />
@@ -559,7 +552,7 @@ warning 6002: The table/view 'aspnetdb.dbo.MeetingAttendees' does not have a pri
             <End Role="Meeting" EntitySet="Meetings" />
             <End Role="Meeting1" EntitySet="Meetings" />
           </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
         <EntityType Name="Ivr_Themes">
           <Key>
             <PropertyRef Name="Id" />
@@ -610,6 +603,15 @@ warning 6002: The table/view 'aspnetdb.dbo.MeetingAttendees' does not have a pri
           <Property Name="tag" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="vmid" Type="Int32" />
         </EntityType>
+        <EntityType Name="MeetingAttendee">
+          <Key>
+            <PropertyRef Name="MeetingID" />
+            <PropertyRef Name="AttendeeID" />
+          </Key>
+          <Property Name="MeetingID" Type="Int32" Nullable="false" />
+          <Property Name="AttendeeID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Meeting" Relationship="aspnetdbModel.FK_MeetingAtendee_Meeting" FromRole="MeetingAttendee" ToRole="Meeting" />
+        </EntityType>
         <EntityType Name="Meeting">
           <Key>
             <PropertyRef Name="MeetingID" />
@@ -637,15 +639,6 @@ warning 6002: The table/view 'aspnetdb.dbo.MeetingAttendees' does not have a pri
           <NavigationProperty Name="Meetings1" Relationship="aspnetdbModel.FK_Meetings_Meetings" FromRole="Meeting" ToRole="Meeting1" />
           <NavigationProperty Name="Meeting1" Relationship="aspnetdbModel.FK_Meetings_Meetings" FromRole="Meeting1" ToRole="Meeting" />
         </EntityType>
-        <EntityType Name="MeetingAttendee">
-          <Key>
-            <PropertyRef Name="MeetingID" />
-            <PropertyRef Name="AttendeeID" />
-          </Key>
-          <Property Name="MeetingID" Type="Int32" Nullable="false" />
-          <Property Name="AttendeeID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Meeting" Relationship="aspnetdbModel.FK_MeetingAtendee_Meeting" FromRole="MeetingAttendee" ToRole="Meeting" />
-        </EntityType>
         <Association Name="FK_MeetingAtendee_Meeting">
           <End Type="aspnetdbModel.Meeting" Role="Meeting" Multiplicity="1" />
           <End Type="aspnetdbModel.MeetingAttendee" Role="MeetingAttendee" Multiplicity="*" />
@@ -670,7 +663,7 @@ warning 6002: The table/view 'aspnetdb.dbo.MeetingAttendees' does not have a pri
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -820,6 +813,14 @@ warning 6002: The table/view 'aspnetdb.dbo.MeetingAttendees' does not have a pri
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="MeetingAttendees">
+            <EntityTypeMapping TypeName="aspnetdbModel.MeetingAttendee">
+              <MappingFragment StoreEntitySet="MeetingAttendees">
+                <ScalarProperty Name="AttendeeID" ColumnName="AttendeeID" />
+                <ScalarProperty Name="MeetingID" ColumnName="MeetingID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Meetings">
             <EntityTypeMapping TypeName="aspnetdbModel.Meeting">
               <MappingFragment StoreEntitySet="Meetings">
@@ -845,15 +846,7 @@ warning 6002: The table/view 'aspnetdb.dbo.MeetingAttendees' does not have a pri
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="MeetingAttendees">
-            <EntityTypeMapping TypeName="aspnetdbModel.MeetingAttendee">
-              <MappingFragment StoreEntitySet="MeetingAttendees">
-                <ScalarProperty Name="AttendeeID" ColumnName="AttendeeID" />
-                <ScalarProperty Name="MeetingID" ColumnName="MeetingID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-        </EntityContainerMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

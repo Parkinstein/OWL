@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
+using Kendo.Mvc.Extensions;
 
 namespace OWL_Site.Models
 {
@@ -46,33 +49,7 @@ namespace OWL_Site.Models
 
             }).AsQueryable();
         }
-        public IQueryable<MeetingViewModel> GetFiltered(string initname)
-        {
-            return db.Meetings.ToList().Select(meeting => new MeetingViewModel
-            {
-                MeetingID = meeting.MeetingID,  //.MeetingID,
-                Title = meeting.Title,
-                Start = DateTime.SpecifyKind(meeting.Start, DateTimeKind.Utc),
-                End = DateTime.SpecifyKind(meeting.End, DateTimeKind.Utc),
-                StartTimezone = meeting.StartTimezone,
-                EndTimezone = meeting.EndTimezone,
-                Description = meeting.Description,
-                IsAllDay = meeting.IsAllDay,
-                RoomID = (int)meeting.RoomID,
-                RecurrenceRule = meeting.RecurrenceRule,
-                RecurrenceException = meeting.RecurrenceException,
-                RecurrenceID = meeting.RecurrenceID,
-                Attendees = meeting.MeetingAttendees.Select(m => m.AttendeeID).ToArray(),
-                OpLink = meeting.Oplink,
-                AddAttend = meeting.AddAttend,
-                FileLink = meeting.FileLink,
-                Record = meeting.Record,
-                Recfile = meeting.Recfile,
-                InitName = meeting.InitName,
-                InitFullname = meeting.InitName
-
-            }).AsQueryable();
-        }
+        
 
 
         public void Insert(MeetingViewModel meeting, ModelStateDictionary modelState)
@@ -81,7 +58,7 @@ namespace OWL_Site.Models
             {
                 if (meeting.Attendees == null)
                 {
-                    meeting.Attendees = new int[0];
+                    meeting.Attendees = new string[0];
                 }
 
                 if (string.IsNullOrEmpty(meeting.Title))
@@ -90,18 +67,16 @@ namespace OWL_Site.Models
                 }
 
                 var entity = meeting.ToEntity();
-
+                entity.RoomID = meeting.RoomID;
                 foreach (var attendeeId in meeting.Attendees)
                 {
-                    entity.MeetingAttendees.Add(new MeetingAttendee
-                    {
-                        AttendeeID = attendeeId
-                    });
+                    MeetingAttendee attendee = new MeetingAttendee();
+                    attendee.MeetingID = meeting.MeetingID;
+                    attendee.AttendeeID = attendeeId;
+                    db.MeetingAttendees.Add(attendee);
                 }
-                //db.Meetings.AddOrUpdate(entity);//OnSubmit(entity);//OnSubmit(entity);
-                db.Meetings.Add(entity);  //.Meetings.Add(entity);
+                db.Meetings.Add(entity);  
                 db.SaveChanges();
-                Debug.WriteLine("Saved");
                 meeting.MeetingID = entity.MeetingID;
             }
         }
@@ -114,9 +89,7 @@ namespace OWL_Site.Models
                 {
                     meeting.Title = "";
                 }
-
-                var entity = db.Meetings.Include("MeetingAttendees").FirstOrDefault(m => m.MeetingID == meeting.MeetingID);
-
+                var entity = db.Meetings.FirstOrDefault(m => m.MeetingID == meeting.MeetingID);
                 entity.Title = meeting.Title;
                 entity.Start = meeting.Start;
                 entity.End = meeting.End;
@@ -135,10 +108,12 @@ namespace OWL_Site.Models
                 entity.Recfile = meeting.Recfile;
                 entity.InitName = meeting.InitName;
                 entity.InitFullname = meeting.InitFullname;
+                
+
 
                 foreach (var meetingAttendee in entity.MeetingAttendees.ToList())
                 {
-                    entity.MeetingAttendees.Remove(meetingAttendee);
+                    db.MeetingAttendees.Remove(meetingAttendee);
                 }
 
                 if (meeting.Attendees != null)
@@ -147,11 +122,11 @@ namespace OWL_Site.Models
                     {
                         var meetingAttendee = new MeetingAttendee
                         {
-                            MeetingID = entity.MeetingID,
+                            MeetingID = meeting.MeetingID,
                             AttendeeID = attendeeId
                         };
 
-                        entity.MeetingAttendees.Add(meetingAttendee);
+                        db.MeetingAttendees.Add(meetingAttendee);
                     }
                 }
 
@@ -163,7 +138,7 @@ namespace OWL_Site.Models
         {
             if (meeting.Attendees == null)
             {
-                meeting.Attendees = new int[0];
+                meeting.Attendees = new string[0];
             }
 
             var entity = meeting.ToEntity();

@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.Entity.Migrations;
 using System.Diagnostics;
 using System.DirectoryServices;
 using System.Linq;
 using System.Net;
-using System.Security.Claims;
-using System.Security.Policy;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,9 +12,6 @@ using System.Timers;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
-using Microsoft.Owin.Security;
 using Newtonsoft.Json;
 
 namespace OWL_Service
@@ -97,17 +90,19 @@ namespace OWL_Service
                 dirSearcher.PropertiesToLoad.Add("displayName");
                 dirSearcher.PropertiesToLoad.Add("mail");
                 dirSearcher.PropertiesToLoad.Add("memberOf");
+                dirSearcher.PropertiesToLoad.Add("ipPhone");
                 SearchResultCollection resultCol = dirSearcher.FindAll();
                 foreach (SearchResult resul in resultCol)
                 {
                     ApplicationUser objSurveyUsers = new ApplicationUser();
                     objSurveyUsers.Name = GetProperty(resul, "givenName");
                     objSurveyUsers.Surname = GetProperty(resul, "sn"); 
-                    objSurveyUsers.Tel_int = GetProperty(resul, "telephoneNumber");
+                    objSurveyUsers.Tel_mob = GetProperty(resul, "telephoneNumber");
                     objSurveyUsers.Position = GetProperty(resul, "title"); 
                     objSurveyUsers.Email = GetProperty(resul, "mail"); 
                     objSurveyUsers.Sammaccount = GetProperty(resul, "sAMAccountName");
                     objSurveyUsers.DispName = GetProperty(resul, "displayName");
+                    objSurveyUsers.Tel_int = GetProperty(resul, "ipPhone");
                     if (GetProperty(resul, "memberOf").Contains("COBA_admin"))
                     {
                         grname = "Admins";
@@ -153,17 +148,14 @@ namespace OWL_Service
                     }
                     catch (Exception exe)
                     {
-                        
                         Debug.WriteLine(exe.InnerException);
                     }
-                    
                 }
                 if (locusr.Contains(domenuser.Sammaccount))
                 {
                     var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
                     var manager1 = new UserManager<ApplicationUser>(store);
                     var user =  manager1.FindByName(domenuser.Sammaccount);
-
                     user.DispName = domenuser.DispName;
                     user.Group = domenuser.Group;
                     user.H323_addr = domenuser.H323_addr;
@@ -173,9 +165,9 @@ namespace OWL_Service
                     user.Surname = domenuser.Surname;
                     user.Email = domenuser.Email;
                     user.Tel_int = domenuser.Tel_int;
+                    user.Tel_mob = domenuser.Tel_mob;
                     var result = await manager1.UpdateAsync(user);
                 }
-
             }
             foreach (var lokuser in locrecords)
             {
@@ -187,17 +179,13 @@ namespace OWL_Service
                         var manager1 = new UserManager<ApplicationUser>(store);
                         var user = manager1.FindByName(lokuser.Sammaccount);
                         string[] deletegr = new string[] { "Admin", "User" };
-                        var result1 = manager.RemoveFromRolesAsync(user.Id, deletegr);
-                        var result = await manager1.DeleteAsync(user);
+                        await manager.RemoveFromRolesAsync(user.Id, deletegr);
+                        await manager1.DeleteAsync(user);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        Debug.WriteLine(ex.InnerException);
                     }
-                    
-
                 }
-
             }
         }
         private async Task<ActionResult> Register(ApplicationUser model)
@@ -217,7 +205,6 @@ namespace OWL_Service
                 };
                 var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
                 IdentityResult result = await manager.CreateAsync(user,"1Q2w3e4r!");
-                
                 if (result.Succeeded)
                 {
                     if (model.Group == "Admins")
@@ -242,18 +229,11 @@ namespace OWL_Service
                             Debug.WriteLine(user.Id);
                             Debug.WriteLine(e1.InnerException);
                         }
-                        
                     }
                     cont.SaveChanges();
-
-                    Debug.WriteLine(user.DispName+"   ");
                 }
                 else
                 {
-                    foreach (var err in result.Errors)
-                    {
-                        Debug.WriteLine(err);
-                    }
                 }
             }
             return null;
@@ -270,7 +250,7 @@ namespace OWL_Service
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             string reply = client.DownloadString(confapi);
             string reply1 = Win1251ToUTF8(reply);
-            if (reply.ToString() != null)
+            if (!String.IsNullOrEmpty(reply))
             {
                 All_VM_obj = JsonConvert.DeserializeObject<AllVMRS.VmrParent>(reply1);
                 All_Vmrs = All_VM_obj.obj;
@@ -319,7 +299,6 @@ namespace OWL_Service
                     }
                     catch (Exception ex)
                     {
-
                         Debug.WriteLine(ex.InnerException);
                     }
                 }

@@ -9,18 +9,33 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OWL_Service", "OWL_Service\
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CD_ROM|Any CPU = CD_ROM|Any CPU
 		Debug|Any CPU = Debug|Any CPU
+		DVD-5|Any CPU = DVD-5|Any CPU
 		Release|Any CPU = Release|Any CPU
+		SingleImage|Any CPU = SingleImage|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9509716B-AA4F-4128-ABFF-7122301DF29C}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{9509716B-AA4F-4128-ABFF-7122301DF29C}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
 		{9509716B-AA4F-4128-ABFF-7122301DF29C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9509716B-AA4F-4128-ABFF-7122301DF29C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9509716B-AA4F-4128-ABFF-7122301DF29C}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{9509716B-AA4F-4128-ABFF-7122301DF29C}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
 		{9509716B-AA4F-4128-ABFF-7122301DF29C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9509716B-AA4F-4128-ABFF-7122301DF29C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9509716B-AA4F-4128-ABFF-7122301DF29C}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{9509716B-AA4F-4128-ABFF-7122301DF29C}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{62A75FCD-4C19-47F9-8C3E-261E759B4A7F}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{62A75FCD-4C19-47F9-8C3E-261E759B4A7F}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
 		{62A75FCD-4C19-47F9-8C3E-261E759B4A7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{62A75FCD-4C19-47F9-8C3E-261E759B4A7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62A75FCD-4C19-47F9-8C3E-261E759B4A7F}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{62A75FCD-4C19-47F9-8C3E-261E759B4A7F}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
 		{62A75FCD-4C19-47F9-8C3E-261E759B4A7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62A75FCD-4C19-47F9-8C3E-261E759B4A7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62A75FCD-4C19-47F9-8C3E-261E759B4A7F}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{62A75FCD-4C19-47F9-8C3E-261E759B4A7F}.SingleImage|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
