@@ -352,7 +352,7 @@ namespace OWL_Service
                 Debug.WriteLine(meet.MeetingID);
             }
         }
-        public Task<ActionResult> Sendmail(string to, string subj, string body)
+        public async Task<ActionResult> Sendmail(string to, string subj, string body)
         {
             SmtpClient smtpClient = new SmtpClient(set.AuthDnAddress, 25)
             {
@@ -374,8 +374,7 @@ namespace OWL_Service
             mailMessage.To.Add(new MailAddress(to));
             mailMessage.Subject = subj;
             mailMessage.Body = body;
-
-            smtpClient.Send(mailMessage);
+            await smtpClient.SendMailAsync(mailMessage);
             return null;
         }
 
