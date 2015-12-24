@@ -155,9 +155,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.XML" />
-    <Reference Include="TaskScheduler, Version=10.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="TaskScheduler, Version=6.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Documents\Visual Studio 2015\Projects\ProjPepux\projPepux\PepuxFront\bin\TaskScheduler.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\projects\pepuxProj\PepuxFront\bin\TaskScheduler.dll</HintPath>
     </Reference>
     <Reference Include="Telerik.OpenAccess, Version=2015.3.926.1, Culture=neutral, PublicKeyToken=7ce17eeaf1d59342, processorArchitecture=MSIL">
       <HintPath>..\packages\Telerik.DataAccess.Core.2015.3.926.1\lib\net40\Telerik.OpenAccess.dll</HintPath>
@@ -295,15 +295,6 @@
     <Content Include="bin\Microsoft.Owin.Host.SystemWeb.dll" />
     <Content Include="bin\Microsoft.Owin.Security.Cookies.dll" />
     <Content Include="bin\Microsoft.Owin.Security.dll" />
-    <Content Include="bin\Microsoft.Owin.Security.Facebook.dll" />
-    <Content Include="bin\Microsoft.Owin.Security.Facebook.xml" />
-    <Content Include="bin\Microsoft.Owin.Security.Google.dll" />
-    <Content Include="bin\Microsoft.Owin.Security.Google.xml" />
-    <Content Include="bin\Microsoft.Owin.Security.MicrosoftAccount.dll" />
-    <Content Include="bin\Microsoft.Owin.Security.MicrosoftAccount.xml" />
-    <Content Include="bin\Microsoft.Owin.Security.OAuth.xml" />
-    <Content Include="bin\Microsoft.Owin.Security.Twitter.dll" />
-    <Content Include="bin\Microsoft.Owin.Security.Twitter.xml" />
     <Content Include="bin\MySql.Data.dll" />
     <Content Include="bin\Newtonsoft.Json.dll" />
     <Content Include="bin\Owin.dll" />
