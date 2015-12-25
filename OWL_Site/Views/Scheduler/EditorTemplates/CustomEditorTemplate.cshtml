@@ -122,7 +122,10 @@
 </div>
 <div data-container-for="recurrenceRule" class="k-edit-field">
     @(Html.Kendo().RecurrenceEditorFor(model => model.RecurrenceRule)
-        .HtmlAttributes(new { data_bind = "value:recurrenceRule" }))
+          .HtmlAttributes(new {data_bind = "value:recurrenceRule"}))
+</div>
+<div class="k-edit-label">
+    @(Html.Label("Выбор VMR"))
 </div>
 <div data-container-for="RoomID" class="k-edit-field">
         @(Html.Kendo().DropDownListFor(m => m.RoomID)
@@ -148,7 +151,6 @@
                   });
           })
         )
-
     <script>
         function requestData(selector) {
             var combobox = $(selector).data("kendoComboBox"),
@@ -161,7 +163,6 @@
             return { text: value };
         }
     </script>
-    <script></script>
 </div>
 <div class="k-edit-label">
     @(Html.Label("Участники"))
@@ -181,9 +182,7 @@
                   .Transport(transport =>
                   {
                       transport.Read("GetUsers", "Scheduler");
-
                   })
-
                   .Schema(schema =>
                   {
                       schema.Data("Data")
@@ -192,19 +191,18 @@
           })
     )
 </div>
-
 <div class="k-edit-label">
     @(Html.LabelFor(m => m.AddAttend, "Доп. участники"))
 </div>
 <div data-container-for="AddAttend" class="k-edit-field">
     @(Html.TextAreaFor(model => model.AddAttend, new { @class = "k-textbox", data_bind = "value:AddAttend" }))
 </div>
-<div class="k-edit-label">
+@*<div class="k-edit-label">
     @(Html.Label("Записывать"))
 </div>
 <div class="k-edit-field">
     <input data-bind="checked: Record" data-val="true" id="Record" name="Record" type="checkbox" />
-</div>
+</div>*@
 <div class="div_oplink" data_bind="value:OpLink" id="OpLink">
 
     <p><a href='#= OpLink #' target="_blank"><h6>Ссылка Оператора</h6></a></p>
@@ -212,15 +210,14 @@
     @*<a href="javascript:oplink_create()" id="link" target="_blank">Ссылка оператора</a>*@
 
 </div>
-<div class="div_oplink" data_bind="value:FileLink" id="FileLink">
+@*<div class="div_oplink" data_bind="value:FileLink" id="FileLink">
 
     <p>
         <a href='#= FileLink #'><h6>Файл встречи</h6></a>
     </p>
 
-    @*<a href="javascript:filelink_create()" id="link" target="_blank">Файл встречи</a>*@
-
-</div>
+    @*<a href="javascript:filelink_create()" id="link" target="_blank">Файл встречи</a>
+</div>*@
 <script>
     function reccheck() {
 

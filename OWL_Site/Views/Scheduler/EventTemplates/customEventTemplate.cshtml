@@ -1,0 +1,38 @@
+﻿@*<script>
+    function getColor(data) {
+        var date = new Date();
+        datenow = kendo.toString(date, 'yyyy/MM/dd HH:mm:ss.fff');
+        if (kendo.toString(data.start, 'yyyy/MM/dd HH:mm:ss.fff') < datenow && datenow < kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff')) {
+            return "green";
+        } else if (kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff') < datenow) {
+            return "gray";
+        } else {
+            return "blur";
+        }
+    }
+
+    function getColor2(data) {
+        var date = new Date();
+        datenow = kendo.toString(date, 'yyyy/MM/dd HH:mm:ss.fff');
+        if (kendo.toString(data.start, 'yyyy/MM/dd HH:mm:ss.fff') < datenow && datenow < kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff')) {
+            return "white";
+        } else if (kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff') < datenow) {
+            return "white";
+        } else {
+            return "blur";
+        }
+    }
+    document.getElementById("evnt").backgroundColor = getColor(data);
+    document.getElementById("titl").backgroundColor = getColor2(data);
+</script>*@
+
+
+
+@*<div class = "evnt" style ="height: 100%; margin-top: -10px; padding-top: 10px; padding-left: 5px; box-shadow: 0 0 10px #000000; box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);">
+    <h6 class="titl">'#=title #'</h6>
+    <h6 class="titl">'#= InitFullname #'</h6>
+    <p><a class="titl" href='#= OpLink #'><h6>Ссылка Оператора</h6></a></p>
+    <p><a class="titl" href='#= FileLink #'><h6>Файл встречи</h6></a></p>
+    <p><h6 class="titl">'#= kendo.toString(start, 'HH:mm') #'  -  '#= kendo.toString(end, 'HH:mm') #'</h6></p>
+</div>*@
+<div>'#= kendo.toString(start, 'HH:mm') #'</div>

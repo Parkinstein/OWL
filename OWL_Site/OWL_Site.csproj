@@ -2525,6 +2525,7 @@
     <Content Include="Views\Scheduler\Index.cshtml" />
     <Content Include="Views\Statistics\Statistics.cshtml" />
     <Content Include="Views\Scheduler\EditorTemplates\CustomEditorTemplate.cshtml" />
+    <Content Include="Views\Scheduler\EventTemplates\customEventTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
