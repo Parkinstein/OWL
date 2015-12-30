@@ -28,5 +28,14 @@ namespace OWL_Service
         public string CobaRecPass { get; set; }
         public string CobaRecBdName { get; set; }
         public string CobaRecBdTable { get; set; }
+        public string SmtpServer { get; set; }
+        public Nullable<int> SmtpPort { get; set; }
+        public bool SmtpSSL { get; set; }
+        public string SmtpLogin { get; set; }
+        public string SmtpPassword { get; set; }
+        public string MailFrom_email { get; set; }
+        public string MailFrom_name { get; set; }
+        public string CobaMngLogin { get; set; }
+        public string CobaMngPass { get; set; }
     }
 }

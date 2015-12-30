@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Entity.Migrations;
 using System.Diagnostics;
 using System.DirectoryServices;
@@ -26,6 +27,7 @@ namespace OWL_Service
         public List<AllVMRS.AllVmrs> All_Vmrs;
         public AllVMRS.VmrParent All_VM_obj;
         public static Setting set;
+        static bool mailSent = false;
         public static string GetProperty(SearchResult searchResult, string PropertyName)
         {
             if (searchResult.Properties.Contains(PropertyName))
@@ -341,41 +343,95 @@ namespace OWL_Service
 
         #region CheckTimeMeeting
 
-        public void GetNowMeeting()
+        public async void GetNowMeeting()
         {
+            
             DateTime dt1 = DateTime.Now - TimeSpan.FromMinutes(180);
-            DateTime dt2 = DateTime.Now - TimeSpan.FromMinutes(120);
+            DateTime dt2 = DateTime.Now - TimeSpan.FromMinutes(165);
             var soonmeet = databs.Meetings.Where(t => t.Start > dt1);
-            var diapmet = soonmeet.Where(s => s.Start < dt2);
+            var diapmet = soonmeet.Where(s => s.Start < dt2 && s.reminder);
             foreach (var meet in diapmet)
             {
-                Debug.WriteLine(meet.MeetingID);
+                List<string> maillist = new List<string>();
+                var attends = databs.MeetingAttendees.Where(m => m.MeetingID == meet.MeetingID);
+                List<string> AddAtt;
+                if (meet.AddAttend != null)
+                {
+                    AddAtt = ((meet.AddAttend.Replace(" ","")).Split((",").ToCharArray())).ToList();
+                    foreach (var adat in AddAtt)
+                    {
+                        maillist.Add(adat);
+                    }
+                }
+                foreach (var attend in attends)
+                {
+                    var reciever = databs.AspNetUsers.FirstOrDefault(u => u.Id == attend.AttendeeID);
+                    maillist.Add(reciever?.Email);
+                }
+                string body = String.Concat("Напоминиаем, что через ", (meet.Start-dt1).ToString(@"mm"), " минут состоится видеоконференция ", meet.Title);
+                foreach (var rcpt in maillist)
+                {
+                    await Sendmail(rcpt, meet.Title, body, meet);
+                    if (mailSent)
+                    {
+                        var db = new aspnetdbEntities();
+                        meet.reminder = false;
+                        db.Meetings.AddOrUpdate(meet);
+                        db.SaveChanges();
+
+                    }
+                }
+                
+               
             }
         }
-        public async Task<ActionResult> Sendmail(string to, string subj, string body)
+        public async Task Sendmail(string to, string subj, string body, Meeting meet)
         {
-            SmtpClient smtpClient = new SmtpClient(set.AuthDnAddress, 25)
+            SmtpClient smtpClient = new SmtpClient(set.SmtpServer, (int)set.SmtpPort)
             {
                 UseDefaultCredentials = false,
-                EnableSsl = false,
-                Credentials = new NetworkCredential("cobaservice", "Ciscocisco123"),
-
+                EnableSsl = set.SmtpSSL,
+                Credentials = new NetworkCredential(set.SmtpLogin, set.SmtpPassword),
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 Timeout = 20000
             };
             MailMessage mailMessage = new MailMessage()
             {
                 Priority = MailPriority.High,
-                From = new MailAddress("putin@kremlin.ru", "Планировщик системы видео-конференц-связи 'Сова'")
+                From = new MailAddress(set.MailFrom_email, set.MailFrom_name)
             };
             AlternateView alternateHtml = AlternateView.CreateAlternateViewFromString(body,
                                                                             new ContentType("text/html"));
             mailMessage.AlternateViews.Add(alternateHtml);
-            mailMessage.To.Add(new MailAddress(to));
+           
+                mailMessage.To.Add(new MailAddress(to));
+            
             mailMessage.Subject = subj;
             mailMessage.Body = body;
+            smtpClient.SendCompleted += new
+            SendCompletedEventHandler(SendCompletedCallback);
+
             await smtpClient.SendMailAsync(mailMessage);
-            return null;
+        }
+        
+        private static void SendCompletedCallback(object sender, AsyncCompletedEventArgs e)
+        {
+            // Get the unique identifier for this asynchronous operation.
+            string token = e.UserState.ToString();
+
+            if (e.Cancelled)
+            {
+                Debug.WriteLine("[{0}] Send canceled.", token);
+            }
+            if (e.Error != null)
+            {
+                Debug.WriteLine("[{0}] {1}", token, e.Error.ToString());
+            }
+            else
+            {
+                Debug.WriteLine("Message sent.");
+            }
+            mailSent = true;
         }
 
         #endregion

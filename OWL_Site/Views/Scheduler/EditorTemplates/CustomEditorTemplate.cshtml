@@ -36,6 +36,7 @@
 
     @(Html.Kendo().DateTimePickerFor(model => model.Start)
     .TimeFormat("HH:mm")
+    
         .HtmlAttributes(generateDatePickerAttributes("startDateTime", "start", "value:start,invisible:isAllDay")))
 
     @(Html.Kendo().DatePickerFor(model => model.Start)
