@@ -12,8 +12,11 @@ namespace OWL_Service
     using System;
     using System.Collections.Generic;
     
-    public partial class PrivateBook
+    public partial class PrivatePhB
     {
         public int Id { get; set; }
+        public string OwSAN { get; set; }
+        public string IdREC { get; set; }
+        public string Group { get; set; }
     }
 }

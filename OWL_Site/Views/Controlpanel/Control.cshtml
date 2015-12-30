@@ -856,9 +856,8 @@
     };
 
     var user = {
-        node: "84.253.116.75",
+        node: @MvcApplication.set.CobaCfgAddress,
         conference: "@ViewData["confnm"]",
-        conference: "apilugin",
         display_name: "@ViewData["dispnm"]",
         role: "HOST",
         token: null,
@@ -872,7 +871,7 @@
         guests_muted: false,
         live_active_call: null,
         last_message_origin: null,
-        record_server: "84.253.116.74",
+        record_server: @MvcApplication.set.CobaRecordsAddress,
         recorded: false,
         record_pid: null,
         record_id: null,

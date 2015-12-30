@@ -44,7 +44,8 @@
           .MajorTick(60)
           .AutoBind(true)
           .Mobile()
-                          .EventTemplate("<div style='background-color:#:getColor(data)#;height:100%;margin-top: -10px;padding-top:10px;padding-left:5px;box-shadow:0 0 10px rgba(0,0,0,0.9);'>" + "<h6 style='color:#:getColor2(data)#'>#= title #</h6>" + "<h6 style='color:#:getColor2(data)#'>#= InitFullname #</h6>" + "<p><a style='color:#:getColor2(data)#' href = '#= OpLink #'><h6>Ссылка Оператора</h6></a></p>" + "<p><a style='color:#:getColor2(data)#' href = '#= FileLink #'><h6>Файл встречи</h6></a></p>" + "<p><h6 style='color:#:getColor2(data)#'>" + "#= kendo.toString(start, 'HH:mm') #" + " - " + "#= kendo.toString(end, 'HH:mm') #</h6></p>" + "</div>")
+          //.EventTemplate("<div style='background-color:#:getColor(data)#;height:100%;margin-top: -10px;padding-top:10px;padding-left:5px;box-shadow:0 0 10px rgba(0,0,0,0.9);'>" + "<h6 style='color:#:getColor2(data)#'>#= title #</h6>" + "<h6 style='color:#:getColor2(data)#'>#= InitFullname #</h6>" + "<p><a style='color:#:getColor2(data)#' href = '#= OpLink #'><h6>Ссылка Оператора</h6></a></p>" + "<p><a style='color:#:getColor2(data)#' href = '#= FileLink #'><h6>Файл встречи</h6></a></p>" + "<p><h6 style='color:#:getColor2(data)#'>" + "#= kendo.toString(start, 'HH:mm') #" + " - " + "#= kendo.toString(end, 'HH:mm') #</h6></p>" + "</div>")
+          .EventTemplateId("customEventTemplate")
           .Views(views =>
           {
               views.DayView(v => v.Title("День"));
@@ -56,7 +57,7 @@
           .Editable(editable =>
           {
               editable.TemplateName("CustomEditorTemplate");
-              
+
           })
           .DataSource(d => d
 
@@ -124,3 +125,23 @@
         background-color: #a9a9a9;
     }
 </style>
+<script id="customEventTemplate" type="text/x-kendo-template">
+    <div style="background-color :#:getColor(data)#;" > @*style="height: 100%; margin-top: -10px; padding-top: 10px; padding-left: 5px; box-shadow: 0 0 10px #000000; box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);">*@
+        <p>#= title#</p>
+        @*<a href="" data-toggle="popover" title="Popover Header" data-content="Some content inside the popover">Toggle popover</a>*@
+        <a href="" data-toggle="tooltip" title="Hooray!">#= title#</a>
+    </div>
+        @*<div class="evnt" style="height: 100%; margin-top: -10px; padding-top: 10px; padding-left: 5px; box-shadow: 0 0 10px #000000; box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);">
+                <h6 class="titl">'#=title #'</h6>
+                <h6 class="titl">'#= InitFullname #'</h6>
+                <p><a class="titl" href='#= OpLink #'><h6>Ссылка Оператора</h6></a></p>
+                <p><a class="titl" href='#= FileLink #'><h6>Файл встречи</h6></a></p>
+                <p><h6 class="titl">'#= kendo.toString(start, 'HH:mm') #'  -  '#= kendo.toString(end, 'HH:mm') #'</h6></p>
+            </div>*@
+    $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+<script>
+
+</script>
