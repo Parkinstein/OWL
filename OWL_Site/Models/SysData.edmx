@@ -135,6 +135,7 @@
           <Property Name="Recfile" Type="nvarchar(max)" />
           <Property Name="InitName" Type="nvarchar(max)" />
           <Property Name="InitFullname" Type="nvarchar(max)" />
+          <Property Name="reminder" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PrivatePhBs">
           <Key>
@@ -163,6 +164,15 @@
           <Property Name="CobaRecPass" Type="nvarchar(max)" />
           <Property Name="CobaRecBdName" Type="nvarchar(max)" />
           <Property Name="CobaRecBdTable" Type="nvarchar(max)" />
+          <Property Name="SmtpServer" Type="nvarchar(max)" />
+          <Property Name="SmtpPort" Type="int" />
+          <Property Name="SmtpSSL" Type="bit" Nullable="false" />
+          <Property Name="SmtpLogin" Type="nvarchar(max)" />
+          <Property Name="SmtpPassword" Type="nvarchar(max)" />
+          <Property Name="MailFrom_email" Type="nvarchar(max)" />
+          <Property Name="MailFrom_name" Type="nvarchar(max)" />
+          <Property Name="CobaMngLogin" Type="nvarchar(max)" />
+          <Property Name="CobaMngPass" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="VmrAliases">
           <Key>
@@ -426,6 +436,15 @@
           <Property Name="CobaRecPass" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CobaRecBdName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CobaRecBdTable" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SmtpServer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SmtpPort" Type="Int32" />
+          <Property Name="SmtpSSL" Type="Boolean" Nullable="false" />
+          <Property Name="SmtpLogin" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SmtpPassword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MailFrom_email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MailFrom_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CobaMngLogin" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CobaMngPass" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_Role_Id">
           <End Role="AspNetRoles" Type="Self.AspNetRole" Multiplicity="0..1" />
@@ -638,6 +657,7 @@
           <NavigationProperty Name="MeetingAttendees" Relationship="aspnetdbModel.FK_MeetingAtendee_Meeting" FromRole="Meeting" ToRole="MeetingAttendee" />
           <NavigationProperty Name="Meetings1" Relationship="aspnetdbModel.FK_Meetings_Meetings" FromRole="Meeting" ToRole="Meeting1" />
           <NavigationProperty Name="Meeting1" Relationship="aspnetdbModel.FK_Meetings_Meetings" FromRole="Meeting1" ToRole="Meeting" />
+          <Property Name="reminder" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_MeetingAtendee_Meeting">
           <End Type="aspnetdbModel.Meeting" Role="Meeting" Multiplicity="1" />
@@ -742,6 +762,15 @@
           <EntitySetMapping Name="Settings">
             <EntityTypeMapping TypeName="aspnetdbModel.Setting">
               <MappingFragment StoreEntitySet="Settings">
+                <ScalarProperty Name="CobaMngPass" ColumnName="CobaMngPass" />
+                <ScalarProperty Name="CobaMngLogin" ColumnName="CobaMngLogin" />
+                <ScalarProperty Name="MailFrom_name" ColumnName="MailFrom_name" />
+                <ScalarProperty Name="MailFrom_email" ColumnName="MailFrom_email" />
+                <ScalarProperty Name="SmtpPassword" ColumnName="SmtpPassword" />
+                <ScalarProperty Name="SmtpLogin" ColumnName="SmtpLogin" />
+                <ScalarProperty Name="SmtpSSL" ColumnName="SmtpSSL" />
+                <ScalarProperty Name="SmtpPort" ColumnName="SmtpPort" />
+                <ScalarProperty Name="SmtpServer" ColumnName="SmtpServer" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="AuthDnAddress" ColumnName="AuthDnAddress" />
                 <ScalarProperty Name="OU" ColumnName="OU" />
@@ -824,6 +853,7 @@
           <EntitySetMapping Name="Meetings">
             <EntityTypeMapping TypeName="aspnetdbModel.Meeting">
               <MappingFragment StoreEntitySet="Meetings">
+                <ScalarProperty Name="reminder" ColumnName="reminder" />
                 <ScalarProperty Name="InitFullname" ColumnName="InitFullname" />
                 <ScalarProperty Name="InitName" ColumnName="InitName" />
                 <ScalarProperty Name="Recfile" ColumnName="Recfile" />
