@@ -119,15 +119,15 @@
           <Property Name="MeetingID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Start" Type="datetime" Nullable="false" />
           <Property Name="End" Type="datetime" Nullable="false" />
-          <Property Name="Title" Type="ntext" Nullable="false" />
-          <Property Name="Description" Type="ntext" />
+          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="RoomID" Type="int" />
           <Property Name="IsAllDay" Type="bit" Nullable="false" />
-          <Property Name="RecurrenceRule" Type="ntext" />
+          <Property Name="RecurrenceRule" Type="nvarchar(max)" />
           <Property Name="RecurrenceID" Type="int" />
-          <Property Name="RecurrenceException" Type="ntext" />
-          <Property Name="StartTimezone" Type="ntext" />
-          <Property Name="EndTimezone" Type="ntext" />
+          <Property Name="RecurrenceException" Type="nvarchar(max)" />
+          <Property Name="StartTimezone" Type="nvarchar(max)" />
+          <Property Name="EndTimezone" Type="nvarchar(max)" />
           <Property Name="Oplink" Type="nvarchar(max)" />
           <Property Name="AddAttend" Type="nvarchar(max)" />
           <Property Name="FileLink" Type="nvarchar(max)" />
@@ -135,6 +135,7 @@
           <Property Name="Recfile" Type="nvarchar(max)" />
           <Property Name="InitName" Type="nvarchar(max)" />
           <Property Name="InitFullname" Type="nvarchar(max)" />
+          <Property Name="reminder" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PrivatePhBs">
           <Key>
@@ -163,6 +164,15 @@
           <Property Name="CobaRecPass" Type="nvarchar(max)" />
           <Property Name="CobaRecBdName" Type="nvarchar(max)" />
           <Property Name="CobaRecBdTable" Type="nvarchar(max)" />
+          <Property Name="SmtpServer" Type="nvarchar(max)" />
+          <Property Name="SmtpPort" Type="int" />
+          <Property Name="SmtpSSL" Type="bit" Nullable="false" />
+          <Property Name="SmtpLogin" Type="nvarchar(max)" />
+          <Property Name="SmtpPassword" Type="nvarchar(max)" />
+          <Property Name="MailFrom_email" Type="nvarchar(max)" />
+          <Property Name="MailFrom_name" Type="nvarchar(max)" />
+          <Property Name="CobaMngLogin" Type="nvarchar(max)" />
+          <Property Name="CobaMngPass" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="VmrAliases">
           <Key>
@@ -520,6 +530,7 @@
           <NavigationProperty Name="MeetingAttendees" Relationship="aspnetdbModel.FK_MeetingAtendee_Meeting" FromRole="Meeting" ToRole="MeetingAttendee" />
           <NavigationProperty Name="Meetings1" Relationship="aspnetdbModel.FK_Meetings_Meetings" FromRole="Meeting" ToRole="Meeting1" />
           <NavigationProperty Name="Meeting1" Relationship="aspnetdbModel.FK_Meetings_Meetings" FromRole="Meeting1" ToRole="Meeting" />
+          <Property Name="reminder" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="PrivatePhB">
           <Key>
@@ -548,6 +559,15 @@
           <Property Name="CobaRecPass" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CobaRecBdName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CobaRecBdTable" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SmtpServer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SmtpPort" Type="Int32" />
+          <Property Name="SmtpSSL" Type="Boolean" Nullable="false" />
+          <Property Name="SmtpLogin" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SmtpPassword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MailFrom_email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MailFrom_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CobaMngLogin" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CobaMngPass" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VmrAlias">
           <Key>
@@ -667,188 +687,197 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="aspnetdbModelStoreContainer" CdmEntityContainer="aspnetdbEntities">
-          <EntitySetMapping Name="AllVmrs">
-            <EntityTypeMapping TypeName="aspnetdbModel.AllVmr">
-              <MappingFragment StoreEntitySet="AllVmrs">
-                <ScalarProperty Name="vmid" ColumnName="vmid" />
-                <ScalarProperty Name="tag" ColumnName="tag" />
-                <ScalarProperty Name="service_type" ColumnName="service_type" />
-                <ScalarProperty Name="resource_uri" ColumnName="resource_uri" />
-                <ScalarProperty Name="pin" ColumnName="pin" />
-                <ScalarProperty Name="participant_limit" ColumnName="participant_limit" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="max_callrate_out" ColumnName="max_callrate_out" />
-                <ScalarProperty Name="max_callrate_in" ColumnName="max_callrate_in" />
-                <ScalarProperty Name="host_view" ColumnName="host_view" />
-                <ScalarProperty Name="guest_view" ColumnName="guest_view" />
-                <ScalarProperty Name="guest_pin" ColumnName="guest_pin" />
-                <ScalarProperty Name="force_presenter_into_main" ColumnName="force_presenter_into_main" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="allow_guests" ColumnName="allow_guests" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AspNetRoles">
-            <EntityTypeMapping TypeName="aspnetdbModel.AspNetRole">
-              <MappingFragment StoreEntitySet="AspNetRoles">
-                <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AspNetUserClaims">
-            <EntityTypeMapping TypeName="aspnetdbModel.AspNetUserClaim">
-              <MappingFragment StoreEntitySet="AspNetUserClaims">
-                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
-                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AspNetUserLogins">
-            <EntityTypeMapping TypeName="aspnetdbModel.AspNetUserLogin">
-              <MappingFragment StoreEntitySet="AspNetUserLogins">
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
-                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AspNetUserRoles">
-            <EntityTypeMapping TypeName="aspnetdbModel.AspNetUserRole">
-              <MappingFragment StoreEntitySet="AspNetUserRoles">
-                <ScalarProperty Name="ApplicationUser_Id" ColumnName="ApplicationUser_Id" />
-                <ScalarProperty Name="Role_Id" ColumnName="Role_Id" />
-                <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
-                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AspNetUsers">
-            <EntityTypeMapping TypeName="aspnetdbModel.AspNetUser">
-              <MappingFragment StoreEntitySet="AspNetUsers">
-                <ScalarProperty Name="Group" ColumnName="Group" />
-                <ScalarProperty Name="H323_addr" ColumnName="H323_addr" />
-                <ScalarProperty Name="Sip_addr" ColumnName="Sip_addr" />
-                <ScalarProperty Name="Timezone" ColumnName="Timezone" />
-                <ScalarProperty Name="DispName" ColumnName="DispName" />
-                <ScalarProperty Name="Tel_mob" ColumnName="Tel_mob" />
-                <ScalarProperty Name="Tel_ext" ColumnName="Tel_ext" />
-                <ScalarProperty Name="Tel_int" ColumnName="Tel_int" />
-                <ScalarProperty Name="Position" ColumnName="Position" />
-                <ScalarProperty Name="Surname" ColumnName="Surname" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Sammaccount" ColumnName="Sammaccount" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
-                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
-                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
-                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
-                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
-                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
-                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Ivr_Themes">
-            <EntityTypeMapping TypeName="aspnetdbModel.Ivr_Themes">
-              <MappingFragment StoreEntitySet="Ivr_Themes">
-                <ScalarProperty Name="intid" ColumnName="intid" />
-                <ScalarProperty Name="vmid" ColumnName="vmid" />
-                <ScalarProperty Name="uuid" ColumnName="uuid" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MeetingAttendees">
-            <EntityTypeMapping TypeName="aspnetdbModel.MeetingAttendee">
-              <MappingFragment StoreEntitySet="MeetingAttendees">
-                <ScalarProperty Name="AttendeeID" ColumnName="AttendeeID" />
-                <ScalarProperty Name="MeetingID" ColumnName="MeetingID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Meetings">
-            <EntityTypeMapping TypeName="aspnetdbModel.Meeting">
-              <MappingFragment StoreEntitySet="Meetings">
-                <ScalarProperty Name="InitFullname" ColumnName="InitFullname" />
-                <ScalarProperty Name="InitName" ColumnName="InitName" />
-                <ScalarProperty Name="Recfile" ColumnName="Recfile" />
-                <ScalarProperty Name="Record" ColumnName="Record" />
-                <ScalarProperty Name="FileLink" ColumnName="FileLink" />
-                <ScalarProperty Name="AddAttend" ColumnName="AddAttend" />
-                <ScalarProperty Name="Oplink" ColumnName="Oplink" />
-                <ScalarProperty Name="EndTimezone" ColumnName="EndTimezone" />
-                <ScalarProperty Name="StartTimezone" ColumnName="StartTimezone" />
-                <ScalarProperty Name="RecurrenceException" ColumnName="RecurrenceException" />
-                <ScalarProperty Name="RecurrenceID" ColumnName="RecurrenceID" />
-                <ScalarProperty Name="RecurrenceRule" ColumnName="RecurrenceRule" />
-                <ScalarProperty Name="IsAllDay" ColumnName="IsAllDay" />
-                <ScalarProperty Name="RoomID" ColumnName="RoomID" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="End" ColumnName="End" />
-                <ScalarProperty Name="Start" ColumnName="Start" />
-                <ScalarProperty Name="MeetingID" ColumnName="MeetingID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PrivatePhBs">
-            <EntityTypeMapping TypeName="aspnetdbModel.PrivatePhB">
-              <MappingFragment StoreEntitySet="PrivatePhBs">
-                <ScalarProperty Name="Group" ColumnName="Group" />
-                <ScalarProperty Name="IdREC" ColumnName="IdREC" />
-                <ScalarProperty Name="OwSAN" ColumnName="OwSAN" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Settings">
-            <EntityTypeMapping TypeName="aspnetdbModel.Setting">
-              <MappingFragment StoreEntitySet="Settings">
-                <ScalarProperty Name="CobaRecBdTable" ColumnName="CobaRecBdTable" />
-                <ScalarProperty Name="CobaRecBdName" ColumnName="CobaRecBdName" />
-                <ScalarProperty Name="CobaRecPass" ColumnName="CobaRecPass" />
-                <ScalarProperty Name="CobaRecLogin" ColumnName="CobaRecLogin" />
-                <ScalarProperty Name="CobaRecordsAddress" ColumnName="CobaRecordsAddress" />
-                <ScalarProperty Name="CobaCfgAddress" ColumnName="CobaCfgAddress" />
-                <ScalarProperty Name="CobaMngAddress" ColumnName="CobaMngAddress" />
-                <ScalarProperty Name="DnAdminPass" ColumnName="DnAdminPass" />
-                <ScalarProperty Name="DnAdminUn" ColumnName="DnAdminUn" />
-                <ScalarProperty Name="AdminGroup" ColumnName="AdminGroup" />
-                <ScalarProperty Name="UserGroup" ColumnName="UserGroup" />
-                <ScalarProperty Name="OU" ColumnName="OU" />
-                <ScalarProperty Name="AuthDnAddress" ColumnName="AuthDnAddress" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="VmrAliases">
-            <EntityTypeMapping TypeName="aspnetdbModel.VmrAlias">
-              <MappingFragment StoreEntitySet="VmrAliases">
-                <ScalarProperty Name="vmid" ColumnName="vmid" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="conference" ColumnName="conference" />
-                <ScalarProperty Name="alias" ColumnName="alias" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-        </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="aspnetdbModelStoreContainer" CdmEntityContainer="aspnetdbEntities">
+    <EntitySetMapping Name="AllVmrs">
+      <EntityTypeMapping TypeName="IsTypeOf(aspnetdbModel.AllVmr)">
+        <MappingFragment StoreEntitySet="AllVmrs">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="allow_guests" ColumnName="allow_guests" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="force_presenter_into_main" ColumnName="force_presenter_into_main" />
+          <ScalarProperty Name="guest_pin" ColumnName="guest_pin" />
+          <ScalarProperty Name="guest_view" ColumnName="guest_view" />
+          <ScalarProperty Name="host_view" ColumnName="host_view" />
+          <ScalarProperty Name="max_callrate_in" ColumnName="max_callrate_in" />
+          <ScalarProperty Name="max_callrate_out" ColumnName="max_callrate_out" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="participant_limit" ColumnName="participant_limit" />
+          <ScalarProperty Name="pin" ColumnName="pin" />
+          <ScalarProperty Name="resource_uri" ColumnName="resource_uri" />
+          <ScalarProperty Name="service_type" ColumnName="service_type" />
+          <ScalarProperty Name="tag" ColumnName="tag" />
+          <ScalarProperty Name="vmid" ColumnName="vmid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetRoles">
+      <EntityTypeMapping TypeName="IsTypeOf(aspnetdbModel.AspNetRole)">
+        <MappingFragment StoreEntitySet="AspNetRoles">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUserClaims">
+      <EntityTypeMapping TypeName="IsTypeOf(aspnetdbModel.AspNetUserClaim)">
+        <MappingFragment StoreEntitySet="AspNetUserClaims">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+          <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUserLogins">
+      <EntityTypeMapping TypeName="IsTypeOf(aspnetdbModel.AspNetUserLogin)">
+        <MappingFragment StoreEntitySet="AspNetUserLogins">
+          <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+          <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUserRoles">
+      <EntityTypeMapping TypeName="IsTypeOf(aspnetdbModel.AspNetUserRole)">
+        <MappingFragment StoreEntitySet="AspNetUserRoles">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+          <ScalarProperty Name="Role_Id" ColumnName="Role_Id" />
+          <ScalarProperty Name="ApplicationUser_Id" ColumnName="ApplicationUser_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUsers">
+      <EntityTypeMapping TypeName="IsTypeOf(aspnetdbModel.AspNetUser)">
+        <MappingFragment StoreEntitySet="AspNetUsers">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+          <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+          <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+          <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+          <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Sammaccount" ColumnName="Sammaccount" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Surname" ColumnName="Surname" />
+          <ScalarProperty Name="Position" ColumnName="Position" />
+          <ScalarProperty Name="Tel_int" ColumnName="Tel_int" />
+          <ScalarProperty Name="Tel_ext" ColumnName="Tel_ext" />
+          <ScalarProperty Name="Tel_mob" ColumnName="Tel_mob" />
+          <ScalarProperty Name="DispName" ColumnName="DispName" />
+          <ScalarProperty Name="Timezone" ColumnName="Timezone" />
+          <ScalarProperty Name="Sip_addr" ColumnName="Sip_addr" />
+          <ScalarProperty Name="H323_addr" ColumnName="H323_addr" />
+          <ScalarProperty Name="Group" ColumnName="Group" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ivr_Themes">
+      <EntityTypeMapping TypeName="IsTypeOf(aspnetdbModel.Ivr_Themes)">
+        <MappingFragment StoreEntitySet="Ivr_Themes">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="uuid" ColumnName="uuid" />
+          <ScalarProperty Name="vmid" ColumnName="vmid" />
+          <ScalarProperty Name="intid" ColumnName="intid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MeetingAttendees">
+      <EntityTypeMapping TypeName="IsTypeOf(aspnetdbModel.MeetingAttendee)">
+        <MappingFragment StoreEntitySet="MeetingAttendees">
+          <ScalarProperty Name="MeetingID" ColumnName="MeetingID" />
+          <ScalarProperty Name="AttendeeID" ColumnName="AttendeeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Meetings">
+      <EntityTypeMapping TypeName="IsTypeOf(aspnetdbModel.Meeting)">
+        <MappingFragment StoreEntitySet="Meetings">
+          <ScalarProperty Name="MeetingID" ColumnName="MeetingID" />
+          <ScalarProperty Name="Start" ColumnName="Start" />
+          <ScalarProperty Name="End" ColumnName="End" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="RoomID" ColumnName="RoomID" />
+          <ScalarProperty Name="IsAllDay" ColumnName="IsAllDay" />
+          <ScalarProperty Name="RecurrenceRule" ColumnName="RecurrenceRule" />
+          <ScalarProperty Name="RecurrenceID" ColumnName="RecurrenceID" />
+          <ScalarProperty Name="RecurrenceException" ColumnName="RecurrenceException" />
+          <ScalarProperty Name="StartTimezone" ColumnName="StartTimezone" />
+          <ScalarProperty Name="EndTimezone" ColumnName="EndTimezone" />
+          <ScalarProperty Name="Oplink" ColumnName="Oplink" />
+          <ScalarProperty Name="AddAttend" ColumnName="AddAttend" />
+          <ScalarProperty Name="FileLink" ColumnName="FileLink" />
+          <ScalarProperty Name="Record" ColumnName="Record" />
+          <ScalarProperty Name="Recfile" ColumnName="Recfile" />
+          <ScalarProperty Name="InitName" ColumnName="InitName" />
+          <ScalarProperty Name="InitFullname" ColumnName="InitFullname" />
+          <ScalarProperty Name="reminder" ColumnName="reminder" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PrivatePhBs">
+      <EntityTypeMapping TypeName="IsTypeOf(aspnetdbModel.PrivatePhB)">
+        <MappingFragment StoreEntitySet="PrivatePhBs">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="OwSAN" ColumnName="OwSAN" />
+          <ScalarProperty Name="IdREC" ColumnName="IdREC" />
+          <ScalarProperty Name="Group" ColumnName="Group" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Settings">
+      <EntityTypeMapping TypeName="IsTypeOf(aspnetdbModel.Setting)">
+        <MappingFragment StoreEntitySet="Settings">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="AuthDnAddress" ColumnName="AuthDnAddress" />
+          <ScalarProperty Name="OU" ColumnName="OU" />
+          <ScalarProperty Name="UserGroup" ColumnName="UserGroup" />
+          <ScalarProperty Name="AdminGroup" ColumnName="AdminGroup" />
+          <ScalarProperty Name="DnAdminUn" ColumnName="DnAdminUn" />
+          <ScalarProperty Name="DnAdminPass" ColumnName="DnAdminPass" />
+          <ScalarProperty Name="CobaMngAddress" ColumnName="CobaMngAddress" />
+          <ScalarProperty Name="CobaCfgAddress" ColumnName="CobaCfgAddress" />
+          <ScalarProperty Name="CobaRecordsAddress" ColumnName="CobaRecordsAddress" />
+          <ScalarProperty Name="CobaRecLogin" ColumnName="CobaRecLogin" />
+          <ScalarProperty Name="CobaRecPass" ColumnName="CobaRecPass" />
+          <ScalarProperty Name="CobaRecBdName" ColumnName="CobaRecBdName" />
+          <ScalarProperty Name="CobaRecBdTable" ColumnName="CobaRecBdTable" />
+          <ScalarProperty Name="SmtpServer" ColumnName="SmtpServer" />
+          <ScalarProperty Name="SmtpPort" ColumnName="SmtpPort" />
+          <ScalarProperty Name="SmtpSSL" ColumnName="SmtpSSL" />
+          <ScalarProperty Name="SmtpLogin" ColumnName="SmtpLogin" />
+          <ScalarProperty Name="SmtpPassword" ColumnName="SmtpPassword" />
+          <ScalarProperty Name="MailFrom_email" ColumnName="MailFrom_email" />
+          <ScalarProperty Name="MailFrom_name" ColumnName="MailFrom_name" />
+          <ScalarProperty Name="CobaMngLogin" ColumnName="CobaMngLogin" />
+          <ScalarProperty Name="CobaMngPass" ColumnName="CobaMngPass" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VmrAliases">
+      <EntityTypeMapping TypeName="IsTypeOf(aspnetdbModel.VmrAlias)">
+        <MappingFragment StoreEntitySet="VmrAliases">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="alias" ColumnName="alias" />
+          <ScalarProperty Name="conference" ColumnName="conference" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="vmid" ColumnName="vmid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
@@ -862,7 +891,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="true" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
-        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>
