@@ -330,7 +330,7 @@ namespace OWL_Site.Controllers
             {
                 UseDefaultCredentials = false,
                 EnableSsl = false,
-                Credentials = new NetworkCredential("cobaservice", "Ciscocisco123"),
+                Credentials = new NetworkCredential(MvcApplication.set.SmtpLogin, MvcApplication.set.SmtpPassword),
 
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 Timeout = 20000

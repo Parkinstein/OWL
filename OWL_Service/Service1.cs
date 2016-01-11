@@ -82,7 +82,7 @@ namespace OWL_Service
             try
             {
                 string grname = "";
-                string domainPath = String.Concat(set.AuthDnAddress, "/OU=", set.OU, ",DC=nkc,DC=ru");
+                string domainPath = String.Concat(set.AuthDnAddress, "/OU=", set.OU, ",DC=rad,DC=lan,DC=local");
                 //"dc0.rad.lan.local/OU=Pepux,DC=rad,DC=lan,DC=local";
                 DirectoryEntry directoryEntry = new DirectoryEntry("LDAP://" + domainPath, set.DnAdminUn,
                     set.DnAdminPass);
@@ -253,8 +253,8 @@ namespace OWL_Service
             List<int> localInts = new List<int>();
             Uri confapi = new Uri("https://" + set.CobaMngAddress + "/api/admin/configuration/v1/conference/");
             WebClient client = new WebClient();
-            client.Credentials = new NetworkCredential("admin", "NKCTelemed");
-            client.Headers.Add("auth", "admin,NKCTelemed");
+            client.Credentials = new NetworkCredential(set.CobaMngLogin, set.CobaMngPass);
+            client.Headers.Add("auth", "admin,ciscovoip");
             client.Headers.Add("veryfy", "False");
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             string reply = client.DownloadString(confapi);

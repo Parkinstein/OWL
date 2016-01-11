@@ -40,6 +40,7 @@ namespace OWL_Site.Models
         public string Recfile { get; set; }
         public string InitName { get; set; }
         public string InitFullname { get; set; }
+        public bool reminder { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MeetingAttendee> MeetingAttendees { get; set; }
