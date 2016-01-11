@@ -119,15 +119,15 @@
           <Property Name="MeetingID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Start" Type="datetime" Nullable="false" />
           <Property Name="End" Type="datetime" Nullable="false" />
-          <Property Name="Title" Type="ntext" Nullable="false" />
-          <Property Name="Description" Type="ntext" />
+          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="RoomID" Type="int" />
           <Property Name="IsAllDay" Type="bit" Nullable="false" />
-          <Property Name="RecurrenceRule" Type="ntext" />
+          <Property Name="RecurrenceRule" Type="nvarchar(max)" />
           <Property Name="RecurrenceID" Type="int" />
-          <Property Name="RecurrenceException" Type="ntext" />
-          <Property Name="StartTimezone" Type="ntext" />
-          <Property Name="EndTimezone" Type="ntext" />
+          <Property Name="RecurrenceException" Type="nvarchar(max)" />
+          <Property Name="StartTimezone" Type="nvarchar(max)" />
+          <Property Name="EndTimezone" Type="nvarchar(max)" />
           <Property Name="Oplink" Type="nvarchar(max)" />
           <Property Name="AddAttend" Type="nvarchar(max)" />
           <Property Name="FileLink" Type="nvarchar(max)" />

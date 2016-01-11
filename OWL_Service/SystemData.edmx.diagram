@@ -4,23 +4,27 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="aacdb8a3e1c241cb970770c2e8ceed9e" Name="Diagram1" ZoomLevel="99">
-        <EntityTypeShape EntityType="aspnetdbModel.AspNetRole" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="aspnetdbModel.AspNetUserClaim" Width="1.5" PointX="3" PointY="4.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="aspnetdbModel.AspNetUserLogin" Width="1.5" PointX="3" PointY="7.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="aspnetdbModel.AspNetUserRole" Width="3.625" PointX="6" PointY="5.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="aspnetdbModel.AspNetUser" Width="1.5" PointX="0.75" PointY="3.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="aspnetdbModel.PrivateBook" Width="1.5" PointX="5.75" PointY="2.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="aspnetdbModel.Setting" Width="1.5" PointX="5.75" PointY="9.375" IsExpanded="true" />
-        <AssociationConnector Association="aspnetdbModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_Role_Id" ManuallyRouted="false" />
-        <AssociationConnector Association="aspnetdbModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" ManuallyRouted="false" />
-        <AssociationConnector Association="aspnetdbModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="aspnetdbModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="aspnetdbModel.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_ApplicationUser_Id" ManuallyRouted="false" />
-        <AssociationConnector Association="aspnetdbModel.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="aspnetdbModel.VmrAlias" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="aspnetdbModel.AllVmr" Width="1.5" PointX="10.75" PointY="8.375" />
-        <EntityTypeShape EntityType="aspnetdbModel.Ivr_Themes" Width="1.5" PointX="8.375" PointY="0.75" />
+      <Diagram DiagramId="aacdb8a3e1c241cb970770c2e8ceed9e" Name="Diagram1" ZoomLevel="98">
+        <EntityTypeShape EntityType="aspnetdbModel.AllVmr" Width="1.5" PointX="7.75" PointY="5.75" />
+        <EntityTypeShape EntityType="aspnetdbModel.AspNetRole" Width="1.5" PointX="0.75" PointY="10.125" />
+        <EntityTypeShape EntityType="aspnetdbModel.AspNetUserClaim" Width="1.5" PointX="3" PointY="9" />
+        <EntityTypeShape EntityType="aspnetdbModel.AspNetUserLogin" Width="1.5" PointX="3" PointY="6.5" />
+        <EntityTypeShape EntityType="aspnetdbModel.AspNetUserRole" Width="1.5" PointX="3" PointY="2.875" />
+        <EntityTypeShape EntityType="aspnetdbModel.AspNetUser" Width="1.5" PointX="0.75" PointY="2" />
+        <EntityTypeShape EntityType="aspnetdbModel.Ivr_Themes" Width="1.5" PointX="9.75" PointY="5.75" />
+        <EntityTypeShape EntityType="aspnetdbModel.MeetingAttendee" Width="1.5" PointX="8" PointY="2.875" />
+        <EntityTypeShape EntityType="aspnetdbModel.Meeting" Width="1.5" PointX="5.75" PointY="1.125" />
+        <EntityTypeShape EntityType="aspnetdbModel.PrivatePhB" Width="1.5" PointX="9.75" PointY="8.75" />
+        <EntityTypeShape EntityType="aspnetdbModel.Setting" Width="1.5" PointX="11.875" PointY="1" />
+        <EntityTypeShape EntityType="aspnetdbModel.VmrAlias" Width="1.5" PointX="5.75" PointY="10.75" />
+        <AssociationConnector Association="aspnetdbModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_Role_Id" />
+        <AssociationConnector Association="aspnetdbModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" />
+        <AssociationConnector Association="aspnetdbModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="aspnetdbModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="aspnetdbModel.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_ApplicationUser_Id" />
+        <AssociationConnector Association="aspnetdbModel.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="aspnetdbModel.FK_MeetingAtendee_Meeting" />
+        <AssociationConnector Association="aspnetdbModel.FK_Meetings_Meetings" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

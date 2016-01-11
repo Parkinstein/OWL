@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using Kendo.Mvc.Extensions;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
@@ -128,17 +127,6 @@ namespace OWL_Service
             context.SaveChanges();
         }
 
-        /// <summary>
-        /// Context Initializer
-        /// </summary>
-        //public class DropCreateAlwaysInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
-        //{
-        //    protected override void Seed(ApplicationDbContext context)
-        //    {
-        //        context.Seed(context);
-
-        //        base.Seed(context);
-        //    }
-        //}
+        
     }
 }

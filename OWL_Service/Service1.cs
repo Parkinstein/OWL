@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Entity.Migrations;
 using System.Diagnostics;
 using System.DirectoryServices;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
+using System.Net.Mime;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +27,7 @@ namespace OWL_Service
         public List<AllVMRS.AllVmrs> All_Vmrs;
         public AllVMRS.VmrParent All_VM_obj;
         public static Setting set;
+        static bool mailSent = false;
         public static string GetProperty(SearchResult searchResult, string PropertyName)
         {
             if (searchResult.Properties.Contains(PropertyName))
@@ -62,6 +66,7 @@ namespace OWL_Service
         {
             GetPhonebookUsers();
             GetVmrList();
+            GetNowMeeting();
         }
         public Setting Settings_Read()
         {
@@ -69,13 +74,15 @@ namespace OWL_Service
             set = db.Settings.FirstOrDefault();
             return set;
         }
+
+        #region SyncData
         public List<ApplicationUser> GetPhonebookUsers()
         {
             List<ApplicationUser> allreco = new List<ApplicationUser>();
             try
             {
                 string grname = "";
-                string domainPath = String.Concat(set.AuthDnAddress, "/OU=", set.OU, ",DC=nkc,DC=ru");
+                string domainPath = String.Concat(set.AuthDnAddress, "/OU=", set.OU, ",DC=rad,DC=lan,DC=local");
                 //"dc0.rad.lan.local/OU=Pepux,DC=rad,DC=lan,DC=local";
                 DirectoryEntry directoryEntry = new DirectoryEntry("LDAP://" + domainPath, set.DnAdminUn,
                     set.DnAdminPass);
@@ -242,10 +249,12 @@ namespace OWL_Service
         {
             All_Vmrs = new List<AllVMRS.AllVmrs>();
             aspnetdbEntities dtbs = new aspnetdbEntities();
+            List<int> remoteInts =new List<int>();
+            List<int> localInts = new List<int>();
             Uri confapi = new Uri("https://" + set.CobaMngAddress + "/api/admin/configuration/v1/conference/");
             WebClient client = new WebClient();
-            client.Credentials = new NetworkCredential("admin", "NKCTelemed");
-            client.Headers.Add("auth", "admin,NKCTelemed");
+            client.Credentials = new NetworkCredential(set.CobaMngLogin, set.CobaMngPass);
+            client.Headers.Add("auth", "admin,ciscovoip");
             client.Headers.Add("veryfy", "False");
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             string reply = client.DownloadString(confapi);
@@ -257,6 +266,7 @@ namespace OWL_Service
                 foreach (var vm in All_Vmrs)
                 {
                     AllVmr confroom = new AllVmr();
+                    remoteInts.Add(vm.id);
                     confroom.Id = vm.id;
                     confroom.allow_guests = vm.allow_guests;
                     confroom.description = vm.description;
@@ -264,8 +274,8 @@ namespace OWL_Service
                     confroom.guest_pin = vm.guest_pin;
                     confroom.guest_view = vm.guest_view;
                     confroom.host_view = vm.host_view;
-                    confroom.max_callrate_in_ = vm.max_callrate_in;
-                    confroom.max_callrate_out_ = vm.max_callrate_out;
+                    confroom.max_callrate_in = vm.max_callrate_in;
+                    confroom.max_callrate_out = vm.max_callrate_out;
                     confroom.name = vm.name;
                     confroom.participant_limit = vm.participant_limit;
                     confroom.pin = vm.pin;
@@ -302,6 +312,21 @@ namespace OWL_Service
                         Debug.WriteLine(ex.InnerException);
                     }
                 }
+                foreach (var locrec in dtbs.AllVmrs)
+                {
+                    localInts.Add(locrec.Id);
+                }
+                foreach (var locint in localInts)
+                {
+                    if (!remoteInts.Contains(locint))
+                    {
+                        var delvmr = dtbs.AllVmrs.FirstOrDefault(v => v.Id == locint);
+                        var delalias = dtbs.VmrAliases.Where(a => a.vmid == delvmr.Id);
+                        dtbs.VmrAliases.RemoveRange(delalias);
+                        dtbs.AllVmrs.Remove(delvmr);
+                        Debug.WriteLine(delvmr.name);
+                    }
+                }
                 try
                 {
                     dtbs.SaveChanges();
@@ -314,6 +339,103 @@ namespace OWL_Service
             }
             return All_Vmrs;
         }
+        #endregion
+
+        #region CheckTimeMeeting
+
+        public async void GetNowMeeting()
+        {
+            
+            DateTime dt1 = DateTime.Now - TimeSpan.FromMinutes(180);
+            DateTime dt2 = DateTime.Now - TimeSpan.FromMinutes(165);
+            var soonmeet = databs.Meetings.Where(t => t.Start > dt1);
+            var diapmet = soonmeet.Where(s => s.Start < dt2 && s.reminder);
+            foreach (var meet in diapmet)
+            {
+                List<string> maillist = new List<string>();
+                var attends = databs.MeetingAttendees.Where(m => m.MeetingID == meet.MeetingID);
+                List<string> AddAtt;
+                if (meet.AddAttend != null)
+                {
+                    AddAtt = ((meet.AddAttend.Replace(" ","")).Split((",").ToCharArray())).ToList();
+                    foreach (var adat in AddAtt)
+                    {
+                        maillist.Add(adat);
+                    }
+                }
+                foreach (var attend in attends)
+                {
+                    var reciever = databs.AspNetUsers.FirstOrDefault(u => u.Id == attend.AttendeeID);
+                    maillist.Add(reciever?.Email);
+                }
+                string body = String.Concat("Напоминиаем, что через ", (meet.Start-dt1).ToString(@"mm"), " минут состоится видеоконференция ", meet.Title);
+                foreach (var rcpt in maillist)
+                {
+                    await Sendmail(rcpt, meet.Title, body, meet);
+                    if (mailSent)
+                    {
+                        var db = new aspnetdbEntities();
+                        meet.reminder = false;
+                        db.Meetings.AddOrUpdate(meet);
+                        db.SaveChanges();
+
+                    }
+                }
+                
+               
+            }
+        }
+        public async Task Sendmail(string to, string subj, string body, Meeting meet)
+        {
+            SmtpClient smtpClient = new SmtpClient(set.SmtpServer, (int)set.SmtpPort)
+            {
+                UseDefaultCredentials = false,
+                EnableSsl = set.SmtpSSL,
+                Credentials = new NetworkCredential(set.SmtpLogin, set.SmtpPassword),
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                Timeout = 20000
+            };
+            MailMessage mailMessage = new MailMessage()
+            {
+                Priority = MailPriority.High,
+                From = new MailAddress(set.MailFrom_email, set.MailFrom_name)
+            };
+            AlternateView alternateHtml = AlternateView.CreateAlternateViewFromString(body,
+                                                                            new ContentType("text/html"));
+            mailMessage.AlternateViews.Add(alternateHtml);
+           
+                mailMessage.To.Add(new MailAddress(to));
+            
+            mailMessage.Subject = subj;
+            mailMessage.Body = body;
+            smtpClient.SendCompleted += new
+            SendCompletedEventHandler(SendCompletedCallback);
+
+            await smtpClient.SendMailAsync(mailMessage);
+        }
+        
+        private static void SendCompletedCallback(object sender, AsyncCompletedEventArgs e)
+        {
+            // Get the unique identifier for this asynchronous operation.
+            string token = e.UserState.ToString();
+
+            if (e.Cancelled)
+            {
+                Debug.WriteLine("[{0}] Send canceled.", token);
+            }
+            if (e.Error != null)
+            {
+                Debug.WriteLine("[{0}] {1}", token, e.Error.ToString());
+            }
+            else
+            {
+                Debug.WriteLine("Message sent.");
+            }
+            mailSent = true;
+        }
+
+        #endregion
+
         protected override void OnStop()
         {
             polling.Dispose();

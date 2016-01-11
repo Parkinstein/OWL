@@ -44,7 +44,8 @@
           .MajorTick(60)
           .AutoBind(true)
           .Mobile()
-                          .EventTemplate("<div style='background-color:#:getColor(data)#;height:100%;margin-top: -10px;padding-top:10px;padding-left:5px;box-shadow:0 0 10px rgba(0,0,0,0.9);'>" + "<h6 style='color:#:getColor2(data)#'>#= title #</h6>" + "<h6 style='color:#:getColor2(data)#'>#= InitFullname #</h6>" + "<p><a style='color:#:getColor2(data)#' href = '#= OpLink #'><h6>Ссылка Оператора</h6></a></p>" + "<p><a style='color:#:getColor2(data)#' href = '#= FileLink #'><h6>Файл встречи</h6></a></p>" + "<p><h6 style='color:#:getColor2(data)#'>" + "#= kendo.toString(start, 'HH:mm') #" + " - " + "#= kendo.toString(end, 'HH:mm') #</h6></p>" + "</div>")
+          //.EventTemplate("<div style='background-color:#:getColor(data)#;height:100%;margin-top: -10px;padding-top:10px;padding-left:5px;box-shadow:0 0 10px rgba(0,0,0,0.9);'>" + "<h6 style='color:#:getColor2(data)#'>#= title #</h6>" + "<h6 style='color:#:getColor2(data)#'>#= InitFullname #</h6>" + "<p><a style='color:#:getColor2(data)#' href = '#= OpLink #'><h6>Ссылка Оператора</h6></a></p>" + "<p><a style='color:#:getColor2(data)#' href = '#= FileLink #'><h6>Файл встречи</h6></a></p>" + "<p><h6 style='color:#:getColor2(data)#'>" + "#= kendo.toString(start, 'HH:mm') #" + " - " + "#= kendo.toString(end, 'HH:mm') #</h6></p>" + "</div>")
+          .EventTemplateId("customEventTemplate")
           .Views(views =>
           {
               views.DayView(v => v.Title("День"));
@@ -56,7 +57,7 @@
           .Editable(editable =>
           {
               editable.TemplateName("CustomEditorTemplate");
-              
+
           })
           .DataSource(d => d
 
@@ -123,4 +124,241 @@
     .event-template2 {
         background-color: #a9a9a9;
     }
+    
 </style>
+<script id="customEventTemplate" type="text/x-kendo-template">
+    <div class="effect eff-6" style="background-color:#:getColor(data)#;">
+        <div class="overlay">
+           <!-- <div class="icon"></div> -->
+            <div class="borders">
+                <div class="border border-top"></div>
+                <div class="border border-right"></div>
+                <div class="border border-bottom"></div>
+                <div class="border border-left"></div>
+            </div>
+        </div>
+        <div class="caption">
+            <h4>#=title #</h4>
+            <p> #=start # </p>
+        </div>
+    </div>
+</script>
+<style>
+    .eff-6 {
+  width: 300px;
+  height: 300px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+    }
+.eff-6 img {
+  min-width: 100%;
+  min-height: 100%;
+    }
+.eff-6 .overlay {
+  width: 60px;
+  height: 60px;
+  background: rgba(255,255,255,0.6);
+  position: absolute;
+  top: 120px;
+  left: 120px;
+  -moz-transition: all 0.2s linear 0s;
+  -o-transition: all 0.2s linear 0s;
+  -ms-transition: all 0.2s linear 0s;
+  -webkit-transition: all 0.2s linear 0s;
+  transition: all 0.2s linear 0s;
+}
+.eff-6 .overlay .icon {
+  width: 35px;
+  height: 23px;
+  background: url('http://eisenpar.com/view-icon.png') 0 0 no-repeat;
+  position: absolute;
+  top: 18px;
+  left: 13px;
+  opacity: 1;
+  -moz-transition: all 0.01s linear 0.2s;
+  -webkit-transition: all 0.01s linear 0.2s;
+  -o-transition: all 0.01s linear 0.2s;
+  -ms-transition: all 0.01s linear 0.2s;
+  transition: all 0.01s linear 0.2s;
+}
+.eff-6 .borders {
+  width: 90%;
+  height: 90%;
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  opacity: 0;
+  -moz-transition: all 0.01s linear 0s;
+  -webkit-transition: all 0.01s linear 0s;
+  -o-transition: all 0.01s linear 0s;
+  -ms-transition: all 0.01s linear 0s;
+  transition: all 0.01s linear 0s;
+}
+.eff-6 .border {
+  background: black;
+  position: absolute;
+  -moz-transition: all 0.4s linear 0s;
+  -o-transition: all 0.4s linear 0s;
+  -ms-transition: all 0.4s linear 0s;
+  -webkit-transition: all 0.4s linear 0s;
+  transition: all 0.4s linear 0s;
+}
+.eff-6 .border-top {
+  top: 0px;
+  left: 2px;
+  width: 100%;
+  height: 2px;
+  -moz-transform-origin: left top;
+  -o-transform-origin: left top;
+  -ms-transform-origin: left top;
+  -webkit-transform-origin: left top;
+  transform-origin: left top;
+}
+.eff-6 .border-left {
+  bottom: 0px;
+  left: 0px;
+  width: 2px;
+  height: 100%;
+  -moz-transform-origin: left bottom;
+  -ms-transform-origin: left bottom;
+  -o-transform-origin: left bottom;
+  -webkit-transform-origin: left bottom;
+  transform-origin: left bottom;
+}
+.eff-6 .border-bottom {
+  bottom: 0px;
+  right: 2px;
+  width: 100%;
+  height: 2px;
+  -moz-transform-origin: right bottom;
+  -ms-transform-origin: right bottom;
+  -o-transform-origin: right bottom;
+  -webkit-transform-origin: right bottom;
+  transform-origin: right bottom;
+}
+.eff-6 .border-right {
+  top: 0px;
+  right: 0px;
+  width: 2px;
+  height: 100%;
+  -moz-transform-origin: right top;
+  -o-transform-origin: right top;
+  -ms-transform-origin: right top;
+  -webkit-transform-origin: right top;
+  transform-origin: right top;
+}
+.eff-6 .caption {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  color: white;
+  opacity: 0;
+  -moz-transform: scale(0);
+  -o-transform: scale(0);
+  -ms-transform: scale(0);
+  -webkit-transform: scale(0);
+  transform: scale(0);
+  -moz-transition: all 0.3s linear 0s;
+  -o-transition: all 0.3s linear 0s;
+  -ms-transition: all 0.3s linear 0s;
+  -webkit-transition: all 0.3s linear 0s;
+  transition: all 0.3s linear 0s;
+}
+.eff-6 .caption h4 {
+  width: 80%;
+  margin: 40px auto 0px auto;
+  background: rgba(0,0,0,0.7);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: 22px;
+  padding: 6px 0px;
+  position: relative;
+}
+.eff-6 .caption h4:before {
+  content: "";
+  width: 0px;
+  height: 0px;
+  display: block;
+  border: 20px solid transparent;
+  border-top: 20px solid rgba(0,0,0,0.7);
+  position: absolute;
+  top: 100%;
+  left: 42%;
+}
+.eff-6 .caption p {
+  width: 100%;
+  max-width: -webkit-calc(80% - 20px);
+  max-width: -o-calc(80% - 20px);
+  max-width: -moz-calc(80% - 20px);
+  max-width: -ms-calc(80% - 20px);
+  max-width: calc(80% - 20px);
+  margin: 40px auto 0px auto;
+  background: rgba(0,0,0,0.8);
+  font-weight: 400;
+  padding: 6px 10px;
+  font-size: 14px;
+}
+.eff-6 .caption a {
+  display: inline-block;
+  margin: 30px auto 0px auto;
+  background-color: #7F3B1B;
+  color: inherit;
+  padding: 7px 20px;
+  font-size: 15px;
+  box-shadow: inset 0px 0px 7px 1px rgba(0,0,0,0.2);
+  border-radius: 5px;
+  text-decoration: none;
+}
+.eff-6:hover .overlay {
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+}
+.eff-6:hover .overlay .icon {
+  opacity: 0;
+  -moz-transition-delay: 0s;
+  -o-transition-delay: 0s;
+  -ms-transition-delay: 0s;
+  -webkit-transition-delay: 0s;
+  transition-delay: 0s;
+}
+.eff-6:hover .borders {
+  opacity: 1;
+}
+.eff-6:hover .border-top,
+.eff-6:hover .border-left,
+.eff-6:hover .border-bottom,
+.eff-6:hover .border-right {
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+  -moz-transition-delay: 0.2s;
+  -o-transition-delay: 0.2s;
+  -ms-transition-delay: 0.2s;
+  -webkit-transition-delay: 0.2s;
+  transition-delay: 0.2s;
+}
+.eff-6:hover .caption {
+  opacity: 1;
+  -moz-transform: scale(1);
+  -o-transform: scale(1);
+  -ms-transform: scale(1);
+  -webkit-transform: scale(1);
+  transform: scale(1);
+  -moz-transition-delay: 0.65s;
+  -ms-transition-delay: 0.65s;
+  -webkit-transition-delay: 0.65s;
+  -o-transition-delay: 0.65s;
+  transition-delay: 0.65s;
+}      
+</style>
+<script>
+
+</script>

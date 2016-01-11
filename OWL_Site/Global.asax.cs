@@ -26,6 +26,8 @@ namespace OWL_Site
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             Settings_Read();
             GetPhonebookUsers();
+            
+
 
             // Database.SetInitializer<ApplicationDbContext>(new ApplicationDbContext.DropCreateAlwaysInitializer());
         }
@@ -65,7 +67,7 @@ namespace OWL_Site
             try
             {
 
-                string domainPath = String.Concat(MvcApplication.set.AuthDnAddress, "/OU=", MvcApplication.set.OU, ",DC=nkc,DC=ru");//"dc0.rad.lan.local/OU=Pepux,DC=rad,DC=lan,DC=local";
+                string domainPath = String.Concat(MvcApplication.set.AuthDnAddress, "/OU=", MvcApplication.set.OU, ",DC=rad,DC=lan,DC=local");//"dc0.rad.lan.local/OU=Pepux,DC=rad,DC=lan,DC=local";
                 DirectoryEntry directoryEntry = new DirectoryEntry("LDAP://" + domainPath, MvcApplication.set.DnAdminUn, MvcApplication.set.DnAdminPass);
                 DirectorySearcher dirSearcher = new DirectorySearcher(directoryEntry);
                 dirSearcher.SearchScope = SearchScope.Subtree;

@@ -227,11 +227,13 @@
         var imya = oPhonebookTable.cells('.selected', 1, { page: 'current' }).data();
         var fam = oPhonebookTable.cells('.selected', 2, { page: 'current' }).data();
         for (var i = 0; i < sip_add.length; i++) {
+            name = imya[i] + " " + fam[i];
             if (sip_add[i] !== '') {
-                user.action_dial("sip", user.conference, user.display_name, sip_add[i], "guest");
+                user.dial_pb(sip_add[i], "sip", name);
             } else {
-                user.action_dial("sip", user.conference, user.display_name, sip_add[i], "guest");
+                user.dial_pb(h323_add[i], "h323", name);
             }
+
         }
         document.getElementById("popup_block").className = "hide";
     };
@@ -362,6 +364,7 @@
     var class_conference_record_on = "participant_action fa fa-circle-blink fa-fw red";
     var class_role_chair = "participant_action fa fa-user-plus fa-fw";
     var class_role_guest = "participant_action fa fa-user fa-fw";
+
 
     function DumpObject(obj) {
         var od = new Object;
@@ -745,17 +748,14 @@
         }
     };
 
-    Participant.prototype.chair_role = function() {
+    Participant.prototype.chair_role = function () {
         console.log("participant chair role " + this);
-        if (user.role === "HOST") {
-            var msg = user.post_request("participants/", null);
-            if (msg["data"][this.uuid]["role"] === "chair") {
-                user.post_request("participants/" + this.uuid + "/role", { "role": "guest" });
-                this.chair_role_element.className = class_role_guest;
-            } else {
-                user.post_request("participants/" + this.uuid + "/role", { "role": "chair" });
-                this.chair_role_element.className = class_role_chair;
-            }
+        if (user.role == "HOST") {
+            user.post_request("participants/" + this.uuid + "/role", { "role": "chair" });
+            this.chair_role_element.className = class_role_chair;
+        } else {
+            user.post_request("participants/" + this.uuid + "/role", { "role": "guest" });
+            this.chair_role_element.className = class_role_guest;
         }
     };
 
@@ -856,25 +856,25 @@
     };
 
     var user = {
-	    token: null,
-	    participant_uuid: null,
-	    node: "84.253.116.75",
-	    conference: "@ViewData["confnm"]",
-	    pin: "@ViewData["pinc"]",
-	    event_source: null,
-	    conference_participants: {},
-	    token_refresh: null,
-	    role: "HOST",
-	    locked: false,
-	    live_active: false,
-	    guests_muted: false,
-	    live_active_call: null,
-	    last_message_origin: null,
-	    display_name: "@ViewData["dispnm"]",
-	    record_server: "@MvcApplication.set.CobaRecordsAddress",
-	    recorded: false,
-	    record_pid: null,
-	    record_id: null,
+        node: @MvcApplication.set.CobaCfgAddress,
+        conference: "@ViewData["confnm"]",
+        display_name: "@ViewData["dispnm"]",
+        role: "HOST",
+        token: null,
+        participant_uuid: null,
+        pin: "@ViewData["pinc"]",
+        event_source: null,
+        conference_participants: {},
+        token_refresh: null,
+        locked: false,
+        live_active: false,
+        guests_muted: false,
+        live_active_call: null,
+        last_message_origin: null,
+        record_server: @MvcApplication.set.CobaRecordsAddress,
+        recorded: false,
+        record_pid: null,
+        record_id: null,
 
         join: function () {
             this.join_with_token(null);
@@ -1003,11 +1003,12 @@
                 }
                 return true;
             } else if (response["status"] == 403) {
-                console.log("Pin required, " + "response status: " + response["status"]);
+                console.log("Pin required");
+                join_error.innerHTML = "Failed to join conference: Pin required";
             } else if (response["status"] == 0) {
-                console.log("Failed to join conference: " + JSON.stringify(response["data"]));
+                join_error.innerHTML = "Failed to join conference: " + JSON.stringify(response["data"]);
             } else {
-                console.log("Failed to join conference: " + response["status"] + "(" + JSON.stringify(response["data"]) + ")");
+                join_error.innerHTML = "Failed to join conference: " + response["status"] + "(" + JSON.stringify(response["data"]) + ")";
             }
             return false;
         },
@@ -1018,7 +1019,6 @@
             console.log("response " + response["status"]);
             if (response["status"] == 200) {
                 this.token = response["data"]["result"]["token"];
-                role = response["data"]["result"]["role"] || this.role;
             } else {
                 console.log("Refresh failed, leave conference");
                 this.leave();
@@ -1097,42 +1097,21 @@
         record: function () {
             if (this.recorded == false) {
                 if (this.token) {
-                    var call_data = { "call_type": "rtmp", "streaming": "true", "present": "receive" };
-                    var command = "participants/" + this.uuid + "/calls";
-                    console.log("command: " + command + " params: " + JSON.stringify(params));
-                    var response = user.post_request(command, call_data);
+                    var call_data = { "call_type": "rtmp", "streaming": "true" };
+                    var response = user.post_request("participants/" + this.participant_uuid + "/calls", call_data);
                     if (response["status"] == 200) {
                         var url = response["data"]["result"]["url"] + "-stream";
-                        var rec_call_uuid = msg["result"]["call_uuid"];
                         console.log("url: " + url);
                     }
                 }
                 var params = { "vmr": this.conference, "name": this.display_name, "link": url, };
-                var async = false;
-                var method = "POST";
                 var xhr = new XMLHttpRequest();
-                var xhrUrl = "https://" + this.record_server + "/recordstart.php";
-                console.log("Requesting: " + xhrUrl);
-                xhr.open(method, xhrUrl, async);
+                xhr.open("POST", "https://" + this.record_server + "/recordstart.php", false);
+                xhr.onerror = function () { this.onError(this.trans.ERROR_CONNECTING); };
+                xhr.ontimeout = function () { this.onError(this.trans.ERROR_CONNECTING); };
                 console.log(params);
                 xhr.setRequestHeader('Content-type', 'application/json;charset=UTF-8"');
-                try {
-                    (function () {
-                        xhr.send(JSON.stringify(params));
-                    }())
-                } catch (error) {
-                    (function (error) {
-                        console.log("Catch error '" + error + "' during connection to record server. Check network connectivity.");
-                        alert("По техническим причинам запись недоступна. Проверьте сетевое подключение к серверу записи");
-                        var command = "participants/" + this.uuid + "/calls/" + rec_call_uuid + "/disconnect"; // compose command to stop rtmp stream
-                        var params = "";
-                        console.log("command: " + command + " params: " + JSON.stringify(params));
-                        var msg = user.post_request(command, params);
-                        document.getElementById("record").className = class_conference_record_off;
-                        this.recorded = false;
-                        document.getElementById("record").className = class_conference_record_off;
-                    }())
-                }
+                xhr.send(JSON.stringify(params));
                 console.log("Response: " + xhr.responseText);
                 var msg = {};
                 try {
@@ -1146,23 +1125,11 @@
                     this.record_id = msg.ID_rec;
                     this.recorded = true;
                     document.getElementById("record").className = class_conference_record_on;
-                } else {
-                    var command = "participants/" + self.uuid + "/calls/" + rec_call_uuid + "/disconnect";
-                    var params = "";
-                    console.log("command: " + command + " params: " + JSON.stringify(params));
-                    var msg = user.post_request(command, params);
-                    this.recorded = false;
-                    document.getElementById("record").className = class_conference_record_off;
                 }
             } else {
                 var params = { "pid": this.record_pid, "ID_rec": this.record_id, };
-                var async = false;
-                var method = "POST"; // post http request
                 var xhr = new XMLHttpRequest();
-
-                var xhrUrl = "https://" + this.record_server + "/recordstop.php";
-                console.log("Requesting: " + xhrUrl);
-                xhr.open(method, xhrUrl, async);
+                xhr.open("POST", "https://" + this.record_server + "/recordstop.php", false);
                 xhr.onerror = function () { this.onError(this.trans.ERROR_CONNECTING); };
                 xhr.ontimeout = function () { this.onError(this.trans.ERROR_CONNECTING); };
                 console.log(params);
@@ -1213,8 +1180,10 @@
 
         send_message: function () {
             var chatinput_element = document.getElementById("chatinput");
-            var call_data = { "type": "text/plain",
-                "payload": chatinput_element.value };
+            var call_data = {
+                "type": "text/plain",
+                "payload": chatinput_element.value
+            };
             this.post_request("message", call_data);
             this.display_message("Me", chatinput_element.value);
             chatinput_element.value = "";
@@ -1262,8 +1231,6 @@
             this.event_source.addEventListener("stage", user.stage.bind(this), false);
             this.event_source.addEventListener("refer", user.refer.bind(this), false);
             this.event_source.addEventListener("message_received", user.receive_message.bind(this), false);
-            this.event_source.addEventListener("refresh_token", user.refresh_token.bind(this), false);
-            this.event_source.addEventListener("layout", user.layout.bind(this), false);
             return true;
         },
 
@@ -1442,7 +1409,19 @@
             var remotealias = document.getElementById("remotealias");
             var role = document.getElementById("role");
 
-            this.action_dial(protocol.value, localalias.value, localdisplayname.value, remotealias.value, role.value);
+            var call_data = {
+                "protocol": protocol.value,
+                "source": localalias.value,
+                "destination": remotealias.value,
+                "role": role.value
+            };
+            if (protocol.value == "rtmp") {
+                call_data["streaming"] = "yes";
+            }
+            var response = user.post_request("dial", call_data);
+            if (response["status"] == 200) {
+                console.log("Dial out success");
+            }
         },
 
         dial_pb: function (addr, protocol, name) {

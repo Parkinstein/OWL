@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using MeetingRequest;
 using OWL_Site.Models;
 using TaskScheduler;
 using Task = TaskScheduler.Task;
@@ -22,9 +23,7 @@ namespace OWL_Site.Controllers
     {
         private SchedulerMeetingService meetingService;
         private string gp,gpmail;
-        public static string oplink;
         public static IEnumerable<MeetingViewModel> meetings_all, mettingsFiltered;
-
         public SchedulerController()
         {
             this.meetingService = new SchedulerMeetingService();
@@ -35,20 +34,17 @@ namespace OWL_Site.Controllers
             var data = db.AspNetUsers.AsEnumerable();
             return Json(data.ToDataSourceResult(request, o => new {id = o.Id,name = o.DispName}));
         }
-
         public JsonResult GetVmRs([DataSourceRequest] DataSourceRequest request)
         {
             aspnetdbEntities db = new aspnetdbEntities();
             var data = db.AllVmrs.Where(m => m.service_type == "conference");
             return Json(data.ToDataSourceResult(request));
         }
-
         [Authorize]
         public ActionResult Index()
         {
            return View();
         }
-
         public JsonResult Meetings_Create([DataSourceRequest] DataSourceRequest request, MeetingViewModel meeting)
         {
             RegexUtilities util = new RegexUtilities();
@@ -95,20 +91,34 @@ namespace OWL_Site.Controllers
             }
             foreach (var mail in emaillist)
             {
-                string link = "<a href =\"" + "https://" + MvcApplication.set.CobaCfgAddress + "/webapp/?conference=" + 
-                    roomalias.alias + "&name=" + Uri.EscapeDataString(mail.DispName) + "&bw=512" + gp + "&join=1" +
-                    "\">ссылке</a>";
-                string body = "Уважамый(ая), " + mail.DispName + " !<br>" +  (meeting.Start +
-                              TimeSpan.FromHours(3)).ToString("U") + " состоится конференция на тему \"" + 
-                              meeting.Title + "\"." + "<br>"  + "Инициатор конференции: " + init.DispName + "<br>"  +
+                string link = "<a href =\"" + "https://" + MvcApplication.set.CobaCfgAddress + "/webapp/?conference=" +
+                              roomalias.alias + "&name=" + Uri.EscapeDataString(mail.DispName) + "&bw=512" + gp +
+                              "&join=1" +
+                              "\">ссылке</a>";
+                string body = "Уважамый(ая), " + mail.DispName + " !<br>" + (meeting.Start +
+                                                                             TimeSpan.FromHours(3)).ToString("U") +
+                              " состоится конференция на тему \"" +
+                              meeting.Title + "\"." + "<br>" + "Инициатор конференции: " + init.DispName + "<br>" +
                               "В указанное время, для участия в конференции, просьба перейти по " +
-                              link + "<br><br>"+"<b><i>Данные для самостоятельного входа:<i><b><br> Адрес сервера: " + 
+                              link + "<br><br>" + "<b><i>Данные для самостоятельного входа:<i><b><br> Адрес сервера: " +
                               "https://" + MvcApplication.set.CobaCfgAddress + "/" + "<br>" +
-                              "Имя конференции: "+roomalias.alias+"<br>"+gpmail+"<br>"+"SIP-адрес: "+ 
-                              roomalias.alias+"@"+ MvcApplication.set.CobaCfgAddress;
-                try
+                              "Имя конференции: " + roomalias.alias + "<br>" + gpmail + "<br>" + "SIP-адрес: " +
+                              roomalias.alias + "@" + MvcApplication.set.CobaCfgAddress;
+                Event new_event = new Event()
                 {
-                    Sendmail(mail.Email, "NEW: " + meeting.Title, body);
+                    UID = meeting.MeetingID.ToString(),
+                    Location = "Brussels",
+                    Status = EventStatus.CONFIRMED,
+                    Organizer = new Organizer() {PublicName = "Thierry THOUA", Email = "bidule@dotnethub.be"},
+                    StartTime = new DateTime(2011, 7, 1, 17, 0, 0),
+                    EndTime = new DateTime(2011, 7, 1, 19, 0, 0),
+                    Description = "Voici une conf",
+                    Title = "Conference about ics",
+                    Attendees = { }
+                };
+            try
+                {
+                    Sendmail(mail.Email, "NEW: " + meeting.Title, body, meeting, new_event);
                 }
                 catch (Exception e)
                 {
@@ -214,7 +224,7 @@ namespace OWL_Site.Controllers
                                   "\" была отменена пользователем " + init.DispName + ". <br>";
                     try
                     {
-                        Sendmail(mail.Email, "DEL: " + meeting.Title, body);
+                        Sendmail(mail.Email, "DEL: " + meeting.Title, body,meeting, null);
                     }
                     catch (Exception e)
                     {
@@ -223,26 +233,6 @@ namespace OWL_Site.Controllers
                         Debug.WriteLine(e.HResult);
                     }
                 }
-                //}
-                //foreach (var aa in AddAtt)
-                //{
-                //    strB.Append(aa + ";" + aa + Environment.NewLine);
-                //}
-                ////var owner = applicationDbContext.Users.FirstOrDefault(p => p.UserConfID == roomID);
-                //var filename = "meeting-" + AccountController.Uname + "-" +
-                //                   (meeting.Start + TimeSpan.FromHours(3)).ToString("dd-MM-yyyy_hh-mm") + ".csv";
-                //string path = Path.Combine(Server.MapPath("~/Content/OpFiles/CSV"), filename);
-                //Debug.WriteLine(path);
-                //meeting.FileLink = "Content/OpFiles/CSV/" + filename;
-                //meetingService.Update(meeting, ModelState);
-
-                //using (FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate))
-                //{
-                //    using (StreamWriter streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
-                //    {
-                //        streamWriter.Write(strB.ToString());
-                //    }
-                //}
             }
             return Json(new[] { meeting }.ToDataSourceResult(request, ModelState));
         }
@@ -312,6 +302,7 @@ namespace OWL_Site.Controllers
                     }
                     else { }
                 }
+
                 foreach (var mail in emaillist)
                 {
                     string link = "<a href =\"" + "https://" + MvcApplication.set.CobaCfgAddress + "/webapp/?conference=" +
@@ -321,7 +312,7 @@ namespace OWL_Site.Controllers
                                   TimeSpan.FromHours(3)).ToString("U") +"<br>" + "Инициатор конференции: " + init.DispName + "<br>" + "В указанное время, для участия в конференции, просьба перейти по " + link + "<br><br>" + "<b><i>Данные для самостоятельного входа:<i><b><br> Адрес сервера: " + "https://" + MvcApplication.set.CobaCfgAddress + "/" + "<br>" + "Имя конференции: " + roomalias.alias + "<br>" + gpmail + "<br>" + "SIP-адрес: " + roomalias.alias + "@" + MvcApplication.set.CobaCfgAddress;
                     try
                     {
-                        Sendmail(mail.Email, "UPD: " + meeting.Title, body);
+                       Sendmail(mail.Email, "UPD: " + meeting.Title, body, meeting, null);
                     }
                     catch (Exception e)
                     {
@@ -330,36 +321,16 @@ namespace OWL_Site.Controllers
                         Debug.WriteLine(e.HResult);
                     }
                 }
-                //}
-                //foreach (var aa in AddAtt)
-                //{
-                //    strB.Append(aa + ";" + aa + Environment.NewLine);
-                //}
-                ////var owner = applicationDbContext.Users.FirstOrDefault(p => p.UserConfID == roomID);
-                //var filename = "meeting-" + AccountController.Uname + "-" +
-                //                   (meeting.Start + TimeSpan.FromHours(3)).ToString("dd-MM-yyyy_hh-mm") + ".csv";
-                //string path = Path.Combine(Server.MapPath("~/Content/OpFiles/CSV"), filename);
-                //Debug.WriteLine(path);
-                //meeting.FileLink = "Content/OpFiles/CSV/" + filename;
-                //meetingService.Update(meeting, ModelState);
-
-                //using (FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate))
-                //{
-                //    using (StreamWriter streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
-                //    {
-                //        streamWriter.Write(strB.ToString());
-                //    }
-                //}
             }
             return Json(new[] { meeting }.ToDataSourceResult(request, ModelState));
         }
-        public Task<ActionResult> Sendmail(string to, string subj, string body)
+        public Task<ActionResult> Sendmail(string to, string subj, string body, MeetingViewModel meet, Event nEvent)
         {
             SmtpClient smtpClient = new SmtpClient(MvcApplication.set.AuthDnAddress, 25)
             {
                 UseDefaultCredentials = false,
                 EnableSsl = false,
-                Credentials = new NetworkCredential("cobaservice", "Ciscocisco123"),
+                Credentials = new NetworkCredential(MvcApplication.set.SmtpLogin, MvcApplication.set.SmtpPassword),
 
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 Timeout = 20000
@@ -375,6 +346,59 @@ namespace OWL_Site.Controllers
             mailMessage.To.Add(new MailAddress(to));
             mailMessage.Subject = subj;
             mailMessage.Body = body;
+
+            //Event myEvent = new Event();
+            
+            mailMessage.AddEvent(nEvent);
+
+
+            #region Method 1
+
+            //StringBuilder str = new StringBuilder();
+            //str.AppendLine("BEGIN:VCALENDAR");
+
+            ////PRODID: identifier for the product that created the Calendar object
+            //str.AppendLine("PRODID:-//ABC Company//Outlook MIMEDIR//EN");
+            //str.AppendLine("VERSION:2.0");
+            //str.AppendLine("METHOD:REQUEST");
+
+            //str.AppendLine("BEGIN:VEVENT");
+
+            //str.AppendLine(string.Format("DTSTART:{0:yyyyMMddTHHmmssZ}", meet.Start));
+            //    //TimeZoneInfo.ConvertTimeToUtc("BeginTime").ToString("yyyyMMddTHHmmssZ")));
+            //str.AppendLine(string.Format("DTSTAMP:{0:yyyyMMddTHHmmssZ}", DateTime.UtcNow));
+            //str.AppendLine(string.Format("DTEND:{0:yyyyMMddTHHmmssZ}", meet.End));
+            //    //TimeZoneInfo.ConvertTimeToUtc("EndTime").ToString("yyyyMMddTHHmmssZ")));
+            //str.AppendLine(string.Format("LOCATION: {0}", "Система ВКС 'Сова'"));
+
+            //// UID should be unique.
+            //str.AppendLine(string.Format("UID:{0}", Guid.NewGuid()));
+            //str.AppendLine(string.Format("DESCRIPTION:{0}", mailMessage.Body));
+            //str.AppendLine(string.Format("X-ALT-DESC;FMTTYPE=text/html:{0}", mailMessage.Body));
+            //str.AppendLine(string.Format("SUMMARY:{0}", mailMessage.Subject));
+
+            //str.AppendLine("STATUS:CONFIRMED");
+            //str.AppendLine("BEGIN:VALARM");
+            //str.AppendLine("TRIGGER:-PT15M");
+            //str.AppendLine("ACTION:Accept");
+            //str.AppendLine("DESCRIPTION:Reminder");
+            //str.AppendLine("X-MICROSOFT-CDO-BUSYSTATUS:BUSY");
+            //str.AppendLine("END:VALARM");
+            //str.AppendLine("END:VEVENT");
+
+            //str.AppendLine(string.Format("ORGANIZER:MAILTO:{0}", mailMessage.From.Address));
+            //str.AppendLine(string.Format("ATTENDEE;CN=\"{0}\";RSVP=TRUE:mailto:{1}", mailMessage.To[0].DisplayName,
+            //    mailMessage.To[0].Address));
+
+            //str.AppendLine("END:VCALENDAR");
+            //ContentType ct = new ContentType("text/calendar");
+            //ct.Parameters.Add("method", "REQUEST");
+            //ct.Parameters.Add("name", "meeting.ics");
+            //AlternateView avCal = AlternateView.CreateAlternateViewFromString(str.ToString(), ct);
+            //mailMessage.AlternateViews.Add(avCal);
+
+            #endregion
+
 
             smtpClient.Send(mailMessage);
             return null;
