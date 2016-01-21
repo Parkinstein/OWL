@@ -468,6 +468,7 @@ namespace OWL_Site.Controllers
         public JsonResult GetAttendies([DataSourceRequest] DataSourceRequest request)
         {
             aspnetdbEntities db = new aspnetdbEntities();
+            
             var data = db.AspNetUsers.AsEnumerable();
             return Json(data.ToDataSourceResult(request, o => new { id = o.Id, name = o.DispName }));
         }

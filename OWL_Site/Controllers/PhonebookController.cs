@@ -38,6 +38,7 @@ namespace OWL_Site.Controllers
             IEnumerable<PrivatePhB> selectets = (dbs.PrivatePhBs.Where(m => m.OwSAN == User.Identity.Name));
             foreach (var sel in selectets)
             {
+              Debug.WriteLine((db.Users.FirstOrDefault(m => m.Id == sel.IdREC).DispName));
               selrec.Add(db.Users.FirstOrDefault(m => m.Id == sel.IdREC));
             }
             return Json(new
@@ -60,10 +61,14 @@ namespace OWL_Site.Controllers
         // Delete Phonebook records method
         public void Phonebook_Delete(object[] pbrArray)
         {
-            foreach (string pbr in pbrArray)
+            if (pbrArray != null)
             {
-                DeleteFromPrivat(pbr);
+                foreach (string pbr in pbrArray)
+                {
+                    DeleteFromPrivat(pbr);
+                }
             }
+            
         }
 
         public List<AspNetUser> GetPhBOw(string Owname) //get phonebook
@@ -73,16 +78,15 @@ namespace OWL_Site.Controllers
             var selectets = db.PrivatePhBs.Where(m => m.OwSAN == Owname);
             foreach (var sel in selectets)
             {
-                AspNetUser temp = new AspNetUser();
                 var srec = db.AspNetUsers.FirstOrDefault(m => m.Id == sel.IdREC);
-                temp = srec;
+                var temp = srec;
                 if (!String.IsNullOrEmpty(sel.Group))
                 {
-                    temp.Group = sel.Group;
+                    if (temp != null) temp.Group = sel.Group;
                 }
                 if (String.IsNullOrEmpty(sel.Group))
                 {
-                    temp.Group = "Группа не назначена";
+                    if (temp != null) temp.Group = "Группа не назначена";
                 }
                 selrec.Add(temp);
 

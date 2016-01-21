@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
+using MeetingRequest;
 using MySql.Data.MySqlClient;
 using OWL_Site.Models;
 using Renci.SshNet;
@@ -30,16 +31,15 @@ namespace OWL_Site.Controllers
 
         public IEnumerable<VideoRecords.Object> GetRec()
         {
-            
-
-            if (!User.IsInRole("Admin"))
-            {
-                return Videorecs(User.Identity.Name);
-            }
-            else
-            {
-                return Videorecs("");
-            }
+            //if (!User.IsInRole("Admin"))
+            //{
+            //    return Videorecs(User.Identity.Name);
+            //}
+            //else
+            //{
+            //    return Videorecs("");
+            //}
+            return Videorecs("");
         }
         // Delete Records method
         public void VideoRecords_Delete(object[] pbrArray)
