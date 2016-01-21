@@ -60,11 +60,15 @@ namespace OWL_Site.Controllers
             List<AspNetUser> emaillist = new List<AspNetUser>();
             //emaillist.Add(init);
             StringBuilder strB = new StringBuilder();
-            foreach (var att in meeting.Attendees)
+            if (meeting.Attendees != null)
             {
-                AspNetUser attemail = (GetAllPB().FirstOrDefault(m => m.Id == att));
-                emaillist.Add(attemail);
+                foreach (var att in meeting.Attendees)
+                {
+                    AspNetUser attemail = (GetAllPB().FirstOrDefault(m => m.Id == att));
+                    emaillist.Add(attemail);
+                }
             }
+            
             List<string> AddAtt = new List<string>();
             if (meeting.AddAttend != null) { AddAtt = (meeting.AddAttend.Split((",").ToCharArray())).ToList(); }
             if (!String.IsNullOrEmpty(currentroom.guest_pin))
@@ -107,13 +111,13 @@ namespace OWL_Site.Controllers
                 Event new_event = new Event()
                 {
                     UID = meeting.MeetingID.ToString(),
-                    Location = "Brussels",
+                    Location = "Moscow",
                     Status = EventStatus.CONFIRMED,
-                    Organizer = new Organizer() {PublicName = "Thierry THOUA", Email = "bidule@dotnethub.be"},
-                    StartTime = new DateTime(2011, 7, 1, 17, 0, 0),
-                    EndTime = new DateTime(2011, 7, 1, 19, 0, 0),
+                    Organizer = new Organizer() {PublicName = "Владимир Путин", Email = "bidule@dotnethub.be"},
+                    StartTime = meeting.Start,
+                    EndTime = meeting.End,
                     Description = "Voici une conf",
-                    Title = "Conference about ics",
+                    Title = meeting.Title,
                     Attendees = { }
                 };
             try
@@ -460,6 +464,12 @@ namespace OWL_Site.Controllers
             }
 
             return selrec;
+        }
+        public JsonResult GetAttendies([DataSourceRequest] DataSourceRequest request)
+        {
+            aspnetdbEntities db = new aspnetdbEntities();
+            var data = db.AspNetUsers.AsEnumerable();
+            return Json(data.ToDataSourceResult(request, o => new { id = o.Id, name = o.DispName }));
         }
     }
 }

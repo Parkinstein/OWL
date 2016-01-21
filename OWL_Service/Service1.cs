@@ -110,11 +110,11 @@ namespace OWL_Service
                     objSurveyUsers.Sammaccount = GetProperty(resul, "sAMAccountName");
                     objSurveyUsers.DispName = GetProperty(resul, "displayName");
                     objSurveyUsers.Tel_int = GetProperty(resul, "ipPhone");
-                    if (GetProperty(resul, "memberOf").Contains("COBA_admin"))
+                    if (GetProperty(resul, "memberOf").Contains(set.AdminGroup))
                     {
                         grname = "Admins";
                     }
-                    if (GetProperty(resul, "memberOf").Contains("COBA_users"))
+                    if (GetProperty(resul, "memberOf").Contains(set.UserGroup))
                     {
                         grname = "User";
                     }
