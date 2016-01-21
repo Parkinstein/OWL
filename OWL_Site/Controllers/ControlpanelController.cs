@@ -169,7 +169,7 @@ namespace OWL_Site.Controllers
         {
             aspnetdbEntities db = new aspnetdbEntities();
             var curvmr = db.AllVmrs.FirstOrDefault(v => v.name == confname);
-            var curalias = db.VmrAliases.FirstOrDefault(c => c.vmid == curvmr.Id);
+            var curalias = db.VmrAliases.FirstOrDefault(v => v.vmid == curvmr.Id);
 
             if (curvmr != null)
             {
