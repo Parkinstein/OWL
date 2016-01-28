@@ -124,17 +124,41 @@
     .moreinfo {
         padding-left: 5px;
         color: #3D3D6A;
+        border-color: #000;
 }
+    .k-event, .k-more-events {
+    position: absolute;
+    border-style: solid;
+    border-width: 1px;
+    text-align: left;
+    overflow: visible;
+        border-color: #ffffff;
+    background-color: #3D3D6A;
+}
+    .btn-primary {
+        background: #3D3D6A 0 -257px url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAIcCAYAAAD2RY5JAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAShJREFUeNrs2EkKAkEQBEDHBUVcEBFR3JcZ///B8RMp1iHqAXGqpjK76ft+kJwGCAQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQ+EewSYPDNDhOg5M0OE2DszQ4T4PLNLhOg5s0uE2DuzS4T4PHNHhKg5c0eEuDjzT4TIPv8mCbBrs0+CkPduXBtvwevsq/5XsavKbBc/mbcih/l+PJIZ5t4ulrlQYX5TN2vAXEe0q8SY3Kt9F4X/aJAQQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAg8JfgV4ABANLCVFQtVP42AAAAAElFTkSuQmCC') repeat-x;
+        border-color: #3D3D6A;
+        box-shadow: 1px 1px 2px wheat, 2px 11px 2em #3D3D6A;
+    }
+    .btn-primary:hover {
+        background-color: transparent;
+        border-color: #ffffff;
+    }
+    .btn-primary:active {
+        background-color: transparent;
+    }
+    .btn-primary:focus, .btn-primary:active:focus{
+        background-color: transparent;
+    }
 </style>
 
 <script id="customEventTemplate" type="text/x-kendo-template">
     
+    
     <div class="btn-group">
-        @*<span class ="meetingtitle">#= title #</span>*@
-        <button type="button" title="Подробнее..." class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <button type="button" title="Подробнее..." class="btn btn-primary btn-block dropdown-toggle" data-toggle="dropdown">
             #= title #  <span class="caret"></span>
         </button>
-
         <ul class="dropdown-menu" role="menu" style="z-index:9999;">
             <li class ="moreinfo">Начало - #:dateformattingst(data)#</li>
             <li class ="moreinfo">Окончание - #:dateformattingnd(data)#</li>
@@ -150,9 +174,11 @@
     function dateformattingst(data) {
         return kendo.toString(data.start, 'H:mm  ddd, dd-MMM-yyyy');
     }
+
     function dateformattingnd(data) {
         return kendo.toString(data.end, 'H:mm  ddd, dd-MMM-yyyy');
     }
+
     function attquant(data) {
         var addquan;
         var res;
@@ -162,20 +188,17 @@
             var str = data.AddAttend;
             if (str.search(" ") >= 0) {
                 res = str.replace(" ", "");
+            } else {
+                res = str;
             }
-            else { res = str; }
-             res = str;
+            res = str;
             var quan = res.split(",");
             addquan = quan.length;
         }
         if (typeof data.Attendees === 'undefined') {
             return 0;
+        } else {
+            return addquan + data.Attendees.length;
         }
-        else
-        {
-            return addquan + data.Attendees.length;  
-        }
-
     };
-    
 </script>

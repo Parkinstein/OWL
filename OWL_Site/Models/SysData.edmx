@@ -150,7 +150,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="None" />
           <Property Name="AuthDnAddress" Type="nvarchar(max)" />
           <Property Name="OU" Type="nvarchar(max)" />
           <Property Name="UserGroup" Type="nvarchar(max)" />
@@ -422,7 +422,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
           <Property Name="AuthDnAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="OU" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UserGroup" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />

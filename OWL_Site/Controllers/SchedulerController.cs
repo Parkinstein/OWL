@@ -113,7 +113,7 @@ namespace OWL_Site.Controllers
                     UID = meeting.MeetingID.ToString(),
                     Location = "Moscow",
                     Status = EventStatus.CONFIRMED,
-                    Organizer = new Organizer() {PublicName = "Владимир Путин", Email = "bidule@dotnethub.be"},
+                    Organizer = new Organizer() {PublicName = init.DispName, Email = init.Email },
                     StartTime = meeting.Start,
                     EndTime = meeting.End,
                     Description = "Voici une conf",
@@ -265,7 +265,7 @@ namespace OWL_Site.Controllers
         {
             if (ModelState.IsValid)
             {
-                meetingService.Update(meeting, ModelState);
+                
                 RegexUtilities util = new RegexUtilities();
                 aspnetdbEntities db = new aspnetdbEntities();
                 var init = GetAllPB().FirstOrDefault(m => m.Sammaccount == User.Identity.Name);
@@ -273,6 +273,8 @@ namespace OWL_Site.Controllers
                 List<AspNetUser> emaillist = new List<AspNetUser>();
                 StringBuilder strB = new StringBuilder();
                 var roomalias = db.VmrAliases.FirstOrDefault(m => m.vmid == meeting.RoomID);
+                meeting.OpLink = string.Concat("https://", MvcApplication.set.CobaCfgAddress, "/webapp/?conference=", roomalias.alias, "&name=Operator&bw=512&join=1");
+                meetingService.Update(meeting, ModelState);
                 foreach (var att in meeting.Attendees)
                 {
                     AspNetUser attemail = (GetAllPB().FirstOrDefault(m => m.Id == att));

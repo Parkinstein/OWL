@@ -100,11 +100,11 @@ namespace OWL_Site.Controllers
                     identity.AddClaim(new Claim(ClaimTypes.GivenName, user.DispName));
                     if (user.Group == "Admins")
                     {
-                        returnUrl = "/Settings";
+                        returnUrl = "/Sets";
                     }
                     if (user.Group == "User")
                     {
-                        returnUrl = "/Phonebook/Phonebook";
+                        returnUrl = "/Home";
                     }
                     Debug.WriteLine(returnUrl);
                     return RedirectToLocal(returnUrl);

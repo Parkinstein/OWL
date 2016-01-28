@@ -38,7 +38,6 @@ namespace OWL_Site.Controllers
             IEnumerable<PrivatePhB> selectets = (dbs.PrivatePhBs.Where(m => m.OwSAN == User.Identity.Name));
             foreach (var sel in selectets)
             {
-              Debug.WriteLine((db.Users.FirstOrDefault(m => m.Id == sel.IdREC).DispName));
               selrec.Add(db.Users.FirstOrDefault(m => m.Id == sel.IdREC));
             }
             return Json(new
