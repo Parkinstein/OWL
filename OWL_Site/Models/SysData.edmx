@@ -134,7 +134,7 @@
           <Property Name="Record" Type="bit" Nullable="false" />
           <Property Name="Recfile" Type="nvarchar(max)" />
           <Property Name="InitName" Type="nvarchar(max)" />
-          <Property Name="InitFullname" Type="nvarchar(max)" />
+          <Property Name="FName" Type="nvarchar(max)" />
           <Property Name="reminder" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PrivatePhBs">
@@ -422,7 +422,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
           <Property Name="AuthDnAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="OU" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UserGroup" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -653,11 +653,11 @@
           <Property Name="Record" Type="Boolean" Nullable="false" />
           <Property Name="Recfile" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="InitName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="InitFullname" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="reminder" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="MeetingAttendees" Relationship="aspnetdbModel.FK_MeetingAtendee_Meeting" FromRole="Meeting" ToRole="MeetingAttendee" />
           <NavigationProperty Name="Meetings1" Relationship="aspnetdbModel.FK_Meetings_Meetings" FromRole="Meeting" ToRole="Meeting1" />
           <NavigationProperty Name="Meeting1" Relationship="aspnetdbModel.FK_Meetings_Meetings" FromRole="Meeting1" ToRole="Meeting" />
-          <Property Name="reminder" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_MeetingAtendee_Meeting">
           <End Type="aspnetdbModel.Meeting" Role="Meeting" Multiplicity="1" />
@@ -854,7 +854,7 @@
             <EntityTypeMapping TypeName="aspnetdbModel.Meeting">
               <MappingFragment StoreEntitySet="Meetings">
                 <ScalarProperty Name="reminder" ColumnName="reminder" />
-                <ScalarProperty Name="InitFullname" ColumnName="InitFullname" />
+                <ScalarProperty Name="FName" ColumnName="FName" />
                 <ScalarProperty Name="InitName" ColumnName="InitName" />
                 <ScalarProperty Name="Recfile" ColumnName="Recfile" />
                 <ScalarProperty Name="Record" ColumnName="Record" />
