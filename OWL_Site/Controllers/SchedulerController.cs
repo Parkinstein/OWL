@@ -50,6 +50,8 @@ namespace OWL_Site.Controllers
             RegexUtilities util = new RegexUtilities();
             aspnetdbEntities db = new aspnetdbEntities();
             var init = GetAllPB().FirstOrDefault(m => m.Sammaccount == User.Identity.Name);
+            meeting.InitName = init.Id;
+            meeting.FName = init.DispName;
             if (meeting.RoomID == 0)
             {
                 meeting.RoomID = 1;
@@ -243,7 +245,10 @@ namespace OWL_Site.Controllers
         public JsonResult Meetings_Read([DataSourceRequest] DataSourceRequest request)
         {
             meetings_all = meetingService.GetAll();
-            mettingsFiltered = meetings_all.AsEnumerable().Where(m => m.InitName == User.Identity.Name);
+            var init = GetAllPB().FirstOrDefault(m => m.Sammaccount == User.Identity.Name);
+            
+            mettingsFiltered = meetings_all.AsEnumerable().Where(m => m.InitName == init.Id);
+            Debug.WriteLine(mettingsFiltered.GetEnumerator().Current);
             foreach (var all in meetings_all)
             {
                 if (!String.IsNullOrEmpty(all.Recfile))
@@ -269,6 +274,7 @@ namespace OWL_Site.Controllers
                 RegexUtilities util = new RegexUtilities();
                 aspnetdbEntities db = new aspnetdbEntities();
                 var init = GetAllPB().FirstOrDefault(m => m.Sammaccount == User.Identity.Name);
+                
                 var currentroom = db.AllVmrs.FirstOrDefault(m => m.Id == meeting.RoomID);
                 List<AspNetUser> emaillist = new List<AspNetUser>();
                 StringBuilder strB = new StringBuilder();
