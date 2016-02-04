@@ -1,39 +1,15 @@
 ﻿@{
     ViewBag.Title = "Планировщик";
     @model OWL_Site.Models.AspNetUser
+        }
 
-}
-     <script>
-         function getColor(data) {
-             var date = new Date();
-             datenow = kendo.toString(date, 'yyyy/MM/dd HH:mm:ss.fff');
-             if (kendo.toString(data.start, 'yyyy/MM/dd HH:mm:ss.fff') < datenow && datenow < kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff')) {
-                 return "green";
-             } else if (kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff') < datenow) {
-                 return "gray";
-             } else {
-                 return "blur";
-             }
-         }
-
-         function getColor2(data) {
-             var date = new Date();
-             datenow = kendo.toString(date, 'yyyy/MM/dd HH:mm:ss.fff');
-             if (kendo.toString(data.start, 'yyyy/MM/dd HH:mm:ss.fff') < datenow && datenow < kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff')) {
-                 return "white";
-             } else if (kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff') < datenow) {
-                 return "white";
-             } else {
-                 return "blur";
-             }
-         }
-     </script>
+    <script>
+        
+    </script>
+   
 
 @if (User.IsInRole("Admin"))
 {
-    <div class="k-edit-label">
-        @(Html.Label("Фильтр"))
-    </div>
     <div data-container-for="Attendees" class="k-edit-field">
         @(Html.Kendo().MultiSelectFor(m => m.Id)
               .Name("Filter")
@@ -167,47 +143,11 @@
 
 @*<script>
         window.setInterval(function () { var scheduler = $("#scheduler").data("kendoScheduler");
-            scheduler.refresh(); console.log("refreshed");}, 60000);
+            scheduler.dataSource.read(); console.log("refreshed");
+        }, 2000);
     </script>*@
 
-<style>
-    .event-template1 {
-        background-color: #FF0000;
-    }
 
-    .event-template2 {
-        background-color: #a9a9a9;
-    }
-    .moreinfo {
-        padding-left: 5px;
-        color: #3D3D6A;
-        border-color: #000;
-}
-    .k-event, .k-more-events {
-    position: absolute;
-    border-style: solid;
-    border-width: 1px;
-    text-align: left;
-    overflow: visible;
-        border-color: #ffffff;
-    background-color: #3D3D6A;
-}
-    .btn-primary {
-        background: #3D3D6A 0 -257px url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAIcCAYAAAD2RY5JAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAShJREFUeNrs2EkKAkEQBEDHBUVcEBFR3JcZ///B8RMp1iHqAXGqpjK76ft+kJwGCAQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQ+EewSYPDNDhOg5M0OE2DszQ4T4PLNLhOg5s0uE2DuzS4T4PHNHhKg5c0eEuDjzT4TIPv8mCbBrs0+CkPduXBtvwevsq/5XsavKbBc/mbcih/l+PJIZ5t4ulrlQYX5TN2vAXEe0q8SY3Kt9F4X/aJAQQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAg8JfgV4ABANLCVFQtVP42AAAAAElFTkSuQmCC') repeat-x;
-        border-color: #3D3D6A;
-        box-shadow: 1px 1px 2px wheat, 2px 11px 2em #3D3D6A;
-    }
-    .btn-primary:hover {
-        background-color: transparent;
-        border-color: #ffffff;
-    }
-    .btn-primary:active {
-        background-color: transparent;
-    }
-    .btn-primary:focus, .btn-primary:active:focus{
-        background-color: transparent;
-    }
-</style>
 
 <script id="customEventTemplate" type="text/x-kendo-template">
     
@@ -229,41 +169,103 @@
         </ul>
     </div>
 </script>
-<script>
-    function dateformattingst(data) {
-        return kendo.toString(data.start, 'H:mm  ddd, dd-MMM-yyyy');
-    }
-
-    function dateformattingnd(data) {
-        return kendo.toString(data.end, 'H:mm  ddd, dd-MMM-yyyy');
-    }
-    function nameret(data) {
+    <script>
         
-        return kendo.toString(data.FName);
+        function dateformattingst(data) {
+            return kendo.toString(data.start, 'H:mm  ddd, dd-MMM-yyyy');
+        }
+
+        function dateformattingnd(data) {
+            return kendo.toString(data.end, 'H:mm  ddd, dd-MMM-yyyy');
+        }
+
+        function nameret(data) {
+
+            return kendo.toString(data.FName);
+        }
+
+        function attquant(data) {
+            var addquan;
+            var res;
+            if (!data.AddAttend) {
+                addquan = 0;
+            } else {
+
+                var str = data.AddAttend;
+
+                if (str.search(" ") > 0) {
+                    res = str.replace(" ", "");
+                } else {
+                    res = str;
+                }
+                res = str;
+                var quan = res.split(",");
+                addquan = quan.length;
+            }
+            if (typeof data.Attendees === 'undefined') {
+                return 0;
+            } else {
+                return addquan + data.Attendees.length;
+            }
+        };
+
+        function getColor(data) {
+            var date = new Date();
+            var datenow = kendo.toString(date, 'yyyy/MM/dd HH:mm:ss.fff');
+            if (kendo.toString(data.start, 'yyyy/MM/dd HH:mm:ss.fff') < datenow && datenow < kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff')) {
+                return "green";
+            } else if (kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff') < datenow) {
+                return "gray";
+            } else {
+                return "blur";
+            }
+        }
+
+        function getColor2(data) {
+            var date = new Date();
+            var datenow = kendo.toString(date, 'yyyy/MM/dd HH:mm:ss.fff');
+            if (kendo.toString(data.start, 'yyyy/MM/dd HH:mm:ss.fff') < datenow && datenow < kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff')) {
+                return "white";
+            } else if (kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff') < datenow) {
+                return "white";
+            } else {
+                return "blur";
+            }
+        }
+    </script>
+<style>
+    .moreinfo {
+        padding-left: 5px;
+        color: #3D3D6A;
+        border-color: #000;
     }
 
-    function attquant(data) {
-        var addquan;
-        var res;
-        if (!data.AddAttend) {
-            addquan = 0;
-        } else {
-            
-            var str = data.AddAttend;
-            
-            if (str.search(" ") > 0) {
-                res = str.replace(" ", "");
-            } else {
-                res = str;
+    .k-event, .k-more-events {
+        position: absolute;
+        border-style: solid;
+        border-width: 1px;
+        text-align: left;
+        overflow: visible;
+        border-color: #ffffff;
+        background-color:  #3D3D6A;
+    }
+
+    .btn-primary {
+        background: #3D3D6A 0 -257px url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAIcCAYAAAD2RY5JAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAShJREFUeNrs2EkKAkEQBEDHBUVcEBFR3JcZ///B8RMp1iHqAXGqpjK76ft+kJwGCAQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQ+EewSYPDNDhOg5M0OE2DszQ4T4PLNLhOg5s0uE2DuzS4T4PHNHhKg5c0eEuDjzT4TIPv8mCbBrs0+CkPduXBtvwevsq/5XsavKbBc/mbcih/l+PJIZ5t4ulrlQYX5TN2vAXEe0q8SY3Kt9F4X/aJAQQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAg8JfgV4ABANLCVFQtVP42AAAAAElFTkSuQmCC') repeat-x;
+        border-color: #3D3D6A;
+        box-shadow: 1px 1px 2px wheat, 2px 11px 2em #3D3D6A;
+    }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            border-color: #ffffff;
+        }
+
+        .btn-primary:active {
+            background-color: transparent;
+        }
+
+            .btn-primary:focus, .btn-primary:active:focus {
+                background-color: transparent;
             }
-            res = str;
-            var quan = res.split(",");
-            addquan = quan.length;
-        }
-        if (typeof data.Attendees === 'undefined') {
-            return 0;
-        } else {
-            return addquan + data.Attendees.length;
-        }
-    };
-</script>
+</style>
