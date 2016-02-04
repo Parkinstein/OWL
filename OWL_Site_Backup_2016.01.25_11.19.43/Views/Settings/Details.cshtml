@@ -1,0 +1,122 @@
+﻿@model OWL_Site.Models.Setting
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Setting</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AuthDnAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AuthDnAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OU)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OU)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserGroup)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserGroup)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AdminGroup)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AdminGroup)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DnAdminUn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DnAdminUn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DnAdminPass)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DnAdminPass)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CobaMngAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CobaMngAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CobaCfgAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CobaCfgAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CobaRecordsAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CobaRecordsAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CobaRecLogin)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CobaRecLogin)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CobaRecPass)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CobaRecPass)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CobaRecBdName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CobaRecBdName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CobaRecBdTable)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CobaRecBdTable)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

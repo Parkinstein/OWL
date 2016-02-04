@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    <link href="@Url.Content("~/Content/metro.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2015.3.930/kendo.common.min.css")" rel="stylesheet" type="text/css"/>
+    <link href="@Url.Content("~/Content/kendo/2015.3.930/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css"/>
+    <link href="@Url.Content("~/Content/kendo/2015.3.930/kendo.dataviz.min.css")" rel="stylesheet" type="text/css"/>
+    <link href="@Url.Content("~/Content/kendo/2015.3.930/kendo.blueopal.min.css")" rel="stylesheet" type="text/css"/>
+    <link href="@Url.Content("~/Content/kendo/2015.3.930/kendo.dataviz.blueopal.min.css")" rel="stylesheet" type="text/css"/>
+    <link href="@Url.Content("~/Content/font-awesome.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/DataTables/css/jquery.dataTables.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/prettify.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/zebra_tooltips.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/jquery-tooltipify.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-2.1.4.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/modernizr-2.8.3.js")"></script>
+    @*<script src="@Url.Content("~/Scripts/modernizr-2.6.2.js")"></script>*@
+    <script src="@Url.Content("~/Scripts/zebra_tooltips.js")"></script>
+    <script src="@Url.Content("~/Scripts/respond.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.slimscroll.min.js")"></script>
+    @*<script src="@Url.Content("~/Scripts/prettify.js")"></script>*@
+    @*<script src="@Url.Content("~/Scripts/kendo/2015.3.930/jquery.min.js")"></script>*@
+    <script src="@Url.Content("~/Scripts/kendo/2015.3.930/jszip.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2015.3.930/kendo.all.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2015.3.930/kendo.aspnetmvc.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2015.3.930/cultures/kendo.culture.ru-RU.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
+    <script src="@Url.Content("~/Scripts/jwplayer.js")"></script>
+    <script src="@Url.Content("~/Scripts/DataTables/jquery.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2015.3.930/kendo.timezones.min.js")"></script>
+    <script>kendo.culture("ru-RU");</script>
+    <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("Портал управления системой ВКС 'СОВА'", "Index", "Home", new {area = ""}, new {@class = "navbar-brand"})
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-menu-left" data-toggle="dropdown">Конференции<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li class ="icon-set">@Html.ActionLink("Управление конференциями", "Index", "Controlpanel")</li>
+                        <li class="divider"></li>
+                        <li class ="icon-rec">@Html.ActionLink("Просмотр файлов записи", "VideoRecords", "VideoRecords")</li>
+                        <li class="divider"></li>
+                        <li class ="icon-sched">@Html.ActionLink("Планирование конференций", "Index", "Scheduler")</li>
+                        <li class="divider"></li>
+                        <li class ="icon-stat">@Html.ActionLink("Статистика", "Statistics", "Statistics")</li>
+                    </ul>
+                </li>
+                <li>@Html.ActionLink("Телефонная книга", "Phonebook", "Phonebook")</li>
+                
+                @{
+                    if (User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Настройки", "Index", "Sets")</li>
+                    }
+                }
+            </ul>
+            @Html.Partial("_LoginPartial")
+        </div>
+    </div>
+</div>
+<div class="container body-content">
+    @RenderBody()
+    <footer>
+        <p>&copy;@DateTime.Now.Year – Портал управления системой "СОВА"</p>
+    </footer>
+</div>
+@Scripts.Render("~/bundles/bootstrap")
+@RenderSection("scripts", required: false)
+</body>
+</html>
+

@@ -1,0 +1,105 @@
+﻿@model IEnumerable<OWL_Site.Models.Setting>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AuthDnAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OU)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserGroup)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AdminGroup)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DnAdminUn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DnAdminPass)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CobaMngAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CobaCfgAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CobaRecordsAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CobaRecLogin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CobaRecPass)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CobaRecBdName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CobaRecBdTable)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AuthDnAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OU)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserGroup)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AdminGroup)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DnAdminUn)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DnAdminPass)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CobaMngAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CobaCfgAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CobaRecordsAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CobaRecLogin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CobaRecPass)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CobaRecBdName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CobaRecBdTable)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

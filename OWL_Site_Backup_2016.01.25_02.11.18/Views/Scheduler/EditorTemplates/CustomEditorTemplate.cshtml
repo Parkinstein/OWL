@@ -1,0 +1,263 @@
+﻿@using System.Web.Mvc.Html
+@model OWL_Site.Models.MeetingViewModel
+@{
+    //required in order to render validation attributes
+    ViewContext.FormContext = new FormContext();
+}
+@functions{
+    public Dictionary<string, object> generateDatePickerAttributes(
+           string elementId,
+           string fieldName,
+           string dataBindAttribute,
+           Dictionary<string, object> additionalAttributes = null)
+    {
+
+        Dictionary<string, object> datePickerAttributes = additionalAttributes != null ? new Dictionary<string, object>(additionalAttributes) : new Dictionary<string, object>();
+
+        datePickerAttributes["id"] = elementId;
+        datePickerAttributes["name"] = fieldName;
+        datePickerAttributes["data-bind"] = dataBindAttribute;
+        datePickerAttributes["required"] = "required";
+        datePickerAttributes["style"] = "z-index: inherit;";
+
+        return datePickerAttributes;
+    }
+}
+<div class="k-edit-label">
+    @(Html.Label("Тема"))
+</div>
+<div data-container-for="title" class="k-edit-field">
+    @(Html.TextBoxFor(model => model.Title, new { @class = "k-textbox", data_bind = "value:title" }))
+</div>
+<div class="k-edit-label">
+    @(Html.Label("Начало мероприятия"))
+</div>
+<div data-container-for="start" class="k-edit-field">
+
+    @(Html.Kendo().DateTimePickerFor(model => model.Start)
+    .TimeFormat("HH:mm")
+    
+        .HtmlAttributes(generateDatePickerAttributes("startDateTime", "start", "value:start,invisible:isAllDay")))
+
+    @(Html.Kendo().DatePickerFor(model => model.Start)
+        .HtmlAttributes(generateDatePickerAttributes("startDate", "start", "value:start,visible:isAllDay")))
+
+    <span data-bind="text: startTimezone"></span>
+    <span data-for="start" class="k-invalid-msg"></span>
+</div>
+<div class="k-edit-label">
+    @(Html.Label("Окончание мероприятия"))
+</div>
+<div data-container-for="end" class="k-edit-field">
+
+    @(Html.Kendo().DateTimePickerFor(model => model.End)
+            .TimeFormat("HH:mm")
+        .HtmlAttributes(generateDatePickerAttributes(
+            "endDateTime",
+            "end",
+            "value:end,invisible:isAllDay",
+            new Dictionary<string, object>() { { "data-dateCompare-msg", "Дата окончания должна быть позже даты начала" } })))
+
+    @(Html.Kendo().DatePickerFor(model => model.End)
+        .HtmlAttributes(generateDatePickerAttributes(
+            "endDate",
+            "end",
+            "value:end,visible:isAllDay",
+                    new Dictionary<string, object>() { { "data-dateCompare-msg", "Дата окончания должна быть позже даты начала" } })))
+
+    <span data-bind="text: endTimezone"></span>
+    <span data-for="end" class="k-invalid-msg"></span>
+</div>
+<div class="k-edit-label">
+    @(Html.Label("Весь день"))
+</div>
+<div data-container-for="isAllDay" class="k-edit-field">
+    <input data-bind="checked: isAllDay" data-val="true" id="IsAllDay" name="IsAllDay" type="checkbox" />
+</div>
+@*<div class="endTimezoneRow">
+    <div class="k-edit-label"></div>
+    <div class="k-edit-field">
+        <label class="k-check">
+            <input checked="checked" class="k-timezone-toggle" type="checkbox" value="true" />
+            Использовать разные часовые пояса для начала и окончания мероприятия
+        </label>
+    </div>
+</div>
+<script>
+    $(".k-timezone-toggle").on("click", function () {
+        var isVisible = $(this).is(":checked");
+        var container = $(this).closest(".k-popup-edit-form");
+
+        var endTimezoneRow = container.find("label[for='EndTimezone']").parent().add(container.find("div[data-container-for='endTimezone']"));
+        endTimezoneRow.toggle(isVisible);
+
+        if (!isVisible) {
+            var uid = container.attr("data-uid");
+            var scheduler = $("\#scheduler").data("kendoScheduler");
+            var model = scheduler.dataSource.getByUid(uid);
+            model.set("endTimezone", null);
+        }
+    });
+    var endTimezone = '${data.endTimezone}';
+    if (!endTimezone || endTimezone == "null") {
+        $(".k-timezone-toggle").trigger('click');
+    }
+</script>*@
+<div class="k-edit-label">
+    @(Html.Label("Часовой пояс"))
+</div>
+<div data-container-for="startTimezone" class="k-edit-field">
+    @(Html.Kendo().TimezoneEditorFor(model => model.StartTimezone)
+        .HtmlAttributes(new { data_bind = "value:startTimezone" }))
+</div>
+@*<div class="k-edit-label">
+    @(Html.Label("Часовой пояс окончания мероприятия"))
+</div>
+<div data-container-for="endTimezone" class="k-edit-field">
+    @(Html.Kendo().TimezoneEditorFor(model => model.EndTimezone)
+        .HtmlAttributes(new { data_bind = "value:endTimezone" }))
+</div>*@
+
+<div class="k-edit-label">
+    @(Html.Label("Настройки повтора"))
+</div>
+<div data-container-for="recurrenceRule" class="k-edit-field">
+    @(Html.Kendo().RecurrenceEditorFor(model => model.RecurrenceRule)
+          .HtmlAttributes(new {data_bind = "value:recurrenceRule"}))
+</div>
+<div class="k-edit-label">
+    @(Html.Label("Выбор VMR"))
+</div>
+<div data-container-for="RoomID" class="k-edit-field">
+        @(Html.Kendo().DropDownListFor(m => m.RoomID)
+          .AutoBind(true)
+          .DataTextField("name")
+          .DataValueField("Id")
+          .SelectedIndex(0)
+          .Filter(FilterType.Contains)
+          .Height(400)
+          .DataSource(source =>
+          {
+              source.Custom()
+                  .Type("aspnetmvc-ajax")
+                  .Transport(transport =>
+                  {
+                      transport.Read("GetVmRs", "Scheduler");
+                  })
+
+                  .Schema(schema =>
+                  {
+                      schema.Data("Data")
+                          .Total("Total");
+                  });
+          })
+        )
+    <script>
+        function requestData(selector) {
+            var combobox = $(selector).data("kendoComboBox"),
+                filters = combobox.dataSource.filter(),
+                value = combobox.input.val();
+
+            if (!filters) {
+                value = "";
+            }
+            return { text: value };
+        }
+    </script>
+</div>
+<div class="k-edit-label">
+    @(Html.Label("Участники"))
+</div>
+<div data-container-for="Attendees" class="k-edit-field">
+    @(Html.Kendo().MultiSelectFor(m => m.Attendees)
+          .DataTextField("name")
+          .DataValueField("id")
+          .Placeholder("Выбор участников")
+          .Filter(FilterType.Contains)
+          .ValuePrimitive(true)
+          .DataSource(source =>
+          {
+              source.Custom()
+                  .ServerFiltering(true)
+                  .Type("aspnetmvc-ajax")
+                  .Transport(transport =>
+                  {
+                      transport.Read("GetUsers", "Scheduler");
+                  })
+                  .Schema(schema =>
+                  {
+                      schema.Data("Data")
+                          .Total("Total");
+                  });
+          })
+    )
+</div>
+<div class="k-edit-label">
+    @(Html.LabelFor(m => m.AddAttend, "Доп. участники"))
+</div>
+<div data-container-for="AddAttend" class="k-edit-field">
+    @(Html.TextAreaFor(model => model.AddAttend, new { @class = "k-textbox", data_bind = "value:AddAttend" }))
+</div>
+@*<div class="k-edit-label">
+    @(Html.Label("Записывать"))
+</div>
+<div class="k-edit-field">
+    <input data-bind="checked: Record" data-val="true" id="Record" name="Record" type="checkbox" />
+</div>*@
+<div class="div_oplink" data_bind="value:OpLink" id="OpLink">
+
+    <p><a href='#= OpLink #' target="_blank"><h6>Ссылка Оператора</h6></a></p>
+
+    @*<a href="javascript:oplink_create()" id="link" target="_blank">Ссылка оператора</a>*@
+
+</div>
+@*<div class="div_oplink" data_bind="value:FileLink" id="FileLink">
+
+    <p>
+        <a href='#= FileLink #'><h6>Файл встречи</h6></a>
+    </p>
+
+    @*<a href="javascript:filelink_create()" id="link" target="_blank">Файл встречи</a>
+</div>*@
+<script>
+    function reccheck() {
+
+        if ($('#= Recfile #').val() != null)
+            var recdata = true;
+        else recdata = false;
+    }
+</script>
+
+
+
+
+<script>
+
+    function oplink_create() {
+        var valtext = $('#= start #').val();
+        console.debug(valtext);
+    }
+</script>
+
+
+<style>
+    .div_oplink {
+        width: 80%;
+        border: none;
+        float: right;
+        position: inherit;
+    }
+
+    .oplink {
+        border: none;
+        position: inherit;
+        width: 100%;
+    }
+
+    .k-dropdown {
+        width: 100%;
+    }
+</style>
+@{
+    ViewContext.FormContext = null;
+}
