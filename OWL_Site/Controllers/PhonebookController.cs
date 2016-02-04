@@ -79,11 +79,11 @@ namespace OWL_Site.Controllers
             {
                 var srec = db.AspNetUsers.FirstOrDefault(m => m.Id == sel.IdREC);
                 var temp = srec;
-                if (!String.IsNullOrEmpty(sel.Group))
+                if (!String.IsNullOrEmpty(sel.UsersGroup))
                 {
-                    if (temp != null) temp.Group = sel.Group;
+                    if (temp != null) temp.Group = sel.UsersGroup;
                 }
-                if (String.IsNullOrEmpty(sel.Group))
+                if (String.IsNullOrEmpty(sel.UsersGroup))
                 {
                     if (temp != null) temp.Group = "Группа не назначена";
                 }
@@ -106,14 +106,14 @@ namespace OWL_Site.Controllers
             DeleteRecFromDb(ids, User.Identity.Name);
             //ViewBag.DeletedRecs = String.Format("Удалено {0} записей", i);
         }
-        public bool addUserToPrivat(string Owner, string IdRec, string Group)
+        public bool addUserToPrivat(string Owner, string IdRec, string UsersGroup)
         {
             aspnetdbEntities db = new aspnetdbEntities();
 
             PrivatePhB newrecpriv = new PrivatePhB();
             newrecpriv.OwSAN = Owner;
             newrecpriv.IdREC = IdRec;
-            newrecpriv.Group = Group;
+            newrecpriv.UsersGroup = UsersGroup;
             db.PrivatePhBs.AddOrUpdate(newrecpriv);
 
             try
