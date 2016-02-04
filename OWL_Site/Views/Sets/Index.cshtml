@@ -1,0 +1,216 @@
+﻿@{
+    ViewBag.Title = "Настройки системы";
+}
+<h2>@ViewBag.Title.</h2>
+
+<div class="panel-group" id="collapse" style="display: block; background-color: #FFF">
+
+    <div class="panel panel-default">
+        <a data-toggle="collapse" data-parent="#collapse" href="#collapse-one">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+
+                    Информация о домене
+
+                </h4>
+            </div>
+        </a>
+        <div id="collapse-one" class="panel-collapse collapse in">
+            <div class="panel-body">
+                @(Html.Kendo().Grid<OWL_Site.Models.Setting>()
+                      .Name("grid1")
+
+                      .Scrollable(s => s.Height(85))
+                      .Columns(info =>
+                      {
+                          info.Bound(c => c.Id).Hidden();
+                          info.Bound(x => x.AuthDnAddress).Title("Адрес контроллера домена");
+                          info.Bound(x => x.DnAdminUn).Title("Имя пользователя");
+                          info.Bound(x => x.DnAdminPass).Title("Пароль").Format("******");
+                          info.Bound(x => x.OU);
+                          info.Bound(x => x.UserGroup).Title("Группа пользователей");
+                          info.Bound(x => x.AdminGroup).Title("Группа администраторов");
+                          info.Command(command => { command.Edit().Text("Редактировать").CancelText("Отмена").UpdateText("Сохранить"); }).Width(140);
+                      })
+                      .Editable(editable => editable.Mode(GridEditMode.InLine))
+                      .Events(ev => { ev.Save("function(e){this.dataSource.sync(); alert('Настройки сохранены')}"); })
+                      .Scrollable()
+                      .Resizable(resize => resize.Columns(true))
+                      .Mobile()
+                      .DataSource(dataSource => dataSource
+                          .Ajax()
+                          .Model(model => model.Id(p => p.Id))
+                          .Read(read => read.Action("Sett_Read", "Sets"))
+                          .Update(update => update.Action("Sett_Update", "Sets"))
+                      )
+                      )
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <a data-toggle="collapse" data-parent="#collapse" href="#collapse-two">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+
+                    Информация о ВКС
+
+                </h4>
+            </div>
+        </a>
+        <div id="collapse-two" class="panel-collapse collapse">
+            <div class="panel-body">
+                @(Html.Kendo().Grid<OWL_Site.Models.Setting>()
+                      .Name("grid2")
+                      .Scrollable(s => s.Height(85))
+                      .Columns(info =>
+                      {
+                          info.Bound(c => c.Id).Hidden();
+                          info.Bound(x => x.CobaMngAddress);
+                          info.Bound(x => x.CobaCfgAddress);
+                          info.Bound(x => x.CobaMngLogin);
+                          info.Bound(x => x.CobaMngPass).Title("Пароль").Format("******");
+                          info.Command(command => { command.Edit().Text("Редактировать").CancelText("Отмена").UpdateText("Сохранить"); }).Width(140);
+
+                      })
+                      .Editable(editable => editable.Mode(GridEditMode.InLine))
+                      .Events(ev => { ev.Save("function(e){this.dataSource.sync(); alert('Настройки сохранены')}"); })
+                      .Scrollable()
+                      .Resizable(resize => resize.Columns(true))
+                      .Mobile()
+                      .DataSource(dataSource => dataSource
+                          .Ajax()
+                          .Model(model => model.Id(p => p.Id))
+                          .Read(read => read.Action("Sett_Read", "Sets"))
+                          .Update(update => update.Action("Sett_Update", "Sets"))
+                      )
+                      )
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <a data-toggle="collapse" data-parent="#collapse" href="#collapse-three">
+
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Информация о сервере записи
+                </h4>
+            </div>
+        </a>
+
+        <div id="collapse-three" class="panel-collapse collapse">
+            <div class="panel-body">
+                @(Html.Kendo().Grid<OWL_Site.Models.Setting>()
+                      .Name("grid3")
+                      .Scrollable(s => s.Height(85))
+                      .Columns(info =>
+                      {
+                          info.Bound(c => c.Id).Hidden();
+                          info.Bound(x => x.CobaRecordsAddress);
+                          info.Bound(x => x.CobaRecLogin);
+                          info.Bound(x => x.CobaRecPass).Title("Пароль").Format("******");
+                          info.Bound(x => x.CobaRecBdName);
+                          info.Bound(x => x.CobaRecBdTable);
+                          info.Command(command => { command.Edit().Text("Редактировать").CancelText("Отмена").UpdateText("Сохранить"); }).Width(140);
+
+                      })
+                      .Editable(editable => editable.Mode(GridEditMode.InLine))
+                      .Events(ev => { ev.Save("function(e){this.dataSource.sync(); alert('Настройки сохранены')}"); })
+                      .Scrollable()
+                      .Resizable(resize => resize.Columns(true))
+                      .Mobile()
+                      .DataSource(dataSource => dataSource
+                          .Ajax()
+                          .Model(model => model.Id(p => p.Id))
+                          .Read(read => read.Action("Sett_Read", "Sets"))
+                          .Update(update => update.Action("Sett_Update", "Sets"))
+                      )
+                      )
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <a data-toggle="collapse" data-parent="#collapse" href="#collapse-four">
+
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Информация о Email
+                </h4>
+            </div>
+        </a>
+
+        <div id="collapse-four" class="panel-collapse collapse">
+            <div class="panel-body">
+                @(Html.Kendo().Grid<OWL_Site.Models.Setting>()
+                      .Name("grid4")
+                      .Scrollable(s => s.Height(85))
+                      .Columns(info =>
+                      {
+                          info.Bound(c => c.Id).Hidden();
+                          info.Bound(x => x.SmtpServer);
+                          info.Bound(x => x.SmtpPort);
+                          info.Bound(x => x.SmtpSSL);
+                          info.Bound(x => x.SmtpLogin);
+                          info.Bound(x => x.SmtpPassword).Title("Пароль").Format("******");
+                          info.Bound(x => x.MailFrom_email);
+                          info.Bound(x => x.MailFrom_name);
+                          info.Command(command => { command.Edit().Text("Редактировать").CancelText("Отмена").UpdateText("Сохранить"); }).Width(140);
+
+                      })
+                      .Editable(editable => editable.Mode(GridEditMode.InLine))
+                      .Events(ev => { ev.Save("function(e){this.dataSource.sync(); alert('Настройки сохранены')}"); })
+                      .Scrollable()
+                      .Resizable(resize => resize.Columns(true))
+                      .Mobile()
+                      .DataSource(dataSource => dataSource
+                          .Ajax()
+                          .Model(model => model.Id(p => p.Id))
+                          .Read(read => read.Action("Sett_Read", "Sets"))
+                          .Update(update => update.Action("Sett_Update", "Sets"))
+                      )
+                      )
+            </div>
+        </div>
+    </div>
+</div>
+        <script type="text/javascript">
+            function error_handler(e) {
+                if (e.errors) {
+                    var message = "Errors:\n";
+                    $.each(e.errors, function(key, value) {
+                        if ('errors' in value) {
+                            $.each(value.errors, function() {
+                                message += this + "\n";
+                            });
+                        }
+                    });
+                    alert(message);
+                }
+            }
+        </script>
+<style>
+    .grhead {
+        border-color: #3D3D6A;
+        border: 5px;
+        
+    }
+    .sets {
+        height: 0px;
+    }
+    .k-header {
+        background-color: #3D3D6A;
+        color: #ffffff;
+        text-shadow: 1px 1px 1px #3D3D6A,0 0 3px white;
+            }
+    .k-grid-header .k-header>.k-link, .k-header, .k-treemap-title {
+        color: #ffffff;
+    }
+    .k-grid td {
+        text-align: center;
+    }
+    .panel-group {
+    padding-top: 30px;
+    padding-bottom: 30px;
+        background-color: transparent;
+}
+     
+</style>
