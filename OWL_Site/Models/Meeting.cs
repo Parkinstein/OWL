@@ -39,7 +39,7 @@ namespace OWL_Site.Models
         public bool Record { get; set; }
         public string Recfile { get; set; }
         public string InitName { get; set; }
-        public string InitFullname { get; set; }
+        public string FName { get; set; }
         public bool reminder { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

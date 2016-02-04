@@ -451,11 +451,11 @@ namespace OWL_Site.Controllers
                 AspNetUser temp = new AspNetUser();
                 var srec = db.AspNetUsers.FirstOrDefault(m => m.Id == sel.IdREC);
                 temp = srec;
-                if (!String.IsNullOrEmpty(sel.Group))
+                if (!String.IsNullOrEmpty(sel.UsersGroup))
                 {
-                    temp.Group = sel.Group;
+                    temp.Group = sel.UsersGroup;
                 }
-                if (String.IsNullOrEmpty(sel.Group))
+                if (String.IsNullOrEmpty(sel.UsersGroup))
                 {
                     temp.Group = "Группа не назначена";
                 }

@@ -2,12 +2,17 @@
 @{
     ViewBag.Title = "Index";
 }
-<script src="@Url.Content("~/Scripts/DataTables/datatables.select.min.js")"></script>
+<link href="@Url.Content("~/Content/DataTables/css/dataTables.editor.css")" rel="stylesheet" type="text/css"/>
+<link href="@Url.Content("~/Content/DataTables/css/editor.dataTables.min.css")" rel="stylesheet" type="text/css" />
+<script src="@Url.Content("~/Scripts/DataTables/dataTables.editor.min.js")" charset="utf8"></script>
 
 <div class="control_grid">
     <table id="table_pb" class="display">
         <thead>
             <tr>
+                <th>ID</th>
+                <th>OwSAN</th>
+                <th>IdRec</th>
                 <th>ID</th>
                 <th>Имя</th>
                 <th>Фамилия</th>
@@ -17,9 +22,9 @@
                 <th>Телефон (моб.)</th>
                 <th>Email</th>
                 <th>Часовой пояс</th>
-                <th>Группа</th>
                 <th>SIP-адрес</th>
                 <th>H.323-адрес</th>
+                <th width="150px">Группа</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -50,45 +55,78 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<script type="text/javascript" charset="utf8">
     var oPhonebookTable;
     var oDomainusersTable;
 
-    $(document).ready(function() {
+
+    $(document).ready(function () {
+        editor = new $.fn.dataTable.Editor({
+            "ajax": "/Phonebook/Phonebook_Ajax",
+            "table": "#table_pb",
+            "fields": [
+                { label: 'Id', name: 'PrivatePhBs.Id' },
+                { label: 'OwSAN', name: 'PrivatePhBs.OwSAN' },
+                { label: 'IdREC', name: 'PrivatePhBs.IdREC' },
+                { label: 'UsersGroup', name: 'PrivatePhBs.UsersGroup' },
+                { label: 'Id', name: 'AspNetUsers.Id' },
+                { label: 'Name', name: 'AspNetUsers.Name' },
+                { label: 'Surname', name: 'AspNetUsers.Surname' },
+                { label: 'Position', name: 'AspNetUsers.Position' },
+                { label: 'Tel_int', name: 'AspNetUsers.Tel_int' },
+                { label: 'Tel_ext', name: 'AspNetUsers.Tel_ext' },
+                { label: 'Tel_mob', name: 'AspNetUsers.Tel_mob' },
+                { label: 'Email', name: 'AspNetUsers.Email' },
+                { label: 'Timezone', name: 'AspNetUsers.Timezone' },
+                { label: 'Sip_addr', name: 'AspNetUsers.Sip_addr' },
+                { label: 'H323_addr', name: 'AspNetUsers.H323_addr' },
+            ]
+        });
+        
+        $('#table_pb').on('click', '.editable', function () {
+            editor.inline(this, {
+                onBlur: 'submit',
+                submit: 'changed'
+        } );
+        });
+
         oPhonebookTable = $('#table_pb').DataTable({
             "ordering": true,
             "searching": true,
             "paging": true,
             "autoWidth": false,
             "processing": true,
-            "order": [[ 2, 'asc' ]],
+            "order": [[2, 'asc']],
             "pageLength": 30,
             "lengthChange": false,
-            //"serverSide": true,
+            "serverSide": false,
             "select": {
                 "style": 'multi',
             },
-
+            "dom": "Bfrtip",
             "ajax": {
                 "type": "POST",
                 "url": "/Phonebook/Phonebook_Ajax",
-                "contentType": 'application/json; charset=utf-8',
+                "contentType": 'application/json; charset=cp1251',
                 "data": function(data) { return data = JSON.stringify(data); }
             },
 
             "columns": [
-                { "data": "Id", "visible": false, "searchable": false },
-                { "data": "Name" },
-                { "data": "Surname" },
-                { "data": "Position" },
-                { "data": "Tel_int" },
-                { "data": "Tel_ext" },
-                { "data": "Tel_mob" },
-                { "data": "Email" },
-                { "data": "Timezone", "searchable": false },
-                { "data": "Group", "searchable": false },
-                { "data": "Sip_addr", "searchable": false },
-                { "data": "H323_addr", "searchable": false },
+                { "data": "PrivatePhBs.Id", "visible": false, "searchable": false },
+                { "data": "PrivatePhBs.OwSAN", "visible": false, "searchable": false},
+                { "data": "PrivatePhBs.IdREC", "visible": false, "searchable": false },
+                { "data": "AspNetUsers.Id", "visible": false, "searchable": false },
+                { "data": "AspNetUsers.Name" },
+                { "data": "AspNetUsers.Surname" },
+                { "data": "AspNetUsers.Position" },
+                { "data": "AspNetUsers.Tel_int" },
+                { "data": "AspNetUsers.Tel_ext" },
+                { "data": "AspNetUsers.Tel_mob" },
+                { "data": "AspNetUsers.Email" },
+                { "data": "AspNetUsers.Timezone", "searchable": false },
+                { "data": "AspNetUsers.Sip_addr", "searchable": false },
+                { "data": "AspNetUsers.H323_addr", "searchable": false },
+                { "data": "PrivatePhBs.UsersGroup", "searchable": false, "className": "editable"},
             ],
 
             "drawCallback": function(settings) {
@@ -96,10 +134,10 @@
                 var rows = api.rows({ page: 'current' }).nodes();
                 var last = null;
 
-                api.column(9, { page: 'current' }).data().each(function(group, i) {
+                api.column(14, { page: 'current' }).data().each(function(group, i) {
                     if (last !== group) {
                         $(rows).eq(i).before(
-                            '<tr class="phonebook_groups"><td colspan="12">' + group + '</td></tr>'
+                            '<tr class="phonebook_groups"><td colspan="15">' + group + '</td></tr>'
                         );
                         last = group;
                     }

@@ -73,9 +73,17 @@
     </PublishDatabaseSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AntiXssLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AntiXSS.4.3.0\lib\net40\AntiXssLibrary.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="DataTables, Version=1.5.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\Zakachka\Editor-NET-1.5.4\DataTables.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -84,6 +92,10 @@
     </Reference>
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="HtmlSanitizationLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AntiXSS.4.3.0\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Kendo.Mvc, Version=2015.3.930.545, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
@@ -107,6 +119,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.2.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure">
       <HintPath>..\..\..\..\..\..\projects\pepuxProj\PepuxFront\bin\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
@@ -114,9 +130,9 @@
       <HintPath>..\packages\MySql.Data.6.9.8\lib\net45\MySql.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Renci.SshNet, Version=2013.4.7.0, Culture=neutral, processorArchitecture=MSIL">
@@ -166,9 +182,9 @@
     </Reference>
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="TaskScheduler, Version=10.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="TaskScheduler, Version=6.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Documents\Visual Studio 2015\Projects\ProjPepux\projPepux\PepuxFront\bin\TaskScheduler.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\projects\pepuxProj\PepuxFront\bin\TaskScheduler.dll</HintPath>
     </Reference>
     <Reference Include="Telerik.OpenAccess, Version=2015.3.926.1, Culture=neutral, PublicKeyToken=7ce17eeaf1d59342, processorArchitecture=MSIL">
       <HintPath>..\packages\Telerik.DataAccess.Core.2015.3.926.1\lib\net40\Telerik.OpenAccess.dll</HintPath>
@@ -286,6 +302,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SysData.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Phonebook.cs" />
     <Compile Include="Models\VideoRecords.cs" />
     <Compile Include="Models\VmrAlias.cs">
       <DependentUpon>SysData.tt</DependentUpon>
@@ -331,6 +348,8 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.min_old.css" />
     <Content Include="Content\bootstrap_old.css" />
+    <Content Include="Content\dataTables.editor.css" />
+    <Content Include="Content\dataTables.editor.min.css" />
     <Content Include="Content\DataTables\css\autoFill.bootstrap.css" />
     <Content Include="Content\DataTables\css\autoFill.bootstrap.min.css" />
     <Content Include="Content\DataTables\css\autoFill.dataTables.css" />
@@ -364,6 +383,8 @@
     <Content Include="Content\DataTables\css\dataTables.colVis.css" />
     <Content Include="Content\DataTables\css\dataTables.colvis.jqueryui.css" />
     <Content Include="Content\DataTables\css\dataTables.colVis.min.css" />
+    <Content Include="Content\DataTables\css\dataTables.editor.css" />
+    <Content Include="Content\DataTables\css\dataTables.editor.min.css" />
     <Content Include="Content\DataTables\css\dataTables.fixedColumns.css" />
     <Content Include="Content\DataTables\css\dataTables.fixedColumns.min.css" />
     <Content Include="Content\DataTables\css\dataTables.fixedHeader.css" />
@@ -379,6 +400,8 @@
     <Content Include="Content\DataTables\css\dataTables.scroller.min.css" />
     <Content Include="Content\DataTables\css\dataTables.tableTools.css" />
     <Content Include="Content\DataTables\css\dataTables.tableTools.min.css" />
+    <Content Include="Content\DataTables\css\editor.dataTables.css" />
+    <Content Include="Content\DataTables\css\editor.dataTables.min.css" />
     <Content Include="Content\DataTables\css\fixedColumns.bootstrap.css" />
     <Content Include="Content\DataTables\css\fixedColumns.bootstrap.min.css" />
     <Content Include="Content\DataTables\css\fixedColumns.dataTables.css" />
@@ -438,10 +461,17 @@
     <Content Include="Content\DataTables\css\select.foundation.min.css" />
     <Content Include="Content\DataTables\css\select.jqueryui.css" />
     <Content Include="Content\DataTables\css\select.jqueryui.min.css" />
+    <Content Include="Content\DataTables\images\ajax-loader--.gif" />
+    <Content Include="Content\DataTables\images\ajax-loader-.gif" />
+    <Content Include="Content\DataTables\images\ajax-loader-small-.gif" />
+    <Content Include="Content\DataTables\images\ajax-loader-small.gif" />
+    <Content Include="Content\DataTables\images\ajax-loader.gif" />
     <Content Include="Content\DataTables\images\background.png" />
     <Content Include="Content\DataTables\images\back_disabled.png" />
     <Content Include="Content\DataTables\images\back_enabled.png" />
     <Content Include="Content\DataTables\images\back_enabled_hover.png" />
+    <Content Include="Content\DataTables\images\calender.png" />
+    <Content Include="Content\DataTables\images\close.png" />
     <Content Include="Content\DataTables\images\collection.png" />
     <Content Include="Content\DataTables\images\collection_hover.png" />
     <Content Include="Content\DataTables\images\copy.png" />
@@ -460,6 +490,8 @@
     <Content Include="Content\DataTables\images\pdf_hover.png" />
     <Content Include="Content\DataTables\images\print.png" />
     <Content Include="Content\DataTables\images\print_hover.png" />
+    <Content Include="Content\DataTables\images\shadow_left.png" />
+    <Content Include="Content\DataTables\images\shadow_right.png" />
     <Content Include="Content\DataTables\images\sort_asc.png" />
     <Content Include="Content\DataTables\images\sort_asc_disabled.png" />
     <Content Include="Content\DataTables\images\sort_both.png" />
@@ -816,7 +848,14 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\ajax-loader--.gif" />
+    <Content Include="images\ajax-loader-.gif" />
+    <Content Include="images\ajax-loader-small-.gif" />
+    <Content Include="images\ajax-loader-small.gif" />
+    <Content Include="images\ajax-loader.gif" />
     <Content Include="images\background.png" />
+    <Content Include="images\calender.png" />
+    <Content Include="images\close.png" />
     <Content Include="images\coba_logo.png" />
     <Content Include="images\coba_logo_inverted.png" />
     <Content Include="images\lock.png" />
@@ -832,6 +871,8 @@
     <Content Include="images\sched_inv.png" />
     <Content Include="images\settings.png" />
     <Content Include="images\settings_inv.png" />
+    <Content Include="images\shadow_left.png" />
+    <Content Include="images\shadow_right.png" />
     <Content Include="images\stats.png" />
     <Content Include="images\stats_inv.png" />
     <Content Include="images\unlock.png" />
@@ -933,10 +974,16 @@
     <Content Include="Scripts\cldr\event.js" />
     <Content Include="Scripts\cldr\supplemental.js" />
     <Content Include="Scripts\cldr\unresolved.js" />
+    <Content Include="Scripts\DataTables\dataTables.editor.min.js" />
+    <Content Include="Scripts\DataTables\responsive.bootstrap.js" />
+    <Content Include="Scripts\DataTables\responsive.bootstrap.min.js" />
+    <Content Include="Scripts\DataTables\responsive.foundation.js" />
+    <Content Include="Scripts\DataTables\responsive.foundation.min.js" />
+    <Content Include="Scripts\DataTables\responsive.jqueryui.js" />
+    <Content Include="Scripts\DataTables\responsive.jqueryui.min.js" />
     <Content Include="Scripts\errors.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\cldr.js" />
-    <Content Include="Scripts\datatables.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
     <Content Include="Scripts\DataTables\autoFill.foundation.js" />
@@ -1740,11 +1787,7 @@
     <Content Include="Scripts\i18n\angular-locale_zh.js" />
     <Content Include="Scripts\i18n\angular-locale_zu-za.js" />
     <Content Include="Scripts\i18n\angular-locale_zu.js" />
-    <Content Include="Scripts\jquery-2.1.4.min.map" />
-    <Content Include="Scripts\jquery-1.11.3.min.js" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
-    <Content Include="Scripts\jquery-2.1.4.js" />
-    <Content Include="Scripts\jquery-2.1.4.min.js" />
     <None Include="Scripts\jquery-2.2.0-vsdoc.js" />
     <Content Include="Scripts\jquery-2.2.0.js" />
     <Content Include="Scripts\jquery-2.2.0.min.js" />
@@ -2532,7 +2575,7 @@
     <Content Include="Views\Shared\EditorTemplates\Time.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Url.cshtml" />
     <Content Include="Scripts\version.json" />
-    <Content Include="Views\Phonebook\Phonebook.cshtml" />
+    <Content Include="Views\Phonebook\Phonebook_old.cshtml" />
     <Content Include="Views\Controlpanel\Index.cshtml" />
     <Content Include="Views\Controlpanel\Control.cshtml" />
     <Content Include="Views\VideoRecords\Index.cshtml" />
@@ -2541,6 +2584,7 @@
     <Content Include="Views\Statistics\Statistics.cshtml" />
     <Content Include="Views\Scheduler\EditorTemplates\CustomEditorTemplate.cshtml" />
     <Content Include="Views\Scheduler\EventTemplates\customEventTemplate.cshtml" />
+    <Content Include="Views\Phonebook\Phonebook.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

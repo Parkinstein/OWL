@@ -134,7 +134,7 @@
           <Property Name="Record" Type="bit" Nullable="false" />
           <Property Name="Recfile" Type="nvarchar(max)" />
           <Property Name="InitName" Type="nvarchar(max)" />
-          <Property Name="InitFullname" Type="nvarchar(max)" />
+          <Property Name="FName" Type="nvarchar(max)" />
           <Property Name="reminder" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PrivatePhBs">
@@ -144,7 +144,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OwSAN" Type="nvarchar(max)" />
           <Property Name="IdREC" Type="nvarchar(max)" />
-          <Property Name="Group" Type="nvarchar" MaxLength="50" />
+          <Property Name="UsersGroup" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Settings">
           <Key>
@@ -559,8 +559,8 @@
           </AssociationSet>
           <EntitySet Name="Ivr_Themes" EntityType="aspnetdbModel.Ivr_Themes" />
           <EntitySet Name="VmrAliases" EntityType="aspnetdbModel.VmrAlias" />
-          <EntitySet Name="PrivatePhBs" EntityType="aspnetdbModel.PrivatePhB" />
           <EntitySet Name="AllVmrs" EntityType="aspnetdbModel.AllVmr" />
+          <EntitySet Name="PrivatePhBs" EntityType="aspnetdbModel.PrivatePhB" />
           <EntitySet Name="MeetingAttendees" EntityType="aspnetdbModel.MeetingAttendee" />
           <EntitySet Name="Meetings" EntityType="aspnetdbModel.Meeting" />
           <AssociationSet Name="FK_MeetingAtendee_Meeting" Association="aspnetdbModel.FK_MeetingAtendee_Meeting">
@@ -592,15 +592,6 @@
           <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="vmid" Type="Int32" />
         </EntityType>
-        <EntityType Name="PrivatePhB">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OwSAN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="IdREC" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Group" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="AllVmr">
           <Key>
             <PropertyRef Name="Id" />
@@ -621,6 +612,15 @@
           <Property Name="service_type" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="tag" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="vmid" Type="Int32" />
+        </EntityType>
+        <EntityType Name="PrivatePhB">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OwSAN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IdREC" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UsersGroup" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MeetingAttendee">
           <Key>
@@ -653,11 +653,11 @@
           <Property Name="Record" Type="Boolean" Nullable="false" />
           <Property Name="Recfile" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="InitName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="InitFullname" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="reminder" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="MeetingAttendees" Relationship="aspnetdbModel.FK_MeetingAtendee_Meeting" FromRole="Meeting" ToRole="MeetingAttendee" />
           <NavigationProperty Name="Meetings1" Relationship="aspnetdbModel.FK_Meetings_Meetings" FromRole="Meeting" ToRole="Meeting1" />
           <NavigationProperty Name="Meeting1" Relationship="aspnetdbModel.FK_Meetings_Meetings" FromRole="Meeting1" ToRole="Meeting" />
-          <Property Name="reminder" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_MeetingAtendee_Meeting">
           <End Type="aspnetdbModel.Meeting" Role="Meeting" Multiplicity="1" />
@@ -810,16 +810,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PrivatePhBs">
-            <EntityTypeMapping TypeName="aspnetdbModel.PrivatePhB">
-              <MappingFragment StoreEntitySet="PrivatePhBs">
-                <ScalarProperty Name="Group" ColumnName="Group" />
-                <ScalarProperty Name="IdREC" ColumnName="IdREC" />
-                <ScalarProperty Name="OwSAN" ColumnName="OwSAN" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AllVmrs">
             <EntityTypeMapping TypeName="aspnetdbModel.AllVmr">
               <MappingFragment StoreEntitySet="AllVmrs">
@@ -842,6 +832,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PrivatePhBs">
+            <EntityTypeMapping TypeName="aspnetdbModel.PrivatePhB">
+              <MappingFragment StoreEntitySet="PrivatePhBs">
+                <ScalarProperty Name="UsersGroup" ColumnName="UsersGroup" />
+                <ScalarProperty Name="IdREC" ColumnName="IdREC" />
+                <ScalarProperty Name="OwSAN" ColumnName="OwSAN" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="MeetingAttendees">
             <EntityTypeMapping TypeName="aspnetdbModel.MeetingAttendee">
               <MappingFragment StoreEntitySet="MeetingAttendees">
@@ -854,7 +854,7 @@
             <EntityTypeMapping TypeName="aspnetdbModel.Meeting">
               <MappingFragment StoreEntitySet="Meetings">
                 <ScalarProperty Name="reminder" ColumnName="reminder" />
-                <ScalarProperty Name="InitFullname" ColumnName="InitFullname" />
+                <ScalarProperty Name="FName" ColumnName="FName" />
                 <ScalarProperty Name="InitName" ColumnName="InitName" />
                 <ScalarProperty Name="Recfile" ColumnName="Recfile" />
                 <ScalarProperty Name="Record" ColumnName="Record" />
