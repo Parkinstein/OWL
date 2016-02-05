@@ -45,10 +45,11 @@ namespace OWL_Site.Models
                 Record = meeting.Record,
                 Recfile = meeting.Recfile,
                 InitName = meeting.InitName,
-                InitFullname = meeting.InitName
+                FName = meeting.FName
 
             }).AsQueryable();
         }
+
         
 
 
@@ -107,7 +108,7 @@ namespace OWL_Site.Models
                 entity.Record = meeting.Record;
                 entity.Recfile = meeting.Recfile;
                 entity.InitName = meeting.InitName;
-                entity.InitFullname = meeting.InitFullname;
+                entity.FName = meeting.FName;
                 
 
 

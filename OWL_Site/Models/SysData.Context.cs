@@ -33,9 +33,9 @@ namespace OWL_Site.Models
         public virtual DbSet<Setting> Settings { get; set; }
         public virtual DbSet<Ivr_Themes> Ivr_Themes { get; set; }
         public virtual DbSet<VmrAlias> VmrAliases { get; set; }
-        public virtual DbSet<PrivatePhB> PrivatePhBs { get; set; }
         public virtual DbSet<AllVmr> AllVmrs { get; set; }
         public virtual DbSet<MeetingAttendee> MeetingAttendees { get; set; }
         public virtual DbSet<Meeting> Meetings { get; set; }
+        public virtual DbSet<PrivatePhB> PrivatePhBs { get; set; }
     }
 }

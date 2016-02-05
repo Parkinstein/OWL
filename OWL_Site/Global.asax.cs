@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.DirectoryServices;
 using System.Linq;
 using System.Text;
-using System.Web;
-using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using OWL_Site.Context;
 using OWL_Site.Models;
 
 namespace OWL_Site
@@ -24,12 +21,17 @@ namespace OWL_Site
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            //SqlDependency.Start(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        
+
             Settings_Read();
-            GetPhonebookUsers();
-            
 
-
+            // GetPhonebookUsers();
             // Database.SetInitializer<ApplicationDbContext>(new ApplicationDbContext.DropCreateAlwaysInitializer());
+        }
+        protected void Application_End()
+        {
+            //SqlDependency.Stop(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         }
 
         public static Setting set ;
@@ -48,7 +50,6 @@ namespace OWL_Site
         {
             Encoding utf8 = Encoding.GetEncoding("windows-1251");
             Encoding win1251 = Encoding.GetEncoding("utf-8");
-
             byte[] utf8Bytes = win1251.GetBytes(source);
             byte[] win1251Bytes = Encoding.Convert(win1251, utf8, utf8Bytes);
             source = win1251.GetString(win1251Bytes);
@@ -60,7 +61,7 @@ namespace OWL_Site
             set = db.Settings.FirstOrDefault();
             return set;
         }
-
+        #region Get_local_Users_&_Compare
         public List<ApplicationUser> GetPhonebookUsers()
         {
             List<ApplicationUser> allreco = new List<ApplicationUser>();
@@ -108,7 +109,7 @@ namespace OWL_Site
             }
             return allreco;
         }
-        #region Get_local_Users_&_Compare
+        
 
         public void CompareUsers(List<ApplicationUser> adusList)
         {

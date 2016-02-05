@@ -129,8 +129,8 @@ namespace OWL_Site.Controllers
                 Uri statusapi = new Uri("https://" + MvcApplication.set.CobaMngAddress + "/api/admin/status/v1/conference/");
 
                 WebClient client = new WebClient();
-                client.Credentials = new NetworkCredential("admin", "NKCTelemed");
-                client.Headers.Add("auth", "admin,NKCTelemed");
+                client.Credentials = new NetworkCredential(MvcApplication.set.CobaMngLogin , MvcApplication.set.CobaMngPass);
+                client.Headers.Add("auth", MvcApplication.set.CobaMngLogin + "," + MvcApplication.set.CobaMngPass);
                 client.Headers.Add("veryfy", "False");
                 ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
                 string reply = client.DownloadString(statusapi);

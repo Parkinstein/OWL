@@ -91,7 +91,6 @@ namespace OWL_Site.Controllers
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindByNameAsync(model.Sammaccount);
-                Debug.WriteLine(user.Sammaccount);
                 if (user != null && AuthenticateAD(model.Sammaccount, model.Password))
                 {
                     await SignInAsync(user, model.RememberMe);
@@ -100,11 +99,11 @@ namespace OWL_Site.Controllers
                     identity.AddClaim(new Claim(ClaimTypes.GivenName, user.DispName));
                     if (user.Group == "Admins")
                     {
-                        returnUrl = "/Settings";
+                        returnUrl = "/Sets";
                     }
                     if (user.Group == "User")
                     {
-                        returnUrl = "/Phonebook/Phonebook";
+                        returnUrl = "/Home";
                     }
                     Debug.WriteLine(returnUrl);
                     return RedirectToLocal(returnUrl);
@@ -150,6 +149,7 @@ namespace OWL_Site.Controllers
                 string idd = User.Identity.GetUserId();
                 currentUser = db.Users.FirstOrDefault(m => m.Id == idd);
                 Session["CurrentUser"] = currentUser;
+                
             }
             return currentUser.Sammaccount;
         }

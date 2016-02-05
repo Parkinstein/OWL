@@ -7,17 +7,16 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
-    <link href="@Url.Content("~/Content/kendo/2015.3.930/kendo.common.min.css")" rel="stylesheet" type="text/css"/>
-    <link href="@Url.Content("~/Content/kendo/2015.3.930/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css"/>
-    <link href="@Url.Content("~/Content/kendo/2015.3.930/kendo.dataviz.min.css")" rel="stylesheet" type="text/css"/>
-    <link href="@Url.Content("~/Content/kendo/2015.3.930/kendo.blueopal.min.css")" rel="stylesheet" type="text/css"/>
-    <link href="@Url.Content("~/Content/kendo/2015.3.930/kendo.dataviz.blueopal.min.css")" rel="stylesheet" type="text/css"/>
-    <link href="@Url.Content("~/Content/font-awesome.min.css")" rel="stylesheet" type="text/css" />
+    	<link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.common.min.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.dataviz.min.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.blueopal.min.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.dataviz.blueopal.min.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/font-awesome.min.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/DataTables/css/jquery.dataTables.min.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/prettify.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
-
     <link href="@Url.Content("~/Content/zebra_tooltips.css")" rel="stylesheet" type="text/css" />
     <script src="@Url.Content("~/Scripts/jquery-tooltipify.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery-2.1.4.min.js")"></script>
@@ -27,17 +26,17 @@
     <script src="@Url.Content("~/Scripts/respond.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery.slimscroll.min.js")"></script>
     @*<script src="@Url.Content("~/Scripts/prettify.js")"></script>*@
-    @*<script src="@Url.Content("~/Scripts/kendo/2015.3.930/jquery.min.js")"></script>*@
-    <script src="@Url.Content("~/Scripts/kendo/2015.3.930/jszip.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/kendo/2015.3.930/kendo.all.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/kendo/2015.3.930/kendo.aspnetmvc.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/kendo/2015.3.930/cultures/kendo.culture.ru-RU.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
-    <script src="@Url.Content("~/Scripts/jwplayer.js")"></script>
+  	@*<script src="@Url.Content("~/Scripts/kendo/2016.1.112/jquery.min.js")"></script>*@
+
+    	<script src="@Url.Content("~/Scripts/kendo/2016.1.112/jszip.min.js")"></script>
+	<script src="@Url.Content("~/Scripts/kendo/2016.1.112/kendo.all.min.js")"></script>
+	<script src="@Url.Content("~/Scripts/kendo/2016.1.112/kendo.aspnetmvc.min.js")"></script>
+	<script src="@Url.Content("~/Scripts/kendo/2016.1.112/cultures/kendo.culture.ru-RU.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jwplayer.js")"></script>
     <script src="@Url.Content("~/Scripts/DataTables/jquery.dataTables.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/kendo/2015.3.930/kendo.timezones.min.js")"></script>
-    <script>kendo.culture("ru-RU");</script>
-    <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
+    	<script src="@Url.Content("~/Scripts/kendo/2016.1.112/kendo.timezones.min.js")"></script>
+<script>kendo.culture("ru-RU");</script>
+    	<script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
 </head>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -69,7 +68,7 @@
                 @{
                     if (User.IsInRole("Admin"))
                     {
-                        <li>@Html.ActionLink("Настройки", "Index", "Settings")</li>
+                        <li>@Html.ActionLink("Настройки", "Index", "Sets")</li>
                     }
                 }
             </ul>

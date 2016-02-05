@@ -50,6 +50,8 @@ namespace OWL_Site.Controllers
             RegexUtilities util = new RegexUtilities();
             aspnetdbEntities db = new aspnetdbEntities();
             var init = GetAllPB().FirstOrDefault(m => m.Sammaccount == User.Identity.Name);
+            meeting.InitName = init.Id;
+            meeting.FName = init.DispName;
             if (meeting.RoomID == 0)
             {
                 meeting.RoomID = 1;
@@ -113,7 +115,7 @@ namespace OWL_Site.Controllers
                     UID = meeting.MeetingID.ToString(),
                     Location = "Moscow",
                     Status = EventStatus.CONFIRMED,
-                    Organizer = new Organizer() {PublicName = "Владимир Путин", Email = "bidule@dotnethub.be"},
+                    Organizer = new Organizer() {PublicName = init.DispName, Email = init.Email },
                     StartTime = meeting.Start,
                     EndTime = meeting.End,
                     Description = "Voici une conf",
@@ -243,7 +245,10 @@ namespace OWL_Site.Controllers
         public JsonResult Meetings_Read([DataSourceRequest] DataSourceRequest request)
         {
             meetings_all = meetingService.GetAll();
-            mettingsFiltered = meetings_all.AsEnumerable().Where(m => m.InitName == User.Identity.Name);
+            var init = GetAllPB().FirstOrDefault(m => m.Sammaccount == User.Identity.Name);
+            
+            mettingsFiltered = meetings_all.AsEnumerable().Where(m => m.InitName == init.Id);
+            Debug.WriteLine(mettingsFiltered.GetEnumerator().Current);
             foreach (var all in meetings_all)
             {
                 if (!String.IsNullOrEmpty(all.Recfile))
@@ -265,14 +270,17 @@ namespace OWL_Site.Controllers
         {
             if (ModelState.IsValid)
             {
-                meetingService.Update(meeting, ModelState);
+                
                 RegexUtilities util = new RegexUtilities();
                 aspnetdbEntities db = new aspnetdbEntities();
                 var init = GetAllPB().FirstOrDefault(m => m.Sammaccount == User.Identity.Name);
+                
                 var currentroom = db.AllVmrs.FirstOrDefault(m => m.Id == meeting.RoomID);
                 List<AspNetUser> emaillist = new List<AspNetUser>();
                 StringBuilder strB = new StringBuilder();
                 var roomalias = db.VmrAliases.FirstOrDefault(m => m.vmid == meeting.RoomID);
+                meeting.OpLink = string.Concat("https://", MvcApplication.set.CobaCfgAddress, "/webapp/?conference=", roomalias.alias, "&name=Operator&bw=512&join=1");
+                meetingService.Update(meeting, ModelState);
                 foreach (var att in meeting.Attendees)
                 {
                     AspNetUser attemail = (GetAllPB().FirstOrDefault(m => m.Id == att));
@@ -451,11 +459,11 @@ namespace OWL_Site.Controllers
                 AspNetUser temp = new AspNetUser();
                 var srec = db.AspNetUsers.FirstOrDefault(m => m.Id == sel.IdREC);
                 temp = srec;
-                if (!String.IsNullOrEmpty(sel.Group))
+                if (!String.IsNullOrEmpty(sel.UsersGroup))
                 {
-                    temp.Group = sel.Group;
+                    temp.Group = sel.UsersGroup;
                 }
-                if (String.IsNullOrEmpty(sel.Group))
+                if (String.IsNullOrEmpty(sel.UsersGroup))
                 {
                     temp.Group = "Группа не назначена";
                 }
