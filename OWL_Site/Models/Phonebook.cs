@@ -1,4 +1,6 @@
-﻿namespace OWL_Site.Models
+﻿using System.Web;
+
+namespace OWL_Site.Models
 {
     public class Phonebook
     {
@@ -7,6 +9,7 @@
             public int Id { get; set; }
             public string OwSAN { get; set; }
             public string IdREC { get; set; }
+
             public string UsersGroup { get; set; }
         }
 

@@ -1,0 +1,181 @@
+﻿@{
+    ViewBag.Title = "Планировщик";
+}
+     <script>
+            function getColor(data) {
+                var date = new Date();
+                datenow = kendo.toString(date, 'yyyy/MM/dd HH:mm:ss.fff');
+                if (kendo.toString(data.start, 'yyyy/MM/dd HH:mm:ss.fff') < datenow && datenow < kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff')) {
+                    return "green";
+                } else if (kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff') < datenow) {
+                    return "gray";
+                } else {
+                    return "blur";
+                }
+            }
+
+            function getColor2(data) {
+                var date = new Date();
+                datenow = kendo.toString(date, 'yyyy/MM/dd HH:mm:ss.fff');
+                if (kendo.toString(data.start, 'yyyy/MM/dd HH:mm:ss.fff') < datenow && datenow < kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff')) {
+                    return "white";
+                } else if (kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff') < datenow) {
+                    return "white";
+                } else {
+                    return "blur";
+                }
+            }
+        </script>
+
+
+
+<div class="jumbotron">
+    @(Html.Kendo().Scheduler<OWL_Site.Models.MeetingViewModel>()
+          .Name("scheduler")
+          .Date(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day))
+          .StartTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 10, 00, 00))
+          .EndTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 19, 00, 00))
+          .Height(600)
+          .Timezone("Europe/Moscow")
+          .MinorTickCount(4)
+          .MajorTick(60)
+          .AutoBind(true)
+          .Mobile()
+          //.EventTemplate("<div style='background-color:#:getColor(data)#;height:100%;margin-top: -10px;padding-top:10px;padding-left:5px;box-shadow:0 0 10px rgba(0,0,0,0.9);'>" + "<h6 style='color:#:getColor2(data)#'>#= title #</h6>" + "<h6 style='color:#:getColor2(data)#'>#= InitFullname #</h6>" + "<p><a style='color:#:getColor2(data)#' href = '#= OpLink #'><h6>Ссылка Оператора</h6></a></p>" + "<p><a style='color:#:getColor2(data)#' href = '#= FileLink #'><h6>Файл встречи</h6></a></p>" + "<p><h6 style='color:#:getColor2(data)#'>" + "#= kendo.toString(start, 'HH:mm') #" + " - " + "#= kendo.toString(end, 'HH:mm') #</h6></p>" + "</div>")
+          .EventTemplateId("customEventTemplate")
+          .Views(views =>
+          {
+              views.DayView(v => v.Title("День"));
+              views.WeekView(v => v.Title("Неделя"));
+              views.WorkWeekView(workWeekView => workWeekView.Selected(true).Title("Рабочая неделя"));
+              views.MonthView(v => v.Title("Месяц"));
+              views.AgendaView(v => v.Title("Cписок"));
+          })
+          .Editable(editable =>
+          {
+              editable.TemplateName("CustomEditorTemplate");
+
+          })
+          .DataSource(d => d
+
+              .Model(m =>
+              {
+                  m.Id(f => f.MeetingID);
+                  m.RecurrenceId(f => f.RecurrenceID);
+                  m.Field(f => f.Title).DefaultValue("Название конференции");
+
+              })
+                      .ServerOperation(true)
+              .Events(e =>
+              {
+                  e.Error("error_handler");
+
+              })
+              .Read("Meetings_Read", "Scheduler")
+              .Create("Meetings_Create", "Scheduler")
+              .Destroy("Meetings_Destroy", "Scheduler")
+              .Update("Meetings_Update", "Scheduler")
+
+          ))
+
+
+    @*<script>  $("#export").click(function (e) {
+            var scheduler = $("#Home").data("kendoScheduler");
+            scheduler.saveAsPDF();
+        });  </script>*@
+    <script type="text/javascript">
+        function error_handler(e) {
+            if (e.errors) {
+                var message = "Errors:\n";
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                            message += this + "\n";
+                        });
+                    }
+                });
+                alert(message);
+
+                var scheduler = $("#scheduler").data("kendoScheduler");
+                scheduler.one("dataBinding", function (e) {
+                    //prevent saving if server error is thrown
+                    e.preventDefault();
+                });
+            }
+        }
+    </script>
+
+
+</div>
+
+@*<script>
+        window.setInterval(function () { var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.refresh(); console.log("refreshed");}, 60000);
+    </script>*@
+
+<style>
+    .event-template1 {
+        background-color: #FF0000;
+    }
+
+    .event-template2 {
+        background-color: #a9a9a9;
+    }
+    .moreinfo {
+        padding-left: 5px;
+        color: #3D3D6A;
+}
+</style>
+
+<script id="customEventTemplate" type="text/x-kendo-template">
+    
+    <div class="btn-group">
+        @*<span class ="meetingtitle">#= title #</span>*@
+        <button type="button" title="Подробнее..." class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            #= title #  <span class="caret"></span>
+        </button>
+
+        <ul class="dropdown-menu" role="menu" style="z-index:9999;">
+            <li class ="moreinfo">Начало - #:dateformattingst(data)#</li>
+            <li class ="moreinfo">Окончание - #:dateformattingnd(data)#</li>
+            <li class ="moreinfo"></li>
+            <li class="divider"></li>
+            <li class="moreinfo">Участников: #:attquant(data)#</li>
+            <li class="divider"></li>
+            <li class ="moreinfo"><a href="#= OpLink #">Ссылка оператора</a></li>
+        </ul>
+    </div>
+</script>
+<script>
+    function dateformattingst(data) {
+        return kendo.toString(data.start, 'H:mm  ddd, dd-MMM-yyyy');
+    }
+    function dateformattingnd(data) {
+        return kendo.toString(data.end, 'H:mm  ddd, dd-MMM-yyyy');
+    }
+    function attquant(data) {
+        var addquan;
+        var res;
+        if (typeof data.AddAttend === 'undefined') {
+            addquan = 0;
+        } else {
+            var str = data.AddAttend;
+            if (str.search(" ") >= 0) {
+                res = str.replace(" ", "");
+            }
+            else { res = str; }
+             res = str;
+            var quan = res.split(",");
+            addquan = quan.length;
+        }
+        if (typeof data.Attendees === 'undefined') {
+            return 0;
+        }
+        else
+        {
+            return addquan + data.Attendees.length;  
+        }
+
+    };
+    
+</script>

@@ -107,7 +107,7 @@
             "ajax": {
                 "type": "POST",
                 "url": "/Phonebook/Phonebook_Ajax",
-                "contentType": 'application/json; charset=cp1251',
+                "contentType": 'application/json; charset=utf-8',
                 "data": function(data) { return data = JSON.stringify(data); }
             },
 
@@ -126,7 +126,7 @@
                 { "data": "AspNetUsers.Timezone", "searchable": false },
                 { "data": "AspNetUsers.Sip_addr", "searchable": false },
                 { "data": "AspNetUsers.H323_addr", "searchable": false },
-                { "data": "PrivatePhBs.UsersGroup", "searchable": false, "className": "editable"},
+                { "data": "PrivatePhBs.UsersGroup", "searchable": false, "className": "editable" }
             ],
 
             "drawCallback": function(settings) {
@@ -140,6 +140,7 @@
                             '<tr class="phonebook_groups"><td colspan="15">' + group + '</td></tr>'
                         );
                         last = group;
+                        
                     }
                 });
             },
@@ -170,7 +171,7 @@
             },
         });
     });
-
+    
     function popup_du_table() {
         oDomainusersTable = $('#table_du').DataTable({
             "ordering": true,

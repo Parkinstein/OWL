@@ -61,7 +61,7 @@ namespace OWL_Site.Models
         public bool Record { get; set; }
         public string Recfile { get; set; }
         public string InitName { get; set; }
-        public string InitFullname { get; set; }
+        public string FName { get; set; }
 
         public Meeting ToEntity()
         {
@@ -85,7 +85,7 @@ namespace OWL_Site.Models
                 Record = Record,
                 Recfile = Recfile,
                 InitName = InitName,
-                FName = InitFullname
+                FName = FName
             };
 
             return meeting;

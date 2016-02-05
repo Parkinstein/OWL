@@ -29,7 +29,7 @@ namespace OWL_Site.Controllers
             {
                 var personalPhonebook = new Editor(db, "PrivatePhBs", "Id")
                     .Model<Phonebook>()
-                    .Field(new Field("PrivatePhBs.UsersGroup").Validator(Validation.MaxLen(50)))
+                    .Field(new Field(Decoder("PrivatePhBs.UsersGroup")).Validator(Validation.MaxLen(50)))
                     .Where("OwSAN", User.Identity.Name)
                     .LeftJoin("AspNetUsers", "AspNetUsers.Id", "=", "PrivatePhBs.IdREC")
                     .Process(request)
@@ -38,6 +38,12 @@ namespace OWL_Site.Controllers
             }
         }
 
+        public string Decoder(string input)
+        {
+            Debug.WriteLine(input);
+            Debug.WriteLine(HttpUtility.HtmlDecode(input));
+            return HttpUtility.HtmlDecode(input);
+        }
         //Get Full Phonebook
         public ActionResult PhonebookAll_Ajax()
         {

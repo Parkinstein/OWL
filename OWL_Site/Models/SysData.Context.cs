@@ -37,5 +37,6 @@ namespace OWL_Site.Models
         public virtual DbSet<PrivatePhB> PrivatePhBs { get; set; }
         public virtual DbSet<MeetingAttendee> MeetingAttendees { get; set; }
         public virtual DbSet<Meeting> Meetings { get; set; }
+        public virtual DbSet<PrivatePhB> PrivatePhBs { get; set; }
     }
 }
