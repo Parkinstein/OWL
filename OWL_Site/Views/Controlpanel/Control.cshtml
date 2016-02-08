@@ -1,60 +1,64 @@
 ﻿<script src="@Url.Content("~/Scripts/DataTables/datatables.select.min.js")"></script>
 <body onload="user.join()">
     <div id="confcontrol" class="control_panel">
-        <table>
+        <table class="controltable">
             <tr>
                 <td class="controlcol">
-                    <div id="rosterlist" class="roster_list">
-                        <ul class="roster_entry_ul">
-                            <div class="roster_entry_ul_header">
-                                <b>Участники виртуальной переговорной комнаты</b>
-                            </div>
-                            <div class="roster_entry_ul_header_coference_control">
-                                <i id="host" onclick="user.lock()"></i>
-                                <i id="conflock" onclick="user.lock()"></i>
-                                <i id="guestsmuted" onclick="user.muteallguests()"></i>
-                                <i id="disconnectall" onclick="user.disconnect_all()"></i>
-                                <i id="record" onclick="user.record()"></i>
-                            </div>
-                        </ul>
-                    </div>
-                    <div style="min-height: 10px; width: 100%"></div>
-                    <div id="waitingroom" class="roster_list_waiting">
-                        <ul class="roster_entry_ul">
-                            <div class="roster_entry_ul_header">
-                                <b>Комната ожидания</b>
-                            </div>
-                        </ul>
-                    </div>
-                    <div style="min-height: 10px; width: 100%"></div>
-                    <div id="dialdiv" class="dialdiv">
-                        <fieldset>
-                            <legend class="dialdiv_legend">Подключить участника</legend>
-                            <div class="dialdiv_container">
-                                <div class="dialdiv_protocol">
-                                    <label class="dialdiv_header">Протокол </label>
-                                    <select id="protocol" value="sip" class="form-control dial_protocol">
-                                        <option value="sip">SIP</option>
-                                        <option value="h323">H.323</option>
-                                        <option value="mssip">Lync</option>
-                                        <option value="rtmp">RTMP</option>
-                                    </select>
-                                    <br />
-                                    <label class="dialdiv_header">Роль </label>
-                                    <select id="role" value="guest" class="form-control dial_protocol">
-                                        <option value="guest">гость</option>
-                                        <option value="host">хост</option>
-                                    </select>
-                                    <br />
-                                    <label class="dialdiv_header">Адрес вызываемого абонента</label>
-                                    <input id="remotealias" value="" class="form-control dial_alias">
+                    <div id="roster" class="roster">
+                        <div id="roster_list" class="roster_list">
+                            <ul class="roster_entry_ul">
+                                <div class="roster_entry_ul_header">
+                                    <b>Участники виртуальной переговорной комнаты</b>
                                 </div>
-                                <input id="dial" type="button" onclick="user.dial()" value="Вызвать" class="dialdiv_button" />
-                                <input id="dial" type="button" onclick="display_pb()" value="Добавить из адресной книги" class="dialdiv_button" />
-                            </div>
-                        </fieldset>
+                                <div class="roster_entry_ul_header_coference_control">
+                                    <i id="host" onclick="user.lock()"></i>
+                                    <i id="conflock" onclick="user.lock()"></i>
+                                    <i id="guestsmuted" onclick="user.muteallguests()"></i>
+                                    <i id="disconnectall" onclick="user.disconnect_all()"></i>
+                                    <i id="record" onclick="user.record()"></i>
+                                </div>
+                            </ul>
+                        </div>
                     </div>
-                </td>
+                    <div style="min-height: 10px; width: 100%"></div>
+                    <div id="waitingroom" class="waitingroom">
+                        <div id="waitingroom_list" class="waitingroom_list">
+                            <ul class="roster_entry_ul">
+                                <div class="roster_entry_ul_header">
+                                    <b>Комната ожидания</b>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                        <div style="min-height: 10px; width: 100%"></div>
+                        <div id="dialdiv" class="dialdiv">
+                            <fieldset>
+                                <legend class="dialdiv_legend">Подключить участника</legend>
+                                <div class="dialdiv_container">
+                                    <div class="dialdiv_protocol">
+                                        <label class="dialdiv_header">Протокол </label>
+                                        <select id="protocol" value="sip" class="form-control dial_protocol">
+                                            <option value="sip">SIP</option>
+                                            <option value="h323">H.323</option>
+                                            <option value="mssip">Lync</option>
+                                            <option value="rtmp">RTMP</option>
+                                        </select>
+                                        <br />
+                                        <label class="dialdiv_header">Роль </label>
+                                        <select id="role" value="guest" class="form-control dial_protocol">
+                                            <option value="guest">гость</option>
+                                            <option value="host">хост</option>
+                                        </select>
+                                        <br />
+                                        <label class="dialdiv_header">Адрес вызываемого абонента</label>
+                                        <input id="remotealias" value="" class="form-control dial_alias">
+                                    </div>
+                                    <input id="dial" type="button" onclick="user.dial()" value="Вызвать" class="dialdiv_button" />
+                                    <input id="dial" type="button" onclick="display_pb()" value="Добавить из адресной книги" class="dialdiv_button" />
+                                </div>
+                            </fieldset>
+                        </div>
+</td>
                 <td class="controlcol">
                     <div id="layoutdiv" class="layoutdiv">
                         <fieldset>
@@ -161,8 +165,7 @@
                         <fieldset>
                             <legend class="chatdiv_legend">Чат вирутальной переговорной комнаты</legend>
                             <form onsubmit="return user.send_message()">
-                                <div id="chatbox" class="chatbox"></div>
-                                <br />
+                                <div id="chatbox" class="chatbox"></div><br/>
                                 <input id="chatinput" style="width: 70%;" class="form-control chatdiv_text" />
                                 <input id="chatsend" type="button" onclick="user.send_message()" value="Отправить" class="chatdiv_button" />
                             </form>
@@ -313,32 +316,29 @@
     };
 
 
-    (function ($) {
-        $('#rosterlist').slimScroll({
-            height: '350px',
-            width: '100%',
-            margin: '30px',
-            size: '7px',
-            position: 'right',
-            color: '#332383',
-            distance: '0px'
-        });
-        $('#waitingroom').slimScroll({
-            height: '350px',
-            width: '100%',
-            size: '7px',
-            position: 'right',
-            color: '#332383',
-            distance: '0px'
-        });
-        $('#chatbox').slimScroll({
-            height: '276px',
-            width: '100%',
-            size: '7px',
-            position: 'right',
-            color: '#332383',
-            distance: '0px'
-        });
+    $('#roster_list').slimScroll({
+        height: '100%',
+        width: '100%',
+        size: '7px',
+        position: 'right',
+        color: '#332383',
+        distance: '1px',
+    });
+    $('#waitingroom_list').slimScroll({
+        height: '100%',
+        width: '100%',
+        size: '7px',
+        position: 'right',
+        color: '#332383',
+        distance: '1px',
+    });
+    $('#chatbox').slimScroll({
+        height: '280px',
+        width: '100%',
+        size: '7px',
+        position: 'right',
+        color: '#332383',
+        distance: '1px',
     });
 
 
@@ -600,14 +600,14 @@
         this.service_type = participant_data["service_type"];
         if (this.service_type == "conference" || this.service_type == "lecture" || this.service_type == "gateway") {
             console.log("Adding to rosterlist");
-            document.getElementById("rosterlist").appendChild(this.element_root);
+            document.getElementById("roster_list").appendChild(this.element_root);
         } else {
             console.log("Adding to waitingroom");
             if (user.locked == true) {
                 // Show participant unlock button
                 this.unlock_element.className = user.role + " " + class_lock_on;
             }
-            document.getElementById("waitingroom").appendChild(this.element_root);
+            document.getElementById("waitingroom_list").appendChild(this.element_root);
         }
     }
 
@@ -619,11 +619,11 @@
             // Might need to move lists
             if (participant_data["service_type"] == "conference" || participant_data["service_type"] == "lecture" || participant_data["service_type"] == "gateway") {
                 try {
-                    document.getElementById("waitingroom").removeChild(this.element_root);
+                    document.getElementById("waitingroom_list").removeChild(this.element_root);
                 } catch (error) {
                     console.log("Unable to remove participant from waiting room was:" + this.service_type + " now:" + participant_data["service_type"]);
                 }
-                document.getElementById("rosterlist").appendChild(this.element_root);
+                document.getElementById("roster_list").appendChild(this.element_root);
             }
             this.service_type = participant_data["service_type"];
         }
@@ -699,14 +699,14 @@
         if (this.service_type == "conference" || this.service_type == "lecture" || this.service_type == "gateway") {
             console.log("Remove from roster");
             try {
-                document.getElementById("rosterlist").removeChild(this.element_root);
+                document.getElementById("roster_list").removeChild(this.element_root);
             } catch (error) {
                 console.log("Unable to remove from rosterlist");
             }
         } else {
             console.log("Remove from waitingroom");
             try {
-                document.getElementById("waitingroom").removeChild(this.element_root);
+                document.getElementById("waitingroom_list").removeChild(this.element_root);
             } catch (error) {
                 console.log("Unable to remove from waitingroom");
             }
@@ -751,11 +751,15 @@
     Participant.prototype.chair_role = function () {
         console.log("participant chair role " + this);
         if (user.role == "HOST") {
-            user.post_request("participants/" + this.uuid + "/role", { "role": "chair" });
-            this.chair_role_element.className = class_role_chair;
-        } else {
-            user.post_request("participants/" + this.uuid + "/role", { "role": "guest" });
-            this.chair_role_element.className = class_role_guest;
+            if (this.chair_role_element.className === class_role_chair)
+            {
+                user.post_request("participants/" + this.uuid + "/role", { "role": "guest" });
+                this.chair_role_element.className = class_role_guest;
+            } else
+            {
+                user.post_request("participants/" + this.uuid + "/role", { "role": "chair" });
+                this.chair_role_element.className = class_role_chair;
+            }
         }
     };
 
@@ -856,7 +860,7 @@
     };
 
     var user = {
-        node: @MvcApplication.set.CobaCfgAddress,
+        node: "@MvcApplication.set.CobaCfgAddress",
         conference: "@ViewData["confnm"]",
         display_name: "@ViewData["dispnm"]",
         role: "HOST",
@@ -871,7 +875,7 @@
         guests_muted: false,
         live_active_call: null,
         last_message_origin: null,
-        record_server: @MvcApplication.set.CobaRecordsAddress,
+        record_server: "@MvcApplication.set.CobaRecordsAddress",
         recorded: false,
         record_pid: null,
         record_id: null,

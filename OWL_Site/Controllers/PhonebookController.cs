@@ -29,7 +29,7 @@ namespace OWL_Site.Controllers
             {
                 var personalPhonebook = new Editor(db, "PrivatePhBs", "Id")
                     .Model<Phonebook>()
-                    .Field(new Field(Decoder("PrivatePhBs.UsersGroup")).Validator(Validation.MaxLen(50)))
+                    .Field(new Field("PrivatePhBs.UsersGroup").Validator(Validation.MaxLen(50)).Xss(false))
                     .Where("OwSAN", User.Identity.Name)
                     .LeftJoin("AspNetUsers", "AspNetUsers.Id", "=", "PrivatePhBs.IdREC")
                     .Process(request)
