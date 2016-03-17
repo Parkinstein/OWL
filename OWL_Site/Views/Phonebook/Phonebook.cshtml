@@ -2,12 +2,12 @@
 @{
     ViewBag.Title = "Index";
 }
-<link href="@Url.Content("~/Content/DataTables/css/dataTables.editor.css")" rel="stylesheet" type="text/css"/>
+<link href="@Url.Content("~/Content/DataTables/css/dataTables.editor.css")" rel="stylesheet" type="text/css" />
 <link href="@Url.Content("~/Content/DataTables/css/editor.dataTables.min.css")" rel="stylesheet" type="text/css" />
 <script src="@Url.Content("~/Scripts/DataTables/dataTables.editor.min.js")" charset="utf8"></script>
 
 <div class="control_grid">
-    <table id="table_pb" class="display">
+    <table id="table_pb" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>ID</th>
@@ -17,279 +17,243 @@
                 <th>Имя</th>
                 <th>Фамилия</th>
                 <th>Должность</th>
-                <th>Телефон (внут.)</th>
-                <th>Телефон (внеш.)</th>
-                <th>Телефон (моб.)</th>
+                <th>Телефон внут.</th>
+                <th>Телефон внеш.</th>
+                <th>Телефон моб.</th>
                 <th>Email</th>
-                <th>Часовой пояс</th>
-                <th>SIP-адрес</th>
-                <th>H.323-адрес</th>
+                <th>Час. пояс</th>
+                <th>SIP</th>
+                <th>H.323</th>
                 <th width="150px">Группа</th>
             </tr>
         </thead>
         <tbody></tbody>
     </table>
     <div class="phonebook_buttons">
-        <input id="delete" type="button" onclick="delete_pb_users()" value="Удалить" class="phonebook_button_delete" />
-        <input id="add" type="button" onclick="display_du_users()" value="Добавить..." class="phonebook_button_add" />
+        <button type="button" onclick="delete_pb_users()" class="btn btn-primary pull-left">Удалить</button>
+        <button type="button" onclick="display_du_users()" class="btn btn-primary pull-right">Добавить</button>
     </div>
 </div>
-<div id="popup_block" class="hide">
-    <div id="popup_content" class="b-popup b-popup-content">
-        <table id="table_du">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Имя</th>
-                    <th>Фамилия</th>
-                    <th>Должность</th>
-                    <th>Телефон (внут.)</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <div class="phonebook_buttons">
-            <input id="save" type="button" onclick="add_pb_users()" value="Сохранить" class="phonebook_button_add" />
+<div id="modal_block" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <table id="table_du" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Имя</th>
+                            <th>Фамилия</th>
+                            <th>Должность</th>
+                            <th>Телефон (внут.)</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div class="modal-footer">
+                    <button type="button" onclick="add_pb_users()" class="btn btn-primary active">Сохранить</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<script type="text/javascript" charset="utf8">
-    var oPhonebookTable;
-    var oDomainusersTable;
+        <script type="text/javascript" charset="utf8">
+            var oPhonebookTable;
+            var oDomainusersTable;
 
 
-    $(document).ready(function () {
-        editor = new $.fn.dataTable.Editor({
-            "ajax": "/Phonebook/Phonebook_Ajax",
-            "table": "#table_pb",
-            "fields": [
-                { label: 'Id', name: 'PrivatePhBs.Id' },
-                { label: 'OwSAN', name: 'PrivatePhBs.OwSAN' },
-                { label: 'IdREC', name: 'PrivatePhBs.IdREC' },
-                { label: 'UsersGroup', name: 'PrivatePhBs.UsersGroup' },
-                { label: 'Id', name: 'AspNetUsers.Id' },
-                { label: 'Name', name: 'AspNetUsers.Name' },
-                { label: 'Surname', name: 'AspNetUsers.Surname' },
-                { label: 'Position', name: 'AspNetUsers.Position' },
-                { label: 'Tel_int', name: 'AspNetUsers.Tel_int' },
-                { label: 'Tel_ext', name: 'AspNetUsers.Tel_ext' },
-                { label: 'Tel_mob', name: 'AspNetUsers.Tel_mob' },
-                { label: 'Email', name: 'AspNetUsers.Email' },
-                { label: 'Timezone', name: 'AspNetUsers.Timezone' },
-                { label: 'Sip_addr', name: 'AspNetUsers.Sip_addr' },
-                { label: 'H323_addr', name: 'AspNetUsers.H323_addr' },
-            ]
-        });
-        
-        $('#table_pb').on('click', '.editable', function () {
-            editor.inline(this, {
-                onBlur: 'submit',
-                submit: 'changed'
-        } );
-        });
-
-        oPhonebookTable = $('#table_pb').DataTable({
-            "ordering": true,
-            "searching": true,
-            "paging": true,
-            "autoWidth": false,
-            "processing": true,
-            "order": [[2, 'asc']],
-            "pageLength": 30,
-            "lengthChange": false,
-            "serverSide": false,
-            "select": {
-                "style": 'multi',
-            },
-            "dom": "Bfrtip",
-            "ajax": {
-                "type": "POST",
-                "url": "/Phonebook/Phonebook_Ajax",
-                "contentType": 'application/json; charset=utf-8',
-                "data": function(data) { return data = JSON.stringify(data); }
-            },
-
-            "columns": [
-                { "data": "PrivatePhBs.Id", "visible": false, "searchable": false },
-                { "data": "PrivatePhBs.OwSAN", "visible": false, "searchable": false},
-                { "data": "PrivatePhBs.IdREC", "visible": false, "searchable": false },
-                { "data": "AspNetUsers.Id", "visible": false, "searchable": false },
-                { "data": "AspNetUsers.Name" },
-                { "data": "AspNetUsers.Surname" },
-                { "data": "AspNetUsers.Position" },
-                { "data": "AspNetUsers.Tel_int" },
-                { "data": "AspNetUsers.Tel_ext" },
-                { "data": "AspNetUsers.Tel_mob" },
-                { "data": "AspNetUsers.Email" },
-                { "data": "AspNetUsers.Timezone", "searchable": false },
-                { "data": "AspNetUsers.Sip_addr", "searchable": false },
-                { "data": "AspNetUsers.H323_addr", "searchable": false },
-                { "data": "PrivatePhBs.UsersGroup", "searchable": false, "className": "editable" }
-            ],
-
-            "drawCallback": function(settings) {
-                var api = this.api();
-                var rows = api.rows({ page: 'current' }).nodes();
-                var last = null;
-
-                api.column(14, { page: 'current' }).data().each(function(group, i) {
-                    if (last !== group) {
-                        $(rows).eq(i).before(
-                            '<tr class="phonebook_groups"><td colspan="15">' + group + '</td></tr>'
-                        );
-                        last = group;
-                        
-                    }
+            $(document).ready(function () {
+                editor = new $.fn.dataTable.Editor({
+                    "ajax": "/Phonebook/Phonebook_Ajax",
+                    "table": "#table_pb",
+                    "fields": [
+                        { label: 'Id', name: 'PrivatePhBs.Id' },
+                        { label: 'OwSAN', name: 'PrivatePhBs.OwSAN' },
+                        { label: 'IdREC', name: 'PrivatePhBs.IdREC' },
+                        { label: 'UsersGroup', name: 'PrivatePhBs.UsersGroup' },
+                        { label: 'Id', name: 'AspNetUsers.Id' },
+                        { label: 'Name', name: 'AspNetUsers.Name' },
+                        { label: 'Surname', name: 'AspNetUsers.Surname' },
+                        { label: 'Position', name: 'AspNetUsers.Position' },
+                        { label: 'Tel_int', name: 'AspNetUsers.Tel_int' },
+                        { label: 'Tel_ext', name: 'AspNetUsers.Tel_ext' },
+                        { label: 'Tel_mob', name: 'AspNetUsers.Tel_mob' },
+                        { label: 'Email', name: 'AspNetUsers.Email' },
+                        { label: 'Timezone', name: 'AspNetUsers.Timezone' },
+                        { label: 'Sip_addr', name: 'AspNetUsers.Sip_addr' },
+                        { label: 'H323_addr', name: 'AspNetUsers.H323_addr' },
+                    ]
                 });
-            },
 
+                $('#table_pb').on('click', '.editable', function () {
+                    editor.inline(this, {
+                        onBlur: 'submit',
+                        submit: 'changed'
+                    });
+                });
 
-            "language": {
-                "processing": "Подождите...",
-                "search": "Поиск:",
-                "lengthMenu": "Показать _MENU_ записей",
-                "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
-                "infoEmpty": "Записи с 0 до 0 из 0 записей",
-                "rowSelected": "0 рядов выделено",
-                "infoFiltered": "(отфильтровано из _MAX_ записей)",
-                "infoPostFix": "",
-                "loadingRecords": "Загрузка записей...",
-                "zeroRecords": "Записи отсутствуют.",
-                "emptyTable": "В таблице отсутствуют данные",
-                "paginate": {
-                    "first": "Первая",
-                    "previous": "Предыдущая",
-                    "next": "Следующая",
-                    "last": "Последняя"
-                },
-                "aria": {
-                    "sortAscending": ": активировать для сортировки столбца по возрастанию",
-                    "sortDescending": ": активировать для сортировки столбца по убыванию"
-                }
-            },
-        });
-    });
-    
-    function popup_du_table() {
-        oDomainusersTable = $('#table_du').DataTable({
-            "ordering": true,
-            "searching": true,
-            "paging": true,
-            "autoWidth": false,
-            "processing": true,
-            "lengthChange": false,
-            "order": [[2, 'asc' ]],
-            "pageLength": 30,
-            //"serverSide": true,
-            "select": {
-                "style": 'multi',
-            },
+                oPhonebookTable = $('#table_pb').DataTable({
+                    "ordering": true,
+                    "searching": true,
+                    "scrollY": "75vh",
+                    "scrollCollapse": "true",
+                    "autoWidth": false,
+                    "paging": true,
+                    "lengthChange": true,
+                    "pageLength": "15",
+                    "lengthMenu": [15, 25, 50, 100, 1000],
+                    "processing": true,
+                    "order": [[2, 'asc']],
+                    "serverSide": false,
+                    "select": {
+                        "style": 'multi',
+                    },
 
-            "ajax": {
-                "type": "POST",
-                "url": "/Phonebook/PhonebookAll_Ajax",
-                "contentType": 'application/json; charset=utf-8',
-                "data": function (data) { return data = JSON.stringify(data); }
-            },
+                    "ajax": {
+                        "type": "POST",
+                        "url": "/Phonebook/Phonebook_Ajax",
+                        "contentType": 'application/json; charset=utf-8',
+                        "data": function (data) { return data = JSON.stringify(data); }
+                    },
 
-            "columns": [
-                { "data": "Id", "visible": false },
-                { "data": "Name" },
-                { "data": "Surname" },
-                { "data": "Position", "searchable": false },
-                { "data": "Tel_int" },
-                { "data": "Email" },
-            ],
+                    "columns": [
+                        { "data": "PrivatePhBs.Id", "visible": false, "searchable": false },
+                        { "data": "PrivatePhBs.OwSAN", "visible": false, "searchable": false },
+                        { "data": "PrivatePhBs.IdREC", "visible": false, "searchable": false },
+                        { "data": "AspNetUsers.Id", "visible": false, "searchable": false },
+                        { "data": "AspNetUsers.Name" },
+                        { "data": "AspNetUsers.Surname" },
+                        { "data": "AspNetUsers.Position" },
+                        { "data": "AspNetUsers.Tel_int" },
+                        { "data": "AspNetUsers.Tel_ext" },
+                        { "data": "AspNetUsers.Tel_mob" },
+                        { "data": "AspNetUsers.Email" },
+                        { "data": "AspNetUsers.Timezone", "searchable": false },
+                        { "data": "AspNetUsers.Sip_addr", "searchable": false },
+                        { "data": "AspNetUsers.H323_addr", "searchable": false },
+                        { "data": "PrivatePhBs.UsersGroup", "searchable": false, "className": "editable" }
+                    ],
 
-            "language": {
-                "processing": "Подождите...",
-                "search": "Поиск:",
-                "lengthMenu": "Показать _MENU_ записей",
-                "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
-                "infoEmpty": "Записи с 0 до 0 из 0 записей",
-                "infoFiltered": "(отфильтровано из _MAX_ записей)",
-                "infoPostFix": "",
-                "loadingRecords": "Загрузка записей...",
-                "zeroRecords": "Записи отсутствуют.",
-                "emptyTable": "В таблице отсутствуют данные",
-                "paginate": {
-                    "first": "Первая",
-                    "previous": "Предыдущая",
-                    "next": "Следующая",
-                    "last": "Последняя"
-                },
-                "aria": {
-                    "sortAscending": ": активировать для сортировки столбца по возрастанию",
-                    "sortDescending": ": активировать для сортировки столбца по убыванию"
-                }
-            },
-
-        });
-    };
-
-    function refresh_pb() {
-        if (oPhonebookTable != null)
-            oPhonebookTable.ajax.reload();
-    };
-
-    function refresh_du() {
-        if (oDomainusersTable != null)
-            oDomainusersTable.ajax.reload();
-    };
-
-    function delete_pb_users() {
-        var data = [];
-        var arrayToDelete = oPhonebookTable.cells('.selected', 0, { page: 'current' }).data();
-        for (var i = 0; i < arrayToDelete.length; i++) {
-            data[i] = arrayToDelete[i];
-        }
-        if (data != null) {
-            $.ajax({
-                "url": "/Phonebook/Phonebook_Delete",
-                "type": "POST",
-                "contentType": "application/json; charset=utf-8",
-                "data": JSON.stringify({ pbrArray: data }),
+                    "language": {
+                        "url": "../../Content/dt_ru.json",
+                        "select": {
+                            "rows": {
+                                _: "Выделено %d записей",
+                                1: "Выделена 1 запись",
+                                2: "Выделено 2 записи",
+                                3: "Выделено 3 записи",
+                                4: "Выделено 4 записи",
+                            }
+                        },
+                    },
+                });
             });
-        }
-        setTimeout(refresh_pb, 500);
-    };
 
-    function add_pb_users() {
-        var data = [];
-        var arrayToAdd = oDomainusersTable.cells('.selected', 0, { page: 'current' }).data();
-        for (var i = 0; i < arrayToAdd.length; i++) {
-            data[i] = arrayToAdd[i];
-        }
-        if (data != null) {
-            $.ajax({
-                "url": "/Phonebook/Phonebook_Add",
-                "type": "POST",
-                "contentType": "application/json; charset=utf-8",
-                "data": JSON.stringify({ pbrArray: data }),
-            });
-        }
-        document.getElementById("popup_block").className = "hide";
-        setTimeout(refresh_pb, 500);
-    };
+            function popup_du_table() {
+                oDomainusersTable = $('#table_du').DataTable({
+                    "ordering": true,
+                    "searching": true,
+                    "paging": true,
+                    "lengthChange": true,
+                    "pageLength": "10",
+                    "lengthMenu": [10, 20, 30, 100],
+                    "scrollY": "55vh",
+                    "scrollCollapse": "true",
+                    "autoWidth": false,
+                    "processing": true,
+                    "order": [[2, 'asc']],
+                    "select": {
+                        "style": 'multi',
+                    },
 
-    function display_du_users() {
-        event.stopPropagation();
-        document.getElementById("popup_block").className = "b-popup b-popup-content";
-        if (oDomainusersTable == null) {
-            popup_du_table();
-        } else {
-            setTimeout(refresh_du, 500);
-        }
+                    "ajax": {
+                        "type": "POST",
+                        "url": "/Phonebook/PhonebookAll_Ajax",
+                        "contentType": 'application/json; charset=utf-8',
+                        "data": function (data) { return data = JSON.stringify(data); }
+                    },
 
-    };
+                    "columns": [
+                        { "data": "Id", "visible": false },
+                        { "data": "Name" },
+                        { "data": "Surname" },
+                        { "data": "Position", "searchable": false },
+                        { "data": "Tel_int" },
+                        { "data": "Email" },
+                    ],
 
-    $(document).on("click", function (e) {
-        if (!$("#popup_content").is(e.target) && $("#popup_content").has(e.target).length == 0 && document.getElementById("popup_block").className == "b-popup b-popup-content") {
-            document.getElementById("popup_block").className = "hide";
-        };
-    });
+                    "language": {
+                        "url": "../../Content/dt_ru.json",
+                        "select": {
+                            "rows": {
+                                _: "Выделено %d записей",
+                                1: "Выделена 1 запись",
+                                2: "Выделено 2 записи",
+                                3: "Выделено 3 записи",
+                                4: "Выделено 4 записи",
+                            }
+                        },
+                    },
 
+                });
+            };
 
+            function refresh_pb() {
+                if (oPhonebookTable != null)
+                    oPhonebookTable.ajax.reload();
+            };
+
+            function refresh_du() {
+                if (oDomainusersTable != null)
+                    oDomainusersTable.ajax.reload();
+            };
+
+            function delete_pb_users() {
+                var data = [];
+                var arrayToDelete = oPhonebookTable.cells('.selected', 0, { page: 'current' }).data();
+                for (var i = 0; i < arrayToDelete.length; i++) {
+                    data[i] = arrayToDelete[i];
+                }
+                if (data != null) {
+                    $.ajax({
+                        "url": "/Phonebook/Phonebook_Delete",
+                        "type": "POST",
+                        "contentType": "application/json; charset=utf-8",
+                        "data": JSON.stringify({ pbrArray: data }),
+                    });
+                }
+                setTimeout(refresh_pb, 500);
+            };
+
+            function add_pb_users() {
+                var data = [];
+                var arrayToAdd = oDomainusersTable.cells('.selected', 0, { page: 'current' }).data();
+                for (var i = 0; i < arrayToAdd.length; i++) {
+                    data[i] = arrayToAdd[i];
+                }
+                if (data != null) {
+                    $.ajax({
+                        "url": "/Phonebook/Phonebook_Add",
+                        "type": "POST",
+                        "contentType": "application/json; charset=utf-8",
+                        "data": JSON.stringify({ pbrArray: data }),
+                    });
+                }
+                document.getElementById("popup_block").className = "hide";
+                setTimeout(refresh_pb, 500);
+            };
+
+            function display_du_users() {
+                $("#modal_block").modal();
+                if (oDomainusersTable == null) {
+                    popup_du_table();
+                } else {
+                    setTimeout(refresh_du, 500);
+                }
+
+            };
 </script>

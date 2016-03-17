@@ -78,7 +78,7 @@ namespace OWL_Site.Controllers
                     daVrec.Fill(dsVrec, "records");
                     foreach (DataRow dr in dsVrec.Tables["records"].Rows)
                     {
-                        all_recs.Add(new VideoRecords.Object { ID = Int32.Parse(dr["ID"].ToString()), Conf = Convert.ToString(dr["Conf"]), PName = Convert.ToString(dr["PName"]), Tstart = DateTime.Parse(dr["Tstart"].ToString()), Tfinish = DateTime.Parse(dr["Tfinish"].ToString()), Link = Convert.ToString(dr["Link"]) });
+                        all_recs.Add(new VideoRecords.Object { ID = Int32.Parse(dr["ID"].ToString()), Conf = Convert.ToString(dr["Conf"]), PName = Convert.ToString(dr["PName"]), Tstart = Convert.ToString(dr["Tstart"]), Tfinish = Convert.ToString(dr["Tfinish"]), Link = Convert.ToString(dr["Link"]) });
                     }
                     return all_recs;
                 }
@@ -97,7 +97,7 @@ namespace OWL_Site.Controllers
                 daVrec.Fill(dsVrec, "records");
                 foreach (DataRow dr in dsVrec.Tables["records"].Rows)
                 {
-                    all_recs.Add(new VideoRecords.Object { ID = Int32.Parse(dr["ID"].ToString()), Conf = Convert.ToString(dr["Conf"]), PName = Convert.ToString(dr["PName"]), Tstart = DateTime.Parse(dr["Tstart"].ToString()), Tfinish = DateTime.Parse(dr["Tfinish"].ToString()), Link = Convert.ToString(dr["Link"]) });
+                    all_recs.Add(new VideoRecords.Object { ID = Int32.Parse(dr["ID"].ToString()), Conf = Convert.ToString(dr["Conf"]), PName = Convert.ToString(dr["PName"]), Tstart = Convert.ToString(dr["Tstart"]), Tfinish = Convert.ToString(dr["Tfinish"]), Link = Convert.ToString(dr["Link"]) });
                 }
                 return all_recs;
 

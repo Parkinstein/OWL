@@ -4,6 +4,7 @@
 body {
   font-family: 'Calibri', sans-serif;
   font-size: 17px;
+  font-size: 1.6vh;
   height: 100%;
   background-color: #fff;
   padding-top: 3%;
@@ -11,7 +12,7 @@ body {
   font-family: 'Calibri', sans-serif;
 }
 .body-content {
-    padding: 0px 15px 15px 15px;
+    padding: 0px;
     vertical-align: middle;
     text-align: left;
     max-height: 100%;
@@ -914,18 +915,17 @@ footer {
 
 /* DataTables 1.10.8 */
 .control_grid {
-    width: 100%;
-    height: 95%;
-    background-color: #fff;
-    margin: 0px;
-    color: #000000;
-    border: 1px solid;
-    border-color: #3d3d6a;
+    width: 80vw;
+    height: 90vh;
+    background-color: #FFFFFF;
+    margin: 0 auto;
+    padding: 10px;
+    border: 0px solid;
     -ms-border-radius: 10px;
     border-radius: 10px;
     overflow: hidden;
 }
-.dataTables_wrapper {
+/*.dataTables_wrapper {
     width: 100%;
     height: auto;
     padding: 10px;
@@ -1005,7 +1005,14 @@ table.dataTable tbody td{
     color: #ffffff !important;
     border: 1px solid #3d3d6a;
     background: #3d3d6a;
+}*/
+
+#modal_block .modal-dialog {
+    width:95vw;
 }
+
+
+/* Pop-up window
 .b-popup {
     width:100%;
     height: 100%;
@@ -1051,12 +1058,7 @@ table#table_ap.dataTable tbody td{
 .phonebook_buttons {
     width:100%;
     height: 5%;
-}
-.phonebook_groups {
-    background-color: rgba(51 ,35 ,131, 0.4) !important;
-    font-weight: bold;
-    text-align: center;
-}
+}*/
 /* End of DataTables CSS */
 /* menu */
     li.icon-set
@@ -1137,33 +1139,32 @@ table#table_ap.dataTable tbody td{
         background-color: transparent;
     }
     .dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    z-index: 1000;
-    display: none;
-    float: left;
-    min-width: 240px;
-    padding: 5px 0;
-    margin: 2px 0 0;
-    font-size: 14px;
-    text-align: left;
-    list-style: none;
-    background-color: #fff;
-    -webkit-background-clip: padding-box;
-    background-clip: padding-box;
-    border: 1px solid #ccc;
-    border: 1px solid rgba(0,0,0,.15);
-    border-radius: 4px;
-    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
-    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1000;
+        display: none;
+        float: left;
+        min-width: 240px;
+        padding: 5px 0;
+        margin: 2px 0 0;
+        font-size: 14px;
+        text-align: left;
+        list-style: none;
+        background-color: #fff;
+        -webkit-background-clip: padding-box;
+        background-clip: padding-box;
+        border: 1px solid #ccc;
+        border: 1px solid rgba(0,0,0,.15);
+        border-radius: 4px;
+        -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+        box-shadow: 0 6px 12px rgba(0,0,0,.175);
     }
-.jumbotron {
-    padding-top: 30px;
-    padding-bottom: 30px;
-    margin-bottom: 30px;
-    color: inherit;
-    background-color: transparent;
-}
-    
+    .jumbotron {
+        padding-top: 30px;
+        padding-bottom: 30px;
+        margin-bottom: 30px;
+        color: inherit;
+        background-color: transparent;
+    }
 }

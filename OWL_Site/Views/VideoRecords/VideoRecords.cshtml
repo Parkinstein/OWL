@@ -1,16 +1,5 @@
-﻿@using OWL_Site.Controllers
-@model IEnumerable<OWL_Site.Models.VideoRecords.Object>
-
-@{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-<script src="@Url.Content("~/Scripts/DataTables/datatables.select.min.js")"></script>
-<script src="@Url.Content("~/Scripts/moment-with-locales.min.js")"></script>
-
-<div id="video_recs" class="control_grid">
-    <table id="table_rec" class="display">
+﻿<div id="video_recs" class="control_grid">
+    <table id="table_rec" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>ID</th>
@@ -24,25 +13,28 @@
         <tbody></tbody>
     </table>
     <div class="phonebook_buttons">
-        <input id="delete" type="button" onclick="delete_records()" value="Удалить" class="videorecs_button_delete" />
+        <button type="button" class="btn btn-primary" onclick="delete_records()">Удалить</button>
     </div>
 </div>
 
 <script>
     var oRecordsTable;
-
     $(document).ready(function () {
         oRecordsTable = $('#table_rec').DataTable({
-            "ordering": false,
+            "ordering": true,
             "searching": true,
+            "scrollY": "75vh",
+            "scrollCollapse": "true",
             "paging": true,
+            "lengthChange": true,
+            "pageLength": "15",
+            "lengthMenu": [15, 25, 50, 100, 1000],
             "autoWidth": false,
             "processing": true,
-            "pageLength": 20,
-            "lengthChange": false,
             "select": {
                 "style": 'multi',
             },
+            "order": [[2, 'desc']],
 
             "ajax": {
                 "type": "POST",
@@ -55,58 +47,36 @@
                 { "data": "ID", "visible": false, "searchable": false },
                 { "data": "Conf" },
                 { "data": "PName" },
-                { "data": "Tstart", "searchable": false },
-                { "data": "Tfinish", "searchable": false },
-                { "data": "Link", "searchable": false },
-            ],
-            "columnDefs": [
-                {
-                    "targets": 3, "data": "Tstart",
-                    "render": function (data)   {
-                        var datetime = new Date(parseInt(data.substr(6)));
-                        var datewrapper = moment(datetime);
-                        return datewrapper.format('LLL');
-                    }
-                 },
-
-                {
-                    "targets": 4, "data": "Tfinish",
-                    "render": function (data) {
-                        var datetime = new Date(parseInt(data.substr(6)));
-                        var datewrapper = moment(datetime);
-                        return datewrapper.format('LLL');
+                { "data": "Tstart", "searchable": false, "render": function (data, type, full, meta) {
+                        var t = data.split(/[. :]/);
+                        var date = new Date(t[2], t[1], t[0], t[3], t[4], t[5]);
+                        return date.toLocaleString("ru");
                     }
                 },
-
                 {
-                    "targets": 5, "data": "Link",
-                    "render": function (data, type, full, meta)     {
-                         return '<a href="' + data + '">' + data + '</a>';
-                                                                    }
+                    "data": "Tfinish", "searchable": false, "render": function (data, type, full, meta) {
+                        var t = data.split(/[. :]/);
+                        var date = new Date(t[2], t[1], t[0], t[3], t[4], t[5]);
+                        return date.toLocaleString("ru");
+                    }
+                },
+                {
+                    "data": "Link", "searchable": false, "render": function (data, type, full, meta) {
+                        return '<a href="' + data + '">Скачать</a>';
+                    }
                 },
             ],
             "language": {
-                "processing": "Подождите...",
-                "search": "Поиск:",
-                "lengthMenu": "Показать _MENU_ записей",
-                "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
-                "infoEmpty": "Записи с 0 до 0 из 0 записей",
-                "rowSelected": "0 рядов выделено",
-                "infoFiltered": "(отфильтровано из _MAX_ записей)",
-                "infoPostFix": "",
-                "loadingRecords": "Загрузка записей...",
-                "zeroRecords": "Записи отсутствуют.",
-                "emptyTable": "В таблице отсутствуют данные",
-                "paginate": {
-                    "first": "Первая",
-                    "previous": "Предыдущая",
-                    "next": "Следующая",
-                    "last": "Последняя"
+                "url": "../../Content/dt_ru.json",
+                "select": {
+                    "rows": {
+                        _: "Выделено %d записей",
+                        1: "Выделена 1 запись",
+                        2: "Выделено 2 записи",
+                        3: "Выделено 3 записи",
+                        4: "Выделено 4 записи",
+                    }
                 },
-                "aria": {
-                    "sortAscending": ": активировать для сортировки столбца по возрастанию",
-                    "sortDescending": ": активировать для сортировки столбца по убыванию"
-                }
             },
         });
     });
@@ -130,14 +100,4 @@
         }
         setTimeout(refresh_rec, 500);
     };
-    $(function () {
-        $('#video_recs').slimScroll({
-            height: '98%',
-            width: '100%',
-            size: '7px',
-            position: 'right',
-            color: '#3d3d6a',
-            distance: '0px'
-        });
-    });
 </script>
