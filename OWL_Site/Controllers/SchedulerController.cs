@@ -12,8 +12,8 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MeetingRequest;
 using OWL_Site.Models;
-using TaskScheduler;
-using Task = TaskScheduler.Task;
+//using TaskScheduler;
+//using Task = TaskScheduler.Task;
 
 //using Telerik.Charting;
 
@@ -415,29 +415,29 @@ namespace OWL_Site.Controllers
             smtpClient.Send(mailMessage);
             return null;
         }
-        public Task<ActionResult> RecordTask(string tasktitle, string taskapp, string stream_link, string pathflv, string comment, string acc_un, string accpass, DateTime task_start, DateTime task_end)
-        {
-            ScheduledTasks st = new ScheduledTasks();
-            Task t;
-            t = st.CreateTask(tasktitle);
-            t.ApplicationName = taskapp;
-            t.Parameters = " -r " + "-q" + pathflv + " -o " + "\"" + stream_link + "\"";
-            t.Comment = comment;
-            t.SetAccountInformation(acc_un, accpass);
-            t.IdleWaitMinutes = 10;
-            TimeSpan worktime = task_end - task_start;
-            Debug.WriteLine(worktime);
-            t.MaxRunTime = new TimeSpan(worktime.Ticks);
+        //public Task<ActionResult> RecordTask(string tasktitle, string taskapp, string stream_link, string pathflv, string comment, string acc_un, string accpass, DateTime task_start, DateTime task_end)
+        //{
+        //    ScheduledTasks st = new ScheduledTasks();
+        //    Task t;
+        //    t = st.CreateTask(tasktitle);
+        //    t.ApplicationName = taskapp;
+        //    t.Parameters = " -r " + "-q" + pathflv + " -o " + "\"" + stream_link + "\"";
+        //    t.Comment = comment;
+        //    t.SetAccountInformation(acc_un, accpass);
+        //    t.IdleWaitMinutes = 10;
+        //    TimeSpan worktime = task_end - task_start;
+        //    Debug.WriteLine(worktime);
+        //    t.MaxRunTime = new TimeSpan(worktime.Ticks);
 
-            t.Priority = System.Diagnostics.ProcessPriorityClass.Idle;
-            DateTime starttask = new DateTime();
-            starttask = task_start + TimeSpan.FromHours(3);
-            t.Triggers.Add(new RunOnceTrigger(starttask));
-            t.Save();
-            t.Close();
-            st.Dispose();
-            return null;
-        }
+        //    t.Priority = System.Diagnostics.ProcessPriorityClass.Idle;
+        //    DateTime starttask = new DateTime();
+        //    starttask = task_start + TimeSpan.FromHours(3);
+        //    t.Triggers.Add(new RunOnceTrigger(starttask));
+        //    t.Save();
+        //    t.Close();
+        //    st.Dispose();
+        //    return null;
+        //}
         private IEnumerable<AspNetUser> GetPB()
         {
             var data = GetPhBOw(User.Identity.Name);
