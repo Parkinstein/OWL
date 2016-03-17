@@ -60,13 +60,21 @@ namespace OWL_Site.Controllers
         public void Phonebook_Add(object[] pbrArray)
         {
             var allpriv = GetPhBOw(User.Identity.Name).AsQueryable();
-            foreach (string pbr in pbrArray)
+            if (pbrArray != null)
             {
-                if (!allpriv.Any(m => m.Id == pbr))
-                    AddToPrivat(pbr);
-                else { ViewBag.Message = "Запись уже существует"; Debug.WriteLine("Запись уже существует"); }
+                foreach (string pbr in pbrArray)
+                {
+                    if (!allpriv.Any(m => m.Id == pbr))
+                        AddToPrivat(pbr);
+                }
+            }
+            else
+            {
+                ViewBag.Message = "Запись уже существует";
+                Debug.WriteLine("Запись уже существует");
             }
         }
+        
         // Check already created personal records
         public List<AspNetUser> GetPhBOw(string Owname)
         {
