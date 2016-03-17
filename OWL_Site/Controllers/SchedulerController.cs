@@ -341,7 +341,7 @@ namespace OWL_Site.Controllers
             SmtpClient smtpClient = new SmtpClient(MvcApplication.set.AuthDnAddress, 25)
             {
                 UseDefaultCredentials = false,
-                EnableSsl = false,
+                EnableSsl = true,
                 Credentials = new NetworkCredential(MvcApplication.set.SmtpLogin, MvcApplication.set.SmtpPassword),
 
                 DeliveryMethod = SmtpDeliveryMethod.Network,
