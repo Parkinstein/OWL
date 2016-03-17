@@ -1,0 +1,24 @@
+﻿{
+  "sEmptyTable": "В таблице отсутствуют данные",
+  "sInfo": "Записи c _START_ по _END_ из _TOTAL_ записей",
+  "sInfoEmpty": "Записи с 0 по 0 из 0 записей",
+  "sInfoFiltered": "(отфильтровано от _MAX_ всего записей)",
+  "sInfoPostFix": "",
+  "srowSelected": "0 рядов выделено",
+  "sInfoThousands": ",",
+  "sLengthMenu": "Показано _MENU_ записей",
+  "sLoadingRecords": "Загрузка записей...",
+  "sProcessing": "Обработка...",
+  "sSearch": "Поиск:",
+  "sZeroRecords": "Записи отсутствуют.",
+  "oPaginate": {
+    "sFirst": "Первая",
+    "sLast": "Последняя",
+    "sNext": "Следующая",
+    "sPrevious": "Предыдущая"
+  },
+  "oAria": {
+    "sSortAscending": ": нажать для сортировки по восходящей",
+    "sSortDescending": ": нажать для сортировки по нисходящей"
+  }
+}
