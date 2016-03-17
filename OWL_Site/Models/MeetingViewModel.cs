@@ -85,7 +85,7 @@ namespace OWL_Site.Models
                 Record = Record,
                 Recfile = Recfile,
                 InitName = InitName,
-                FName = FName
+                InitFullname = InitFullname
             };
 
             return meeting;

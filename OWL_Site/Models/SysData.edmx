@@ -560,6 +560,7 @@
           <EntitySet Name="Ivr_Themes" EntityType="aspnetdbModel.Ivr_Themes" />
           <EntitySet Name="VmrAliases" EntityType="aspnetdbModel.VmrAlias" />
           <EntitySet Name="AllVmrs" EntityType="aspnetdbModel.AllVmr" />
+          <EntitySet Name="PrivatePhBs" EntityType="aspnetdbModel.PrivatePhB" />
           <EntitySet Name="MeetingAttendees" EntityType="aspnetdbModel.MeetingAttendee" />
           <EntitySet Name="Meetings" EntityType="aspnetdbModel.Meeting" />
           <AssociationSet Name="FK_MeetingAtendee_Meeting" Association="aspnetdbModel.FK_MeetingAtendee_Meeting">
@@ -612,6 +613,15 @@
           <Property Name="service_type" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="tag" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="vmid" Type="Int32" />
+        </EntityType>
+        <EntityType Name="PrivatePhB">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OwSAN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IdREC" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UsersGroup" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MeetingAttendee">
           <Key>
@@ -828,6 +838,16 @@
                 <ScalarProperty Name="force_presenter_into_main" ColumnName="force_presenter_into_main" />
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="allow_guests" ColumnName="allow_guests" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PrivatePhBs">
+            <EntityTypeMapping TypeName="aspnetdbModel.PrivatePhB">
+              <MappingFragment StoreEntitySet="PrivatePhBs">
+                <ScalarProperty Name="UsersGroup" ColumnName="UsersGroup" />
+                <ScalarProperty Name="IdREC" ColumnName="IdREC" />
+                <ScalarProperty Name="OwSAN" ColumnName="OwSAN" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

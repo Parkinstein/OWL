@@ -49,8 +49,8 @@ namespace OWL_Site.Models
 
             }).AsQueryable();
         }
-
         
+
 
 
         public void Insert(MeetingViewModel meeting, ModelStateDictionary modelState)
@@ -108,7 +108,7 @@ namespace OWL_Site.Models
                 entity.Record = meeting.Record;
                 entity.Recfile = meeting.Recfile;
                 entity.InitName = meeting.InitName;
-                entity.FName = meeting.FName;
+                entity.InitFullname = meeting.InitFullname;
                 
 
 
