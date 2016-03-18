@@ -28,7 +28,7 @@ namespace OWL_Site.Controllers
             return source;
         }
         // GET: Controlpanel
-        public ActionResult Index()
+        public ActionResult ControlPanel()
         {
             return View();
         }
@@ -167,9 +167,14 @@ namespace OWL_Site.Controllers
         #endregion
         public ActionResult Control(string confname, string dispname)
         {
+            Debug.WriteLine(confname);
             aspnetdbEntities db = new aspnetdbEntities();
+            Debug.WriteLine(db.AllVmrs.FirstOrDefault(v => v.name == confname).description);
             var curvmr = db.AllVmrs.FirstOrDefault(v => v.name == confname);
+            Debug.WriteLine(curvmr.Id);
+            
             var curalias = db.VmrAliases.FirstOrDefault(v => v.vmid == curvmr.Id);
+            Debug.WriteLine(curalias);
 
             if (curvmr != null)
             {
