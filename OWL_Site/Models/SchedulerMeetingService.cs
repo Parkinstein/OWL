@@ -108,7 +108,7 @@ namespace OWL_Site.Models
                 entity.Record = meeting.Record;
                 entity.Recfile = meeting.Recfile;
                 entity.InitName = meeting.InitName;
-                entity.InitFullname = meeting.InitFullname;
+                entity.FName = meeting.FName;
                 
 
 
