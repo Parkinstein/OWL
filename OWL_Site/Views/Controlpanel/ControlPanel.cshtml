@@ -91,7 +91,7 @@
                     }
                 },
                 { "data": "name", "searchable": false, "render": function (data) {
-                    return '<a href="Controlpanel/Control?confname=' + data + '&dispname=' + uname + '">Управление</a>';
+                    return "<a href=\"/ControlPanel/Control?confname=" + data + "&dispname=" + uname + "\">Управление</a>";
                     }
                 },
             ],
@@ -121,7 +121,7 @@
 
             "ajax": {
                 "type": "POST",
-                "url": "/Controlpanel/ActiveParts_Ajax?Confname=" + confName,
+                "url": "/ControlPanel/ActiveParts_Ajax?Confname=" + confName,
                 "contentType": "application/json; charset=utf-8",
                 "data": function (data) { return data = JSON.stringify(data); }
             },
@@ -189,7 +189,7 @@
         if (oActPartTable == null) {
             popup_parts_table(name);
         } else {
-            oActPartTable.ajax.url("/Controlpanel/ActiveParts_Ajax?Confname=" + name).load();
+            oActPartTable.ajax.url("/ControlPanel/ActiveParts_Ajax?Confname=" + name).load();
         }
     };
 
@@ -204,4 +204,6 @@
     $(document).ready(function () {
         refresh_confs();
     });
+
+    setInterval("refresh_stats()", 300000);
 </script>

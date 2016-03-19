@@ -131,7 +131,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Renci.SshNet, Version=2013.4.7.0, Culture=neutral, processorArchitecture=MSIL">
@@ -144,6 +144,7 @@
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -231,7 +232,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Context\ApplicationDbContext.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\ControlpanelController.cs" />
+    <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PhonebookController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
@@ -360,6 +361,8 @@
     <Content Include="Content\DataTables\css\autoFill.jqueryui.min.css" />
     <Content Include="Content\DataTables\css\buttons.bootstrap.css" />
     <Content Include="Content\DataTables\css\buttons.bootstrap.min.css" />
+    <Content Include="Content\DataTables\css\buttons.bootstrap4.css" />
+    <Content Include="Content\DataTables\css\buttons.bootstrap4.min.css" />
     <Content Include="Content\DataTables\css\buttons.dataTables.css" />
     <Content Include="Content\DataTables\css\buttons.dataTables.min.css" />
     <Content Include="Content\DataTables\css\buttons.foundation.css" />
@@ -378,6 +381,8 @@
     <Content Include="Content\DataTables\css\dataTables.autoFill.min.css" />
     <Content Include="Content\DataTables\css\dataTables.bootstrap.css" />
     <Content Include="Content\DataTables\css\dataTables.bootstrap.min.css" />
+    <Content Include="Content\DataTables\css\dataTables.bootstrap4.css" />
+    <Content Include="Content\DataTables\css\dataTables.bootstrap4.min.css" />
     <Content Include="Content\DataTables\css\dataTables.colReorder.css" />
     <Content Include="Content\DataTables\css\dataTables.colReorder.min.css" />
     <Content Include="Content\DataTables\css\dataTables.colVis.css" />
@@ -395,11 +400,17 @@
     <Content Include="Content\DataTables\css\dataTables.jqueryui.min.css" />
     <Content Include="Content\DataTables\css\dataTables.keyTable.css" />
     <Content Include="Content\DataTables\css\dataTables.keyTable.min.css" />
+    <Content Include="Content\DataTables\css\dataTables.material.css" />
+    <Content Include="Content\DataTables\css\dataTables.material.min.css" />
     <Content Include="Content\DataTables\css\dataTables.responsive.css" />
     <Content Include="Content\DataTables\css\dataTables.scroller.css" />
     <Content Include="Content\DataTables\css\dataTables.scroller.min.css" />
+    <Content Include="Content\DataTables\css\dataTables.semanticui.css" />
+    <Content Include="Content\DataTables\css\dataTables.semanticui.min.css" />
     <Content Include="Content\DataTables\css\dataTables.tableTools.css" />
     <Content Include="Content\DataTables\css\dataTables.tableTools.min.css" />
+    <Content Include="Content\DataTables\css\dataTables.uikit.css" />
+    <Content Include="Content\DataTables\css\dataTables.uikit.min.css" />
     <Content Include="Content\DataTables\css\editor.dataTables.css" />
     <Content Include="Content\DataTables\css\editor.dataTables.min.css" />
     <Content Include="Content\DataTables\css\fixedColumns.bootstrap.css" />
@@ -911,20 +922,11 @@
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\SysData.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>SysData.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\SysData.edmx.diagram">
-      <DependentUpon>SysData.edmx</DependentUpon>
-    </Content>
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="images\logo.psd" />
-    <Content Include="Content\DataTables\css\common.scss" />
     <Content Include="Content\DataTables\css\dataTables.jqueryui.scss" />
     <Content Include="Content\DataTables\css\dataTables.responsive.scss" />
-    <Content Include="Content\DataTables\css\mixins.scss" />
     <Content Include="bin\OWL_Site.dll.config" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
@@ -1035,6 +1037,15 @@
     <Content Include="Content\kendo\2016.1.112\images\kendoui.ttf" />
     <Content Include="Content\kendo\2016.1.112\images\kendoui.woff" />
     <Content Include="Content\dt_ru.json" />
+    <EntityDeploy Include="Models\SysData.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SysData.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\SysData.edmx.diagram">
+      <DependentUpon>SysData.edmx</DependentUpon>
+    </Content>
+    <Content Include="Content\DataTables\css\mixins.scss" />
+    <Content Include="Content\DataTables\css\common.scss" />
     <None Include="Properties\PublishProfiles\OWL_Sile.pubxml" />
     <Content Include="Scripts\angular-animate.min.js.map" />
     <Content Include="Scripts\angular-aria.min.js.map" />
@@ -1050,20 +1061,6 @@
     <Content Include="Scripts\cldr\event.js" />
     <Content Include="Scripts\cldr\supplemental.js" />
     <Content Include="Scripts\cldr\unresolved.js" />
-    <Content Include="Scripts\DataTables\dataTables.editor.js" />
-    <Content Include="Scripts\DataTables\dataTables.editor.min.js" />
-    <Content Include="Scripts\DataTables\responsive.bootstrap.js" />
-    <Content Include="Scripts\DataTables\responsive.bootstrap.min.js" />
-    <Content Include="Scripts\DataTables\responsive.foundation.js" />
-    <Content Include="Scripts\DataTables\responsive.foundation.min.js" />
-    <Content Include="Scripts\DataTables\responsive.jqueryui.js" />
-    <Content Include="Scripts\DataTables\responsive.jqueryui.min.js" />
-    <Content Include="Scripts\errors.json" />
-    <None Include="Properties\PublishProfiles\OWL_Sile_local.pubxml" />
-    <None Include="Properties\PublishProfiles\TestDeploy.pubxml" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\cldr.js" />
-    <Content Include="Scripts\datatables.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
     <Content Include="Scripts\DataTables\autoFill.foundation.js" />
@@ -1072,6 +1069,8 @@
     <Content Include="Scripts\DataTables\autoFill.jqueryui.min.js" />
     <Content Include="Scripts\DataTables\buttons.bootstrap.js" />
     <Content Include="Scripts\DataTables\buttons.bootstrap.min.js" />
+    <Content Include="Scripts\DataTables\buttons.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\buttons.bootstrap4.min.js" />
     <Content Include="Scripts\DataTables\buttons.colVis.js" />
     <Content Include="Scripts\DataTables\buttons.colVis.min.js" />
     <Content Include="Scripts\DataTables\buttons.flash.js" />
@@ -1088,12 +1087,14 @@
     <Content Include="Scripts\DataTables\dataTables.autoFill.min.js" />
     <Content Include="Scripts\DataTables\dataTables.bootstrap.js" />
     <Content Include="Scripts\DataTables\dataTables.bootstrap.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\dataTables.bootstrap4.min.js" />
     <Content Include="Scripts\DataTables\dataTables.buttons.js" />
     <Content Include="Scripts\DataTables\dataTables.buttons.min.js" />
     <Content Include="Scripts\DataTables\dataTables.colReorder.js" />
     <Content Include="Scripts\DataTables\dataTables.colReorder.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.colVis.js" />
-    <Content Include="Scripts\DataTables\dataTables.colVis.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.editor.js" />
+    <Content Include="Scripts\DataTables\dataTables.editor.min.js" />
     <Content Include="Scripts\DataTables\dataTables.fixedColumns.js" />
     <Content Include="Scripts\DataTables\dataTables.fixedColumns.min.js" />
     <Content Include="Scripts\DataTables\dataTables.fixedHeader.js" />
@@ -1104,6 +1105,8 @@
     <Content Include="Scripts\DataTables\dataTables.jqueryui.min.js" />
     <Content Include="Scripts\DataTables\dataTables.keyTable.js" />
     <Content Include="Scripts\DataTables\dataTables.keyTable.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.material.js" />
+    <Content Include="Scripts\DataTables\dataTables.material.min.js" />
     <Content Include="Scripts\DataTables\dataTables.responsive.js" />
     <Content Include="Scripts\DataTables\dataTables.responsive.min.js" />
     <Content Include="Scripts\DataTables\dataTables.rowReorder.js" />
@@ -1112,10 +1115,27 @@
     <Content Include="Scripts\DataTables\dataTables.scroller.min.js" />
     <Content Include="Scripts\DataTables\dataTables.select.js" />
     <Content Include="Scripts\DataTables\dataTables.select.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.tableTools.js" />
-    <Content Include="Scripts\DataTables\dataTables.tableTools.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.semanticui.js" />
+    <Content Include="Scripts\DataTables\dataTables.semanticui.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.uikit.js" />
+    <Content Include="Scripts\DataTables\dataTables.uikit.min.js" />
     <Content Include="Scripts\DataTables\jquery.dataTables.js" />
     <Content Include="Scripts\DataTables\jquery.dataTables.min.js" />
+    <Content Include="Scripts\DataTables\responsive.bootstrap.js" />
+    <Content Include="Scripts\DataTables\responsive.bootstrap.min.js" />
+    <Content Include="Scripts\DataTables\responsive.foundation.js" />
+    <Content Include="Scripts\DataTables\responsive.foundation.min.js" />
+    <Content Include="Scripts\DataTables\responsive.jqueryui.js" />
+    <Content Include="Scripts\DataTables\responsive.jqueryui.min.js" />
+    <Content Include="Scripts\errors.json" />
+    <None Include="Properties\PublishProfiles\OWL_Sile_local.pubxml" />
+    <None Include="Properties\PublishProfiles\TestDeploy.pubxml" />
+    <Content Include="Scripts\cldr.js" />
+    <Content Include="Scripts\datatables.js" />
+    <Content Include="Scripts\DataTables\dataTables.colVis.js" />
+    <Content Include="Scripts\DataTables\dataTables.colVis.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.tableTools.js" />
+    <Content Include="Scripts\DataTables\dataTables.tableTools.min.js" />
     <Content Include="Scripts\globalize.js" />
     <Content Include="Scripts\globalize\currency.js" />
     <Content Include="Scripts\globalize\date.js" />
@@ -1867,14 +1887,9 @@
     <Content Include="Scripts\i18n\angular-locale_zh.js" />
     <Content Include="Scripts\i18n\angular-locale_zu-za.js" />
     <Content Include="Scripts\i18n\angular-locale_zu.js" />
-    <Content Include="Scripts\jquery-2.1.4.min.map" />
-    <Content Include="Scripts\jquery-1.11.3.min.js" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
-    <Content Include="Scripts\jquery-2.1.4.js" />
-    <Content Include="Scripts\jquery-2.1.4.min.js" />
-    <None Include="Scripts\jquery-2.2.0-vsdoc.js" />
-    <Content Include="Scripts\jquery-2.2.0.js" />
-    <Content Include="Scripts\jquery-2.2.0.min.js" />
+    <Content Include="Scripts\jquery-2.2.1.js" />
+    <Content Include="Scripts\jquery-2.2.1.min.js" />
     <Content Include="Scripts\jquery-tooltipify.js" />
     <Content Include="Scripts\jquery-tooltipify.min.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.js" />
@@ -1885,7 +1900,7 @@
     <Content Include="Scripts\jquery.tooltipster.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="Scripts\jquery-2.2.0.min.map" />
+    <Content Include="Scripts\jquery-2.2.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -2476,7 +2491,6 @@
     <Content Include="Scripts\kendo\2016.1.112\pako_deflate.min.js" />
     <Content Include="Scripts\knockout-3.4.0.debug.js" />
     <Content Include="Scripts\knockout-3.4.0.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\moment-with-locales.js" />
     <Content Include="Scripts\moment-with-locales.min.js" />
@@ -2540,9 +2554,8 @@
     <Content Include="Views\Shared\EditorTemplates\Url.cshtml" />
     <Content Include="Scripts\version.json" />
     <Content Include="Views\Phonebook\Phonebook.cshtml" />
-    <Content Include="Views\Controlpanel\Index.cshtml" />
-    <Content Include="Views\Controlpanel\Control.cshtml" />
-    <Content Include="Views\VideoRecords\Index.cshtml" />
+    <Content Include="Views\ControlPanel\ControlPanel.cshtml" />
+    <Content Include="Views\ControlPanel\Control.cshtml" />
     <Content Include="Views\VideoRecords\VideoRecords.cshtml" />
     <Content Include="Views\Scheduler\Index.cshtml" />
     <Content Include="Views\Statistics\Statistics.cshtml" />
@@ -2670,7 +2683,6 @@
     <Content Include="Scripts\kendo\2016.1.112\kendo.webcomponents.min.js.map" />
     <Content Include="Scripts\kendo\2016.1.112\kendo.window.min.js.map" />
     <Content Include="Views\Sets\Index.cshtml" />
-    <Content Include="Views\Statistics\Statistics_old.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

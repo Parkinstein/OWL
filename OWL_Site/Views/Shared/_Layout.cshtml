@@ -4,24 +4,19 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
+
     <!-- Jquery -->
-    <script src="@Url.Content("~/Scripts/jquery-2.2.0.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/jquery-tooltipify.js")"></script>
-    
+    <script src="@Url.Content("~/Scripts/jquery-2.2.1.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-tooltipify.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate-vsdoc.js")"></script>
+
     <!-- Common -->
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jquery")
-    <link href="@Url.Content("~/Content/zebra_tooltips.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/prettify.css")" rel="stylesheet" type="text/css" />
     <script src="@Url.Content("~/Scripts/modernizr-2.8.3.js")"></script>
-    <!-- <script src="@Url.Content("~/Scripts/modernizr-2.6.2.js")"></script>-->
+    <link href="@Url.Content("~/Content/zebra_tooltips.css")" rel="stylesheet" type="text/css" />
     <script src="@Url.Content("~/Scripts/zebra_tooltips.js")"></script>
-    <script src="@Url.Content("~/Scripts/respond.js")"></script>
-    <script src="@Url.Content("~/Scripts/kendo/2016.1.112/jszip.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/kendo/2016.1.112/kendo.all.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/kendo/2016.1.112/kendo.aspnetmvc.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/kendo/2016.1.112/cultures/kendo.culture.ru-RU.min.js")"></script>
 
     <!-- Kendo CSS and JS -->
     <link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.common.min.css")" rel="stylesheet" type="text/css"/>
@@ -29,18 +24,23 @@
     <link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.dataviz.min.css")" rel="stylesheet" type="text/css"/>
     <link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.blueopal.min.css")" rel="stylesheet" type="text/css"/>
     <link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.dataviz.blueopal.min.css")" rel="stylesheet" type="text/css"/>
+    <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2016.1.112/jszip.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2016.1.112/kendo.all.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2016.1.112/kendo.aspnetmvc.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2016.1.112/cultures/kendo.culture.ru-RU.min.js")"></script>
     <script src="@Url.Content("~/Scripts/kendo/2016.1.112/kendo.timezones.min.js")"></script>
     <script>kendo.culture("ru-RU");</script>
-    <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
     
     <!-- Bootstrap -->
-    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css"/>
+    <script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/respond.min.js")"></script>
 
     <!-- Datatables -->
     <script src="@Url.Content("~/Scripts/DataTables/jquery.dataTables.min.js")"></script>
     <script src="@Url.Content("~/Scripts/DataTables/dataTables.bootstrap.min.js")"></script>
     <script src="@Url.Content("~/Scripts/DataTables/dataTables.select.min.js")"></script>
-    <!--<link href="@Url.Content("~/Content/DataTables/css/jquery.dataTables.min.css")" rel="stylesheet" type="text/css"/>-->
     <link href="@Url.Content("~/Content/DataTables/css/dataTables.bootstrap.min.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/DataTables/css/select.bootstrap.min.css")" rel="stylesheet" type="text/css" />
 
@@ -50,7 +50,7 @@
     <!-- Awesome font -->
     <link href="@Url.Content("~/Content/font-awesome.min.css")" rel="stylesheet" type="text/css" />
  
-    <!-- Site custom CSS-->
+    <!-- Site custom CSS -->
     <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
 
     <!-- JW player -->
@@ -72,13 +72,13 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-menu-left" data-toggle="dropdown">Конференции<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li class ="icon-set">@Html.ActionLink("Управление конференциями", "Index", "Controlpanel")</li>
+                        <li><span class="fa fa-cogs fa-lg fa-fw" style="color:#3d3d6a;"></span><span>@Html.ActionLink("Управление конференциями", "ControlPanel", "ControlPanel")</span></li>
                         <li class="divider"></li>
-                        <li class ="icon-rec">@Html.ActionLink("Просмотр файлов записи", "VideoRecords", "VideoRecords")</li>
+                        <li><span class="fa fa-youtube-play fa-lg fa-fw" style="color:#3d3d6a;"></span><span>@Html.ActionLink("Просмотр файлов записи", "VideoRecords", "VideoRecords")</span></li>
                         <li class="divider"></li>
-                        <li class ="icon-sched">@Html.ActionLink("Планирование конференций", "Index", "Scheduler")</li>
+                        <li><span class="fa fa-calendar fa-lg fa-fw" style="color:#3d3d6a;"></span><span>@Html.ActionLink("Планирование конференций", "Index", "Scheduler")</span></li>
                         <li class="divider"></li>
-                        <li class ="icon-stat">@Html.ActionLink("Статистика", "Statistics", "Statistics")</li>
+                        <li><span class="fa fa-database fa-lg fa-fw" style="color:#3d3d6a;"></span><span>@Html.ActionLink("Статистика", "Statistics", "Statistics")</span></li>
                     </ul>
                 </li>
                 <li>@Html.ActionLink("Телефонная книга", "Phonebook", "Phonebook")</li>
@@ -100,7 +100,7 @@
         <p>&copy;@DateTime.Now.Year – Портал управления системой "СОВА"</p>
     </footer>
 </div>
-@Scripts.Render("~/bundles/bootstrap")
+
 @RenderSection("scripts", required: false)
 </body>
 </html>
