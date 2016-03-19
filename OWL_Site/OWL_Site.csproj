@@ -99,8 +99,7 @@
     </Reference>
     <Reference Include="Kendo.Mvc, Version=2016.1.112.545, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\KENDOUIMVC\2016.1.112.545\Kendo.Mvc.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Telerik\UI for ASP.NET MVC Q1 2016\wrappers\aspnetmvc\Binaries\Mvc5\Kendo.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="MeetingRequest, Version=0.0.0.2, Culture=neutral, PublicKeyToken=93974380dbc05a58, processorArchitecture=MSIL">
       <HintPath>..\packages\MeetingRequest.0.0.0.2\lib\MeetingRequest.dll</HintPath>

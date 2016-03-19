@@ -571,7 +571,6 @@
             <End Role="Meeting" EntitySet="Meetings" />
             <End Role="Meeting1" EntitySet="Meetings" />
           </AssociationSet>
-          <EntitySet Name="PrivatePhBs" EntityType="aspnetdbModel.PrivatePhB" />
           </EntityContainer>
         <EntityType Name="Ivr_Themes">
           <Key>
@@ -684,15 +683,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="PrivatePhB">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OwSAN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="IdREC" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UsersGroup" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
+        
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
