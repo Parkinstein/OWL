@@ -17,6 +17,6 @@ namespace OWL_Service
         public int Id { get; set; }
         public string OwSAN { get; set; }
         public string IdREC { get; set; }
-        public string Group { get; set; }
+        public string UsersGroup { get; set; }
     }
 }

@@ -114,14 +114,24 @@ namespace OWL_Site.Controllers
                 {
                     UID = meeting.MeetingID.ToString(),
                     Location = "Moscow",
-                    Status = EventStatus.CONFIRMED,
+                    Status = EventStatus.UNDEFINED,
                     Organizer = new Organizer() {PublicName = init.DispName, Email = init.Email },
                     StartTime = meeting.Start,
                     EndTime = meeting.End,
-                    Description = "Voici une conf",
-                    Title = meeting.Title,
-                    Attendees = { }
+                    Description = "Поболтаем?",
+                    Title = meeting.Title
                 };
+                foreach (var at in emaillist.Where(em => em.Email != mail.Email))
+                {
+                    new_event.Attendees.Add(new Attendee()
+                    {
+                        PublicName = at.DispName,
+                        Email = at.Email,
+                        Role = Role.REQPARTICIPANT
+                    });
+                }
+                
+
             try
                 {
                     Sendmail(mail.Email, "NEW: " + meeting.Title, body, meeting, new_event);
@@ -341,7 +351,7 @@ namespace OWL_Site.Controllers
             SmtpClient smtpClient = new SmtpClient(MvcApplication.set.AuthDnAddress, 25)
             {
                 UseDefaultCredentials = false,
-                EnableSsl = true,
+                EnableSsl = false,
                 Credentials = new NetworkCredential(MvcApplication.set.SmtpLogin, MvcApplication.set.SmtpPassword),
 
                 DeliveryMethod = SmtpDeliveryMethod.Network,
@@ -350,7 +360,7 @@ namespace OWL_Site.Controllers
             MailMessage mailMessage = new MailMessage()
             {
                 Priority = MailPriority.High,
-                From = new MailAddress("putin@kremlin.ru", "Планировщик системы видео-конференц-связи 'Сова'")
+                From = new MailAddress("bparkin@gmail.com", "Планировщик системы видео-конференц-связи 'Сова'")
             };
             AlternateView alternateHtml = AlternateView.CreateAlternateViewFromString(body,
                                                                             new ContentType("text/html"));
