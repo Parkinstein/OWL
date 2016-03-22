@@ -28,7 +28,7 @@ namespace OWL_Site.Controllers
             using (var db = new Database("sqlserver", ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
                 var personalPhonebook = new Editor(db, "PrivatePhBs", "Id")
-                    .Model<Phonebook>()
+                    .Model<PrivatePhB>()
                     .Field(new Field("PrivatePhBs.UsersGroup").Validator(Validation.MaxLen(50)).Xss(false))
                     .Where("OwSAN", User.Identity.Name)
                     .LeftJoin("AspNetUsers", "AspNetUsers.Id", "=", "PrivatePhBs.IdREC")
