@@ -52,141 +52,9 @@
     var cobaMgntAddress = '@MvcApplication.set.CobaMngAddress';
     var var_id;
 
-    function stats_table() {
-        oStatisticsTable = $('#table_stats').DataTable({
-            "ordering": true,
-            "searching": true,
-            "scrollY": "75vh",
-            "scrollCollapse": "true",
-            "paging": true,
-            "lengthChange": true,
-            "pageLength": "15",
-            "lengthMenu": [15, 25, 50, 100, 1000],
-            "autoWidth": false,
-            "processing": true,
-            "order": [[ 2, 'desc' ]],
+    
 
-            "ajax": {
-                "type": "POST",
-                "url": "/Statistics/GetHistoryVMR",
-                "contentType": 'application/json; charset=utf-8',
-                "data": function(data) { return data = JSON.stringify(data); }
-            },
-
-            "columns": [
-                { "data": "id", "visible": false },
-                { "data": "name" },
-                { "data": "start_time2" },
-                { "data": "end_time2" },
-                { "data": "duration", "searchable": false, "render": function(data, type, full, meta) {
-                        var secNum = data;
-                        var hours = Math.floor(secNum / 3600);
-                        var minutes = Math.floor((secNum - (hours * 3600)) / 60);
-                        var seconds = secNum - (hours * 3600) - (minutes * 60);
-                        if (hours < 10) { hours = "0" + hours; }
-                        if (minutes < 10) { minutes = "0" + minutes; }
-                        if (seconds < 10) { seconds = "0" + seconds; }
-                        var time = hours + ':' + minutes + ':' + seconds;
-                        return time;
-                    }
-                },
-
-
-
-                { "data": "participant_count", "render": function (data, type, full, meta) {
-                        return full.participant_count + " участников <a href=\"#\" onclick=\"display_parts('" + full.id + "')\">(подробнее...)</a>";
-                    }
-                },
-            ],
-
-            "language": {
-                "url": "../../Content/dt_ru.json"
-            },
-        });
-    };
-
-    function popup_parts_table() {
-        oParticipantsTable = $('#table_parts').DataTable({
-            "ordering": true,
-            "searching": true,
-            "autoWidth": false,
-            "processing": true,
-            "order": [[4, 'asc']],
-            "scrollY": "55vh",
-            "scrollCollapse": "true",
-            "paging": true,
-            "lengthChange": true,
-            "pageLength": "10",
-            "lengthMenu": [5, 10, 20, 50],
-
-            "ajax": {
-                "type": "POST",
-                "url": "/Statistics/GetHistoryParticipants?id=" + var_id,
-                "contentType": 'application/json; charset=utf-8',
-                "data": function (data) { return data = JSON.stringify(data); }
-            },
-
-            "columns": [
-                { "data": "conference_name" },
-                { "data": "role", "searchable": false },
-                { "data": "display_name" },
-                { "data": "start_time2" },
-                { "data": "end_time2" },
-                { "data": "duration" },
-                { "data": "protocol" },
-                { "data": "remote_address",
-                  "render": function(data, type, full, meta) {
-                      return full.remote_address + ":" + full.remote_port;
-                  }
-                },
-                { "data": "disconnect_reason" },
-                { "searchable": false },
-                { "searchable": false },
-                { "searchable": false },
-            ],
-            "columnDefs": [
-
-                { "targets": -3,
-                  "data": "vid_tx_codec",
-                  "render": function (data, type, full, meta) {
-                      full.vid_tx_codec != null ? full.vid_tx_codec = full.vid_tx_codec : full.vid_tx_codec = 'нет';
-                      full.aud_tx_codec != null ? full.aud_tx_codec = full.aud_tx_codec : full.aud_tx_codec = 'нет';
-                      full.pre_tx_codec != null ? full.pre_tx_codec = full.pre_tx_codec : full.pre_tx_codec = 'нет';
-                      return '<div class="fa fa-video-camera fa-fw brand-color"></div>: ' + full.vid_tx_codec + '<br><div class="fa fa-volume-up fa-fw brand-color"></div>: ' + full.aud_tx_codec + '<br><div class="fa fa-bar-chart fa-fw brand-color"></div>: ' + full.pre_tx_codec;
-                  }
-                },
-                { "targets": -2,
-                  "data": "vid_tx_bitrate",
-                  "render": function (data, type, full, meta) {
-                      full.vid_tx_bitrate != null ? full.vid_tx_bitrate = full.vid_tx_bitrate : full.vid_tx_bitrate = 'нет';
-                      full.vid_rx_bitrate != null ? full.vid_rx_bitrate = full.vid_rx_bitrate : full.vid_rx_bitrate = 'нет';
-                      full.aud_tx_bitrate != null ? full.aud_tx_bitrate = full.aud_tx_bitrate : full.aud_tx_bitrate = 'нет';
-                      full.aud_rx_bitrate != null ? full.aud_rx_bitrate = full.aud_rx_bitrate : full.aud_rx_bitrate = 'нет';
-                      full.pre_tx_bitrate != null ? full.pre_tx_bitrate = full.pre_tx_bitrate : full.pre_tx_bitrate = 'нет';
-                      full.pre_rx_bitrate != null ? full.pre_rx_bitrate = full.pre_rx_bitrate : full.pre_rx_bitrate = 'нет';
-                      return '<div class="fa fa-video-camera fa-fw brand-color"></div>: ' + full.vid_tx_bitrate + '/' + full.vid_rx_bitrate + '<br><div class="fa fa-volume-up fa-fw brand-color"></div>: ' + full.aud_tx_bitrate + '/' + full.aud_rx_bitrate + '<br><div class="fa fa-bar-chart fa-fw brand-color"></div>: ' + full.pre_tx_bitrate + '/' + full.pre_rx_bitrate;
-                  }
-                },
-                { "targets": -1,
-                  "data": "vid_tx_resolution",
-                  "render": function (data, type, full, meta) {
-                      full.vid_tx_resolution != null ? full.vid_tx_resolution = full.vid_tx_resolution : full.vid_tx_resolution = 'нет';
-                      full.vid_rx_resolution != null ? full.vid_rx_resolution = full.vid_rx_resolution : full.vid_rx_resolution = 'нет';
-                      full.pre_tx_resolution != null ? full.pre_tx_resolution = full.pre_tx_resolution : full.pre_tx_resolution = 'нет';
-                      full.pre_rx_resolution != null ? full.pre_rx_resolution = full.pre_rx_resolution : full.pre_rx_resolution = 'нет';
-                      return '<div class="fa fa-video-camera fa-fw brand-color"></div>: ' + full.vid_tx_resolution + '/' + full.vid_rx_resolution + '<br><div class="fa fa-bar-chart fa-fw brand-color"></div>: ' + full.pre_tx_resolution + '/' + full.pre_rx_resolution;
-                  },
-                },
-            ],
-
-            "language": {
-                "url": "../../Content/dt_ru.json"
-            },
-
-        });
-    };
-
-    setInterval("refresh_stats()", 300000);
+    setInterval("refresh_stats()", 30000);
 
     function refresh_stats() {
         if (oStatisticsTable != null) {
@@ -210,4 +78,143 @@
     $(document).ready(function() {
         refresh_stats();
     });
+
+    function stats_table() {
+        //$.fn.dataTable.moment('HH:mm MMM D, YY');
+        oStatisticsTable = $('#table_stats').DataTable({
+            "ordering": true,
+            "searching": true,
+            "scrollY": "75vh",
+            "scrollCollapse": "true",
+            "paging": true,
+            "lengthChange": true,
+            "pageLength": 15,
+            "lengthMenu": [15, 25, 50, 100, 1000],
+            "autoWidth": false,
+            "processing": true,
+            "order": [[2, 'desc']],
+
+            "ajax": {
+                "type": "POST",
+                "url": "/Statistics/GetHistoryVMR",
+                "contentType": 'application/json; charset=utf-8',
+                "data": function (data) { return data = JSON.stringify(data); }
+            },
+
+            "columns": [
+                { "data": "id", "visible": false },
+                { "data": "name" },
+                { "data": "start_time2", "type": "date" },
+                { "data": "end_time2", "type": "date" },
+                { "data": "duration", "searchable": false, "render": function (data, type, full, meta) {
+                        var secNum = data;
+                        var hours = Math.floor(secNum / 3600);
+                        var minutes = Math.floor((secNum - (hours * 3600)) / 60);
+                        var seconds = secNum - (hours * 3600) - (minutes * 60);
+                        if (hours < 10) { hours = "0" + hours; }
+                        if (minutes < 10) { minutes = "0" + minutes; }
+                        if (seconds < 10) { seconds = "0" + seconds; }
+                        var time = hours + ':' + minutes + ':' + seconds;
+                        return time;
+                    }
+                },
+                { "data": "participant_count", "render": function (data, type, full, meta) {
+                        return full.participant_count + " участников <a href=\"#\" onclick=\"display_parts('" + full.id + "')\">(подробнее...)</a>";
+                    }
+                },
+            ],
+
+            "columnDefs": [
+                 { "type": "datetime-moment", targets: 2 }
+            ],
+
+            "language": {
+                "url": "../../Content/dt_ru.json"
+            },
+        });
+    };
+
+    function popup_parts_table() {
+        oParticipantsTable = $('#table_parts').DataTable({
+            "ordering": true,
+            "searching": true,
+            "autoWidth": false,
+            "processing": true,
+            "order": [[4, 'asc']],
+            "scrollY": "55vh",
+            "scrollCollapse": "true",
+            "paging": true,
+            "lengthChange": true,
+            "pageLength": 10,
+            "lengthMenu": [5, 10, 20, 50],
+
+            "ajax": {
+                "type": "POST",
+                "url": "/Statistics/GetHistoryParticipants?id=" + var_id,
+                "contentType": 'application/json; charset=utf-8',
+                "data": function (data) { return data = JSON.stringify(data); }
+            },
+
+            "columns": [
+                { "data": "conference_name" },
+                { "data": "role", "searchable": false },
+                { "data": "display_name" },
+                { "data": "start_time2" },
+                { "data": "end_time2" },
+                { "data": "duration" },
+                { "data": "protocol" },
+                { "data": "remote_address", "render": function (data, type, full, meta) {
+                        return full.remote_address + ":" + full.remote_port;
+                    }
+                },
+                { "data": "disconnect_reason" },
+                { "searchable": false },
+                { "searchable": false },
+                { "searchable": false },
+            ],
+            "columnDefs": [
+
+                {
+                    "targets": -3,
+                    "data": "vid_tx_codec",
+                    "render": function (data, type, full, meta) {
+                        full.vid_tx_codec != null ? full.vid_tx_codec = full.vid_tx_codec : full.vid_tx_codec = 'нет';
+                        full.aud_tx_codec != null ? full.aud_tx_codec = full.aud_tx_codec : full.aud_tx_codec = 'нет';
+                        full.pre_tx_codec != null ? full.pre_tx_codec = full.pre_tx_codec : full.pre_tx_codec = 'нет';
+                        return '<div class="fa fa-video-camera fa-fw brand-color"></div>: ' + full.vid_tx_codec + '<br><div class="fa fa-volume-up fa-fw brand-color"></div>: ' + full.aud_tx_codec + '<br><div class="fa fa-bar-chart fa-fw brand-color"></div>: ' + full.pre_tx_codec;
+                    }
+                },
+                {
+                    "targets": -2,
+                    "data": "vid_tx_bitrate",
+                    "render": function (data, type, full, meta) {
+                        full.vid_tx_bitrate != null ? full.vid_tx_bitrate = full.vid_tx_bitrate : full.vid_tx_bitrate = 'нет';
+                        full.vid_rx_bitrate != null ? full.vid_rx_bitrate = full.vid_rx_bitrate : full.vid_rx_bitrate = 'нет';
+                        full.aud_tx_bitrate != null ? full.aud_tx_bitrate = full.aud_tx_bitrate : full.aud_tx_bitrate = 'нет';
+                        full.aud_rx_bitrate != null ? full.aud_rx_bitrate = full.aud_rx_bitrate : full.aud_rx_bitrate = 'нет';
+                        full.pre_tx_bitrate != null ? full.pre_tx_bitrate = full.pre_tx_bitrate : full.pre_tx_bitrate = 'нет';
+                        full.pre_rx_bitrate != null ? full.pre_rx_bitrate = full.pre_rx_bitrate : full.pre_rx_bitrate = 'нет';
+                        return '<div class="fa fa-video-camera fa-fw brand-color"></div>: ' + full.vid_tx_bitrate + '/' + full.vid_rx_bitrate + '<br><div class="fa fa-volume-up fa-fw brand-color"></div>: ' + full.aud_tx_bitrate + '/' + full.aud_rx_bitrate + '<br><div class="fa fa-bar-chart fa-fw brand-color"></div>: ' + full.pre_tx_bitrate + '/' + full.pre_rx_bitrate;
+                    }
+                },
+                {
+                    "targets": -1,
+                    "data": "vid_tx_resolution",
+                    "render": function (data, type, full, meta) {
+                        full.vid_tx_resolution != null ? full.vid_tx_resolution = full.vid_tx_resolution : full.vid_tx_resolution = 'нет';
+                        full.vid_rx_resolution != null ? full.vid_rx_resolution = full.vid_rx_resolution : full.vid_rx_resolution = 'нет';
+                        full.pre_tx_resolution != null ? full.pre_tx_resolution = full.pre_tx_resolution : full.pre_tx_resolution = 'нет';
+                        full.pre_rx_resolution != null ? full.pre_rx_resolution = full.pre_rx_resolution : full.pre_rx_resolution = 'нет';
+                        return '<div class="fa fa-video-camera fa-fw brand-color"></div>: ' + full.vid_tx_resolution + '/' + full.vid_rx_resolution + '<br><div class="fa fa-bar-chart fa-fw brand-color"></div>: ' + full.pre_tx_resolution + '/' + full.pre_rx_resolution;
+                    },
+                },
+            ],
+
+            "language": {
+                "url": "../../Content/dt_ru.json"
+            },
+
+        });
+    };
+
 </script>

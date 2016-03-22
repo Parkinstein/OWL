@@ -78,7 +78,7 @@ namespace PepuxFront.Controllers
             {
                 HistoryParticipantsData = new List<ParticipantStats>();
                 Uri participantsapi =
-                    new Uri("https://" + MvcApplication.set.CobaMngAddress + "/api/admin/history/v1/participant/?conference=" + id);
+                    new Uri("https://" + MvcApplication.set.CobaMngAddress + "/api/admin/history/v1/participant/?limit=1000&conference=" + id);
                 WebClient client = new WebClient();
                 client.Credentials = new NetworkCredential(MvcApplication.set.CobaMngLogin , MvcApplication.set.CobaMngPass);
                 client.Headers.Add("auth", MvcApplication.set.CobaMngLogin + "," + MvcApplication.set.CobaMngPass);

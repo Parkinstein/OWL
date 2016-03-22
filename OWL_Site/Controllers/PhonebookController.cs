@@ -28,7 +28,7 @@ namespace OWL_Site.Controllers
             using (var db = new Database("sqlserver", ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
                 var personalPhonebook = new Editor(db, "PrivatePhBs", "Id")
-                    .Model<PrivatePhB>()
+                    .Model<Phonebook>()
                     .Field(new Field("PrivatePhBs.UsersGroup").Validator(Validation.MaxLen(50)).Xss(false))
                     .Where("OwSAN", User.Identity.Name)
                     .LeftJoin("AspNetUsers", "AspNetUsers.Id", "=", "PrivatePhBs.IdREC")
@@ -129,30 +129,26 @@ namespace OWL_Site.Controllers
         }
         
         // Delete Phonebook records method
-        public void Phonebook_Delete(object[] pbrArray)
+        public void Phonebook_Delete(int[] pbrArray)
         {
             if (pbrArray != null)
             {
-                foreach (string pbr in pbrArray)
+                foreach (int pbr in pbrArray)
                 {
-                    DeleteFromPrivat(pbr);
+                    Debug.WriteLine(pbr);
+                    DeleteRecFromDb(pbr);
                 }
             }
             
         }
 
         // Delete Phonebook records method
-        public void DeleteFromPrivat(string ids)
-        {
-            DeleteRecFromDb(ids, User.Identity.Name);
-        }
-
-        public bool DeleteRecFromDb(string id, string ownm)
+        public bool DeleteRecFromDb(int id)
         {
             aspnetdbEntities db = new aspnetdbEntities();
             var deleteDetails =
             from prop in db.PrivatePhBs
-            where prop.IdREC == id && prop.OwSAN == ownm
+            where prop.Id == id
             select prop;
             foreach (var detal in deleteDetails)
             {
