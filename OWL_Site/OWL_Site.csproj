@@ -811,7 +811,6 @@
     <Content Include="Content\kendo\2016.1.112\Silver\sprite_2x.png" />
     <Content Include="Content\kendo\2016.1.112\Silver\sprite_kpi.png" />
     <Content Include="Content\kendo\2016.1.112\Silver\sprite_kpi_2x.png" />
-    <Content Include="Content\kendo\2016.1.112\textures\brushed-metal.png" />
     <Content Include="Content\kendo\2016.1.112\textures\dots1.png" />
     <Content Include="Content\kendo\2016.1.112\textures\dots10.png" />
     <Content Include="Content\kendo\2016.1.112\textures\dots11.png" />
