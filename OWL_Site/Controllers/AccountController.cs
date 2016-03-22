@@ -137,6 +137,7 @@ namespace OWL_Site.Controllers
                 currentUser = db.Users.FirstOrDefault(m => m.Id == idd);
                 Session["CurrentUser"] = currentUser;
             }
+            Response.AppendHeader("Cache-Control", "no-cache");
             return currentUser.DispName;
         }
         [ChildActionOnly]
