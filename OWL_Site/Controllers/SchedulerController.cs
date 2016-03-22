@@ -364,7 +364,7 @@ namespace OWL_Site.Controllers
             };
             AlternateView alternateHtml = AlternateView.CreateAlternateViewFromString(body,
                                                                             new ContentType("text/html"));
-            mailMessage.AlternateViews.Add(alternateHtml);
+            //mailMessage.AlternateViews.Add(alternateHtml);
             mailMessage.To.Add(new MailAddress(to));
             mailMessage.Subject = subj;
             mailMessage.Body = body;
