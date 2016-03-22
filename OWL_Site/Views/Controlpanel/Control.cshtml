@@ -1,64 +1,93 @@
-﻿<script src="@Url.Content("~/Scripts/DataTables/datatables.select.min.js")"></script>
-<body onload="user.join()">
+﻿<body onload="user.join()">
+<div id="div_stats" class="control_grid">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading clearfix">
+                    <h4 class="pull-left">Видеоконференция</h4>
+                    <div class="dropdown conference_control pull-right">
+                        <button class="btn btn-warning dropdown-toggle pull-right" type="button" data-toggle="dropdown">
+                            Управление конференцией<span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li id="conflock" onclick="user.lock()">Заблокировать конференцию</li>
+                            <li id="guestsmuted" onclick="user.muteallguests()">Отключить микрофоны</li>
+                            <li id="disconnectall" onclick="user.disconnect_all()">Закончить конференцию</li>
+                            <li id="record" onclick="user.record()">Включить запись</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel-body conference_panel">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#active_room">Активная комната</a></li>
+                        <li><a data-toggle="tab" href="#waiting_room">Комната ожидания</a></li>
+                        <li><a data-toggle="tab" href="#connect_user">Подключение участника</a></li>
+                    </ul>                                                                 
+                    <div class="tab-content conference_pane">
+                        <div id="active_room" class="tab-pane fade in active" style="height: 100%;">
+                            <div id="roster" class="well">
+                                <ul id="roster_list" class="list-group" style="height: 100%;">
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="waiting_room" class="tab-pane fade" style="height: 100%;">
+                            <div id="waiting" class="well">
+                                <ul id="waitingroom" class="list-group">
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="connect_user" class="tab-pane fade">
+                            <div class="well">
+                                <div id="dialdiv" class="dialdiv">
+                                    <fieldset>
+                                        <legend class="dialdiv_legend">Подключить участника</legend>
+                                        <div class="dialdiv_container">
+                                            <div class="dialdiv_protocol">
+                                                <label class="dialdiv_header">Протокол </label>
+                                                <select id="protocol" value="sip" class="form-control dial_protocol">
+                                                    <option value="sip">SIP</option>
+                                                    <option value="h323">H.323</option>
+                                                    <option value="mssip">Lync</option>
+                                                    <option value="rtmp">RTMP</option>
+                                                </select>
+                                                <br/>
+                                                <label class="dialdiv_header">Роль </label>
+                                                <select id="role" value="guest" class="form-control dial_protocol">
+                                                    <option value="guest">гость</option>
+                                                    <option value="host">хост</option>
+                                                </select>
+                                                <br/>
+                                                <label class="dialdiv_header">Адрес вызываемого абонента</label>
+                                                <input id="remotealias" value="" class="form-control dial_alias">
+                                            </div>
+                                            <input id="dial" type="button" onclick="user.dial()" value="Вызвать" class="dialdiv_button"/>
+                                            <input id="dial" type="button" onclick="display_pb()" value="Добавить из адресной книги" class="dialdiv_button"/>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Управление</div>
+                <div class="panel-body">Panel Content</div>
+            </div>
+        </div>
+    </div>
     <div id="confcontrol" class="control_panel">
         <table class="controltable">
             <tr>
                 <td class="controlcol">
-                    <div id="roster" class="roster">
-                        <div id="roster_list" class="roster_list">
-                            <ul class="roster_entry_ul">
-                                <div class="roster_entry_ul_header">
-                                    <b>Участники виртуальной переговорной комнаты</b>
-                                </div>
-                                <div class="roster_entry_ul_header_coference_control">
-                                    <i id="host" onclick="user.lock()"></i>
-                                    <i id="conflock" onclick="user.lock()"></i>
-                                    <i id="guestsmuted" onclick="user.muteallguests()"></i>
-                                    <i id="disconnectall" onclick="user.disconnect_all()"></i>
-                                    <i id="record" onclick="user.record()"></i>
-                                </div>
-                            </ul>
-                        </div>
-                    </div>
+                    
                     <div style="min-height: 10px; width: 100%"></div>
-                    <div id="waitingroom" class="waitingroom">
-                        <div id="waitingroom_list" class="waitingroom_list">
-                            <ul class="roster_entry_ul">
-                                <div class="roster_entry_ul_header">
-                                    <b>Комната ожидания</b>
-                                </div>
-                            </ul>
-                        </div>
-                    </div>
-                        <div style="min-height: 10px; width: 100%"></div>
-                        <div id="dialdiv" class="dialdiv">
-                            <fieldset>
-                                <legend class="dialdiv_legend">Подключить участника</legend>
-                                <div class="dialdiv_container">
-                                    <div class="dialdiv_protocol">
-                                        <label class="dialdiv_header">Протокол </label>
-                                        <select id="protocol" value="sip" class="form-control dial_protocol">
-                                            <option value="sip">SIP</option>
-                                            <option value="h323">H.323</option>
-                                            <option value="mssip">Lync</option>
-                                            <option value="rtmp">RTMP</option>
-                                        </select>
-                                        <br />
-                                        <label class="dialdiv_header">Роль </label>
-                                        <select id="role" value="guest" class="form-control dial_protocol">
-                                            <option value="guest">гость</option>
-                                            <option value="host">хост</option>
-                                        </select>
-                                        <br />
-                                        <label class="dialdiv_header">Адрес вызываемого абонента</label>
-                                        <input id="remotealias" value="" class="form-control dial_alias">
-                                    </div>
-                                    <input id="dial" type="button" onclick="user.dial()" value="Вызвать" class="dialdiv_button" />
-                                    <input id="dial" type="button" onclick="display_pb()" value="Добавить из адресной книги" class="dialdiv_button" />
-                                </div>
-                            </fieldset>
-                        </div>
-</td>
+                    
+                    <div style="min-height: 10px; width: 100%"></div>
+                    
+                </td>
                 <td class="controlcol">
                     <div id="layoutdiv" class="layoutdiv">
                         <fieldset>
@@ -93,7 +122,7 @@
                                 <label class="layoutdiv_header">Для участников:</label>
                             </div>
                             <div class="layout_layout_4">
-                                <input type="checkbox" id="vadbackfill" checked />
+                                <input type="checkbox" id="vadbackfill" checked/>
                                 <select id="overlay_text" value="off" class="form-control layoutdiv_select">
                                     <option value="off">откл</option>
                                     <option value="auto">авто</option>
@@ -103,14 +132,14 @@
                                     <option value="hosts">только для гостей</option>
                                 </select>
                             </div>
-                            <br />
+                            <br/>
                             <div id="guestlayout" class="hide">
                                 <div class="layout_layout_1">
                                     <label class="layoutdiv_header">Участники </label>
                                     <label class="layoutdiv_header">Управление раскладками </label>
                                     <label class="layoutdiv_header">PlusN (откл/авто/n)</label>
                                 </div>
-                                <br />
+                                <br/>
                                 <div class="layout_layout_2">
                                     <select id="guest_actors" value="everyone" class="form-control layoutdiv_select">
                                         <option value="everyone">все</option>
@@ -122,7 +151,7 @@
                                         <option value="1:7">1 основной + 7 дополнительных</option>
                                         <option value="1:21">1 основной + 21 дополнительных</option>
                                     </select>
-                                    <input id="plusn" list="plusnvalues" value="auto" class="form-control layoutdiv_select" />
+                                    <input id="plusn" list="plusnvalues" value="auto" class="form-control layoutdiv_select"/>
                                     <datalist id="plusnvalues"><option id="auto_option" value="auto"><option value="off"></datalist>
                                 </div>
                                 <div class="layout_layout_3">
@@ -130,9 +159,9 @@
                                     <label class="layoutdiv_header">Экранные надписи </label>
                                     <label class="layoutdiv_header">Для участников:</label>
                                 </div>
-                                <br />
+                                <br/>
                                 <div class="layout_layout_4">
-                                    <input type="checkbox" id="guest_vadbackfill" checked />
+                                    <input type="checkbox" id="guest_vadbackfill" checked/>
                                     <select id="guest_overlay_text" value="off" class="form-control layoutdiv_select">
                                         <option value="off">откл</option>
                                         <option value="auto">авто</option>
@@ -142,8 +171,8 @@
                                     </select>
                                 </div>
                             </div>
-                            <input id="overridelayout" type="button" onclick="user.overridelayout()" value="Изменить раскладку" class="layoutdiv_button" />
-                            <input id="resetlayout" type="button" onclick="user.resetlayout()" value="Вернуть исходное состояние" class="layoutdiv_button" /><br />
+                            <input id="overridelayout" type="button" onclick="user.overridelayout()" value="Изменить раскладку" class="layoutdiv_button"/>
+                            <input id="resetlayout" type="button" onclick="user.resetlayout()" value="Вернуть исходное состояние" class="layoutdiv_button"/><br/>
                         </fieldset>
                     </div>
                     <div style="min-height: 10px; width: 100%"></div>
@@ -151,12 +180,12 @@
                         <fieldset>
                             <legend class="liveviewdiv_legend">Сейчас транслируется в комнате</legend>
                             <div id="liveviewplayer" class="liveviewdiv_player"></div>
-                            <img id="presentation" class="liveviewdiv_player"><br />
-                            <input id="liveview" type="button" onclick="user.liveview()" value="Просмотр видео" class="liveviewdiv_livebutton" />
-                            <br />
+                            <img id="presentation" class="liveviewdiv_player"><br/>
+                            <input id="liveview" type="button" onclick="user.liveview()" value="Просмотр видео" class="liveviewdiv_livebutton"/>
+                            <br/>
                             <div class="liveviewdiv_rtmp">
-                                <input id="rtmpaddress" class="form-control liveviewdiv_rtmptext" />
-                                <input id="getrtmpaddress" type="button" onclick="user.getrtmpaddress()" value="Получить RTMP ссылку" class="liveviewdiv_rtmpbutton" />
+                                <input id="rtmpaddress" class="form-control liveviewdiv_rtmptext"/>
+                                <input id="getrtmpaddress" type="button" onclick="user.getrtmpaddress()" value="Получить RTMP ссылку" class="liveviewdiv_rtmpbutton"/>
                             </div>
                         </fieldset>
                     </div>
@@ -166,8 +195,8 @@
                             <legend class="chatdiv_legend">Чат вирутальной переговорной комнаты</legend>
                             <form onsubmit="return user.send_message()">
                                 <div id="chatbox" class="chatbox"></div><br/>
-                                <input id="chatinput" style="width: 70%;" class="form-control chatdiv_text" />
-                                <input id="chatsend" type="button" onclick="user.send_message()" value="Отправить" class="chatdiv_button" />
+                                <input id="chatinput" style="width: 70%;" class="form-control chatdiv_text"/>
+                                <input id="chatsend" type="button" onclick="user.send_message()" value="Отправить" class="chatdiv_button"/>
                             </form>
                         </fieldset>
                     </div>
@@ -179,25 +208,26 @@
         <div id="popup_content" class="b-popup b-popup-content">
             <table id="table_du">
                 <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Имя</th>
-                        <th>Фамилия</th>
-                        <th>Должность</th>
-                        <th>Телефон (внут.)</th>
-                        <th>Email</th>
-                        <th>Группа</th>
-                        <th>SIP-адрес</th>
-                        <th>H.323-адрес</th>
-                    </tr>
+                <tr>
+                    <th>ID</th>
+                    <th>Имя</th>
+                    <th>Фамилия</th>
+                    <th>Должность</th>
+                    <th>Телефон (внут.)</th>
+                    <th>Email</th>
+                    <th>Группа</th>
+                    <th>SIP-адрес</th>
+                    <th>H.323-адрес</th>
+                </tr>
                 </thead>
                 <tbody></tbody>
             </table>
             <div class="phonebook_buttons">
-                <input id="save" type="button" onclick="add_pb_user()" value="Подключить" class="phonebook_button_add" />
+                <input id="save" type="button" onclick="add_pb_user()" value="Подключить" class="phonebook_button_add"/>
             </div>
         </div>
     </div>
+</div>
 </body>
 <script type="text/javascript">
     var oPhonebookTable;
@@ -290,41 +320,22 @@
             },
 
             "language": {
-                "processing": "Подождите...",
-                "search": "Поиск:",
-                "lengthMenu": "Показать _MENU_ записей",
-                "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
-                "infoEmpty": "Записи с 0 до 0 из 0 записей",
-                "infoFiltered": "(отфильтровано из _MAX_ записей)",
-                "infoPostFix": "",
-                "loadingRecords": "Загрузка записей...",
-                "zeroRecords": "Записи отсутствуют.",
-                "emptyTable": "В таблице отсутствуют данные",
-                "paginate": {
-                    "first": "Первая",
-                    "previous": "Предыдущая",
-                    "next": "Следующая",
-                    "last": "Последняя"
-                },
-                "aria": {
-                    "sortAscending": ": активировать для сортировки столбца по возрастанию",
-                    "sortDescending": ": активировать для сортировки столбца по убыванию"
-                }
+                "url": "../../Content/dt_ru.json"
             },
 
         });
     };
 
 
-    $('#roster_list').slimScroll({
+    $('#roster').slimScroll({
         height: '100%',
         width: '100%',
-        size: '7px',
+        size: '12px',
         position: 'right',
-        color: '#332383',
+        color: '#337AB7',
         distance: '1px',
     });
-    $('#waitingroom_list').slimScroll({
+    $('#waitingroom').slimScroll({
         height: '100%',
         width: '100%',
         size: '7px',
@@ -346,14 +357,14 @@
     var class_disconnect = "participant_action fa fa-eject fa-fw red";
     var class_mute_on = "participant_action fa fa-microphone-slash fa-fw red";
     var class_mute_off = "participant_action fa fa-microphone fa-fw green";
-    var class_hold_on = "participant_action fa fa-play fa-fw";
-    var class_hold_off = "participant_action fa fa-pause fa-fw";
+    var class_hold_on = "participant_action fa fa-play fa-fw black";
+    var class_hold_off = "participant_action fa fa-pause fa-fw black";
     var class_lock_on = "participant_action fa fa-lock fa-fw red";
     var class_spotlight_on = "participant_action fa fa-star fa-fw yellow";
     var class_spotlight_off = "participant_action fa fa-star-o fa-fw yellow";
     var class_see_presentation_allowed = "participant_action fa fa-bar-chart-o fa-fw green";
     var class_see_presentation_denied = "participant_action fa fa-bar-chart-o fa-fw red";
-    var class_overlay = "participant_action fa fa-font fa-fw";
+    var class_overlay = "participant_action fa fa-font fa-fw black";
     var class_conference_lock_on = "conference_action fa fa-lock fa-fw red";
     var class_conference_lock_off = "conference_action fa fa-unlock fa-fw green";
     var class_conference_guests_mute_on = "conference_action fa fa-microphone-slash fa-fw red";
@@ -362,8 +373,9 @@
     var class_overlay_text_commit = "participant_action fa fa-check fa-fw white";
     var class_conference_record_off = "participant_action fa fa-circle fa-fw red";
     var class_conference_record_on = "participant_action fa fa-circle-blink fa-fw red";
-    var class_role_chair = "participant_action fa fa-user-plus fa-fw";
-    var class_role_guest = "participant_action fa fa-user fa-fw";
+    var class_role_chair = "participant_action fa fa-user-plus fa-fw blue";
+    var class_role_guest = "participant_action fa fa-user fa-fw grey";
+    var class_transfer = "participant_action fa fa-share fa-fw black";
 
 
     function DumpObject(obj) {
@@ -432,104 +444,48 @@
         this.uuid = participant_data["uuid"];
         this.speaking = false;
         this.element_root = document.createElement("li");
-        if (participant_data["role"] == "chair") {
-            this.element_root.className = "roster_entry_host_li";
+        if (participant_data["role"] === "chair") {
+            this.element_root.className = "list-group-item list-group-item-info";
         } else {
-            this.element_root.className = "roster_entry_guest_li";
+            this.element_root.className = "list-group-item list-group-item-warning";
         }
         this.uri = participant_data["uri"];
 
-        if (participant_data["display_name"] != "") {
-            //this.uri = this.uri + " - " + participant_data["display_name"];
+        if (participant_data["display_name"] !== "") {
             this.uri = participant_data["display_name"];
         }
 
-        if (this.uuid == user.participant_uuid) {
-            this.uri = this.uri + " <span class='red'>[оператор]</span>";
-        }
-
-        this.uri_element = document.createElement("div");
-        this.uri_element.className = "participant_uri";
-        this.uri_element.innerHTML = this.uri;
-
         console.log("has_media " + participant_data["has_media"]);
-        this.enable_media_buttons = participant_data["has_media"] && (user.role == 'HOST');
+        this.enable_media_buttons = participant_data["has_media"] && (user.role === 'HOST');
 
-        // Add layout check
+        // Add user check
         this.layout = document.createElement("input");
+        this.layout.className = "participants_check";
         this.layout.setAttribute('type', 'checkbox');
         this.element_root.appendChild(this.layout);
 
         // Add avatar
         this.avatar = document.createElement("img");
         this.avatar.src = "https://" + user.node + "/api/client/v2/conferences/" + user.conference + "/participants/" + this.uuid + "/avatar.jpg?width=40&height=40&token=" + user.token;
+        this.avatar.className = "img-thumbnail avatar";
         this.avatar.onerror = this.avatar_error.bind(this);
         this.element_root.appendChild(this.avatar);
 
-        // Add protocol
-        if (participant_data["protocol"] != undefined) {
-            this.protocol_element = document.createElement("div");
-            this.protocol_element.className = "participant_uri";
-            this.protocol_element.innerHTML = "<b>" + participant_data["protocol"] + "</b>";
-            this.element_root.appendChild(this.protocol_element);
-        }
+        // Add name and overlay rename text
+        this.name_element = document.createElement("div");
+        this.name_element.className = "form-group uri_element";
 
-        // Add role host/guest
-        this.chair_role_element = document.createElement("div");
-        if (participant_data["role"] === "chair") {
-            this.chair_role_element.className = class_role_chair;
-        } else {
-            this.chair_role_element.className = class_role_guest;
-        }
-        this.chair_role_element.addEventListener('click', this.chair_role.bind(this), false);
-        this.element_root.appendChild(this.chair_role_element);
+        var nameInput = document.createElement("input");
+        nameInput.className = "form-control input-sm";
+        nameInput.id = "currenttext_" + participant_data["uuid"];
+        nameInput.type = "text";
+        nameInput.setAttribute('size', '30');
+        nameInput.value = this.uri;
 
-        // Add spotlight button/status
-        this.spotlight_element = document.createElement("div");
-        this.spotlight_state = participant_data["spotlight"] != 0;
-        if (this.spotlight_state) {
-            this.spotlight_element.className = class_spotlight_on;
-        } else {
-            this.spotlight_element.className = class_spotlight_off;
-        }
-        this.spotlight_element.addEventListener('click', this.spotlight.bind(this), false);
-        this.element_root.appendChild(this.spotlight_element);
+        this.name_element.appendChild(nameInput);
+        this.element_root.appendChild(this.name_element);
 
-        // Add mute button/status
-        this.mute_element = document.createElement("div");
-        this.mute_state = participant_data["is_muted"] == "YES";
-        if (this.mute_state) {
-            this.mute_element.className = class_mute_on;
-        } else {
-            this.mute_element.className = class_mute_off;
-        }
-        this.mute_element.addEventListener('click', this.mute.bind(this), false);
-        this.element_root.appendChild(this.mute_element);
-
-        // Add hold/resume button/status
-        this.hold_element = document.createElement("div");
-        if (participant_data["is_held"] == "YES") {
-            this.hold_element.className = class_hold_on;
-        } else {
-            this.hold_element.className = class_hold_off;
-        }
-        this.hold_element.addEventListener('click', this.hold.bind(this), false);
-        this.element_root.appendChild(this.hold_element);
-
-        // Add see presentation button/status
-        this.see_presentation_element = document.createElement("div");
-        this.see_presentation_state = participant_data["rx_presentation_policy"] == "ALLOW";
-        console.log("see_presentation_state " + this.see_presentation_state);
-        if (this.see_presentation_state) {
-            this.see_presentation_element.className = class_see_presentation_allowed;
-        } else {
-            this.see_presentation_element.className = class_see_presentation_denied;
-        }
-        this.see_presentation_element.addEventListener('click', this.see_presentation.bind(this), false);
-        this.element_root.appendChild(this.see_presentation_element);
-
-        // Add overlay text
-        this.overlay_text_element = document.createElement("div");
+        /*this.overlay_text_element = document.createElement("div");
         this.overlay_text_element.className = "particpantOverlayText";
 
         var currentOverlayText = document.createElement("input");
@@ -550,10 +506,11 @@
 
         this.overlay_text_element.appendChild(currentOverlayText);
         this.overlay_text_element.appendChild(newOverlayText);
-        this.overlay_text_element.appendChild(updateTextButton);
+        this.overlay_text_element.appendChild(updateTextButton);*/
 
-        // Add transfer button
-        if (participant_data["protocol"] != "mssip") {
+
+
+        /*if (participant_data["protocol"] != "mssip") {
 
             var transferText = document.createElement("input");
             transferText.className = "form-control newTransferText";
@@ -566,24 +523,118 @@
             this.overlay_text_element.appendChild(transferText);
             this.overlay_text_element.appendChild(transferButton);
         }
+        */
 
-
-        // Add disconnect button
-        var disconnect = document.createElement("div");
-        disconnect.className = class_disconnect;
-        disconnect.addEventListener('click', this.disconnect.bind(this), false);
-        this.element_root.appendChild(disconnect);
-
-        // Add unlock
-        this.unlock_element = document.createElement("div");
-        this.unlock_element.className = "hide";
-        this.unlock_element.addEventListener('click', this.unlock.bind(this), false);
-        this.element_root.appendChild(this.unlock_element);
-
-        this.element_root.appendChild(this.uri_element);
+        /*this.element_root.appendChild(this.uri_element);
         this.element_root.appendChild(this.overlay_text_element);
         if (this.transfer_element != undefined) {
             this.element_root.appendChild(this.transfer_element);
+        }*/
+
+        // Add control button
+        this.div_user_control = document.createElement("div");
+        this.div_user_control.className = "dropdown div_user_control";
+
+            this.button_user_control = document.createElement("button");
+            this.button_user_control.className = "btn btn-primary dropdown-toggle";
+            this.button_user_control.setAttribute('data-toggle', 'dropdown');
+            this.button_user_control.innerHTML = "Управление участником <span class='caret'></span>";
+            this.div_user_control.appendChild(this.button_user_control);
+
+            // Add drop-down list
+            this.list_user_control = document.createElement("ul");
+            this.list_user_control.className = "dropdown-menu";
+            this.div_user_control.appendChild(this.list_user_control);
+
+                // Add chair/guest toggle
+                this.chair_role_element = document.createElement("li");
+                if (participant_data["role"] === "chair") {
+                    this.chair_role_element.className = class_role_chair;
+                } else {
+                    this.chair_role_element.className = class_role_guest;
+                }
+                this.chair_role_element.addEventListener('click', this.chair_role.bind(this), false);
+                this.list_user_control.appendChild(this.chair_role_element);
+
+                // Add spotlight button/status
+                this.spotlight_element = document.createElement("li");
+                this.spotlight_state = participant_data["spotlight"] !== 0;
+                if (this.spotlight_state) {
+                    this.spotlight_element.className = class_spotlight_on;
+                } else {
+                    this.spotlight_element.className = class_spotlight_off;
+                }
+                this.spotlight_element.addEventListener('click', this.spotlight.bind(this), false);
+                this.list_user_control.appendChild(this.spotlight_element);
+
+                // Add mute button/status
+                this.mute_element = document.createElement("li");
+                this.mute_state = participant_data["is_muted"] === "YES";
+                if (this.mute_state) {
+                    this.mute_element.className = class_mute_on;
+                } else {
+                    this.mute_element.className = class_mute_off;
+                }
+                this.mute_element.addEventListener('click', this.mute.bind(this), false);
+                this.list_user_control.appendChild(this.mute_element);
+
+                // Add hold/resume button/status
+                this.hold_element = document.createElement("li");
+                if (participant_data["is_held"] === "YES") {
+                    this.hold_element.className = class_hold_on;
+                } else {
+                    this.hold_element.className = class_hold_off;
+                }
+                this.hold_element.addEventListener('click', this.hold.bind(this), false);
+                this.list_user_control.appendChild(this.hold_element);
+
+                // Add see presentation button/status
+                this.see_presentation_element = document.createElement("li");
+                this.see_presentation_state = participant_data["rx_presentation_policy"] === "ALLOW";
+                console.log("see_presentation_state " + this.see_presentation_state);
+                if (this.see_presentation_state) {
+                    this.see_presentation_element.className = class_see_presentation_allowed;
+                } else {
+                    this.see_presentation_element.className = class_see_presentation_denied;
+                }
+                this.see_presentation_element.addEventListener('click', this.see_presentation.bind(this), false);
+                this.list_user_control.appendChild(this.see_presentation_element);
+
+                // Add disconnect button
+                var disconnect = document.createElement("li");
+                disconnect.className = class_disconnect;
+                disconnect.addEventListener('click', this.disconnect.bind(this), false);
+                this.list_user_control.appendChild(disconnect);
+
+                // Add unlock
+                this.unlock_element = document.createElement("li");
+                this.unlock_element.className = "hide";
+                this.unlock_element.addEventListener('click', this.unlock.bind(this), false);
+                this.list_user_control.appendChild(this.unlock_element);
+
+                // Add transfer
+                this.transfer_element = document.createElement("li");
+                this.transfer_element.className = class_transfer;
+                /*this.transfer_element.addEventListener('click', this.transfer_element.bind(this), false);*/
+                this.list_user_control.appendChild(this.transfer_element);
+
+        // compile user control
+        this.element_root.appendChild(this.div_user_control);
+
+        // Add protocol
+        if (participant_data["protocol"] != undefined) {
+            this.protocol_element = document.createElement("div");
+            this.protocol_element.className = "label label-info pull-right protocol_label";
+            this.protocol_element.innerHTML = participant_data["protocol"];
+            this.element_root.appendChild(this.protocol_element);
+        }
+
+        // Add operator badge
+        if (this.uuid === user.participant_uuid) {
+            this.operator_badge = document.createElement("div");
+            this.operator_badge.className = "label label-danger pull-right badge_label";
+            this.operator_badge.innerHTML = "Оператор";
+            this.element_root.appendChild(this.operator_badge);
         }
 
         if (!this.enable_media_buttons) {
@@ -593,17 +644,18 @@
             this.hold_element.classList.add("disabled_action");
             this.unlock_element.classList.add("disabled_action");
             this.see_presentation_element.classList.add("disabled_action");
+            this.transfer_element.classList.add("disabled_action");
             this.layout.classList.add("invisible");
         }
 
         // Add into the correct list based on service_type
         this.service_type = participant_data["service_type"];
-        if (this.service_type == "conference" || this.service_type == "lecture" || this.service_type == "gateway") {
+        if (this.service_type === "conference" || this.service_type === "lecture" || this.service_type === "gateway") {
             console.log("Adding to rosterlist");
             document.getElementById("roster_list").appendChild(this.element_root);
         } else {
             console.log("Adding to waitingroom");
-            if (user.locked == true) {
+            if (user.locked === true) {
                 // Show participant unlock button
                 this.unlock_element.className = user.role + " " + class_lock_on;
             }
@@ -633,9 +685,9 @@
         }
 
         if (participant_data["role"] == "chair") {
-            this.element_root.className = "roster_entry_host_li";
+            this.element_root.className = "list-group-item list-group-item-info";
         } else {
-            this.element_root.className = "roster_entry_guest_li";
+            this.element_root.className = "list-group-item list-group-item-warning";
         }
 
         if (participant_data["has_media"] && user.role == 'HOST' && this.uuid !== user.participant_uuid) {
@@ -662,7 +714,7 @@
         }
 
         // Update spotlight status
-        this.spotlight_state = participant_data["spotlight"] != 0;
+        this.spotlight_state = participant_data["spotlight"] !== 0;
         if (this.spotlight_state) {
             this.spotlight_element.className = class_spotlight_on;
         } else {
@@ -684,6 +736,7 @@
             this.hold_element.classList.add("disabled_action");
             this.unlock_element.classList.add("disabled_action");
             this.see_presentation_element.classList.add("disabled_action");
+            this.transfer_element.classList.add("disabled_action");
             this.layout.classList.add("invisible");
         } else {
             this.chair_role_element.classList.remove("disabled_action");
@@ -780,7 +833,7 @@
         console.log("participant start_speaking " + this);
         if (!this.speaking) {
             this.speaking = true;
-            this.uri_element.className = "participant_uri_speaking";
+            this.avatar.className = "img-thumbnail avatar_speaking";
         }
     };
 
@@ -788,7 +841,7 @@
         console.log("participant stop_speaking " + this);
         if (this.speaking) {
             this.speaking = false;
-            this.uri_element.className = "participant_uri";
+            this.avatar.className = "img-thumbnail avatar";
         }
     };
 
@@ -1006,13 +1059,8 @@
                     document.getElementById("chatdiv").className = "hide";
                 }
                 return true;
-            } else if (response["status"] == 403) {
-                console.log("Pin required");
-                join_error.innerHTML = "Failed to join conference: Pin required";
-            } else if (response["status"] == 0) {
-                join_error.innerHTML = "Failed to join conference: " + JSON.stringify(response["data"]);
             } else {
-                join_error.innerHTML = "Failed to join conference: " + response["status"] + "(" + JSON.stringify(response["data"]) + ")";
+                console.log("Join error " + response["status"]);
             }
             return false;
         },

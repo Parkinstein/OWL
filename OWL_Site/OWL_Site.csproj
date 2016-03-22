@@ -326,15 +326,7 @@
     <Content Include="bin\Microsoft.Owin.Host.SystemWeb.dll" />
     <Content Include="bin\Microsoft.Owin.Security.Cookies.dll" />
     <Content Include="bin\Microsoft.Owin.Security.dll" />
-    <Content Include="bin\Microsoft.Owin.Security.Facebook.dll" />
-    <Content Include="bin\Microsoft.Owin.Security.Facebook.xml" />
-    <Content Include="bin\Microsoft.Owin.Security.Google.dll" />
-    <Content Include="bin\Microsoft.Owin.Security.Google.xml" />
-    <Content Include="bin\Microsoft.Owin.Security.MicrosoftAccount.dll" />
-    <Content Include="bin\Microsoft.Owin.Security.MicrosoftAccount.xml" />
     <Content Include="bin\Microsoft.Owin.Security.OAuth.xml" />
-    <Content Include="bin\Microsoft.Owin.Security.Twitter.dll" />
-    <Content Include="bin\Microsoft.Owin.Security.Twitter.xml" />
     <Content Include="bin\MySql.Data.dll" />
     <Content Include="bin\Newtonsoft.Json.dll" />
     <Content Include="bin\Owin.dll" />
@@ -800,9 +792,7 @@
     <Content Include="Content\kendo\2016.1.112\Silver\editor.png" />
     <Content Include="Content\kendo\2016.1.112\Silver\imagebrowser.png" />
     <Content Include="Content\kendo\2016.1.112\Silver\indeterminate.gif" />
-    <Content Include="Content\kendo\2016.1.112\Silver\loading-image.gif" />
     <Content Include="Content\kendo\2016.1.112\Silver\loading.gif" />
-    <Content Include="Content\kendo\2016.1.112\Silver\loading_2x.gif" />
     <Content Include="Content\kendo\2016.1.112\Silver\markers.png" />
     <Content Include="Content\kendo\2016.1.112\Silver\markers_2x.png" />
     <Content Include="Content\kendo\2016.1.112\Silver\slider-h.gif" />
@@ -1130,7 +1120,6 @@
     <None Include="Properties\PublishProfiles\OWL_Sile_local.pubxml" />
     <None Include="Properties\PublishProfiles\TestDeploy.pubxml" />
     <Content Include="Scripts\cldr.js" />
-    <Content Include="Scripts\datatables.js" />
     <Content Include="Scripts\DataTables\dataTables.colVis.js" />
     <Content Include="Scripts\DataTables\dataTables.colVis.min.js" />
     <Content Include="Scripts\DataTables\dataTables.tableTools.js" />
