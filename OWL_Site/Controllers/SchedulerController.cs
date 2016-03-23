@@ -371,6 +371,7 @@ namespace OWL_Site.Controllers
             mailMessage.To.Add(new MailAddress(to));
             mailMessage.Subject = subj;
             mailMessage.Body = body;
+            mailMessage.AddCalendar(new MeetingRequest.Calendar());
 
             //Event myEvent = new Event();
             
