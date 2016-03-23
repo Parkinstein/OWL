@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
 
@@ -19,25 +19,25 @@
     <script src="@Url.Content("~/Scripts/zebra_tooltips.js")"></script>
 
     <!-- Kendo CSS and JS -->
-    <link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.common.min.css")" rel="stylesheet" type="text/css"/>
-    <link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css"/>
-    <link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.dataviz.min.css")" rel="stylesheet" type="text/css"/>
-    <link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.blueopal.min.css")" rel="stylesheet" type="text/css"/>
-    <link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.dataviz.blueopal.min.css")" rel="stylesheet" type="text/css"/>
+    <link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.common.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.dataviz.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.blueopal.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.1.112/kendo.dataviz.blueopal.min.css")" rel="stylesheet" type="text/css" />
     <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
     <script src="@Url.Content("~/Scripts/kendo/2016.1.112/jszip.min.js")"></script>
     <script src="@Url.Content("~/Scripts/kendo/2016.1.112/kendo.all.min.js")"></script>
     <script src="@Url.Content("~/Scripts/kendo/2016.1.112/kendo.aspnetmvc.min.js")"></script>
     <script src="@Url.Content("~/Scripts/kendo/2016.1.112/cultures/kendo.culture.ru-RU.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2016.1.112/messages/kendo.messages.ru-RU.min.js")"></script>
     <script src="@Url.Content("~/Scripts/kendo/2016.1.112/kendo.timezones.min.js")"></script>
-    
-    
+
+
     <!-- Bootstrap -->
-    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css"/>
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css" />
     <script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
-    <script>kendo.culture("ru-RU");</script>
     <script src="@Url.Content("~/Scripts/respond.min.js")"></script>
-    
+
     <!-- Datatables -->
     <script src="@Url.Content("~/Scripts/DataTables/jquery.dataTables.min.js")"></script>
     <script src="@Url.Content("~/Scripts/DataTables/dataTables.bootstrap.min.js")"></script>
@@ -50,7 +50,7 @@
 
     <!-- Awesome font -->
     <link href="@Url.Content("~/Content/font-awesome.min.css")" rel="stylesheet" type="text/css" />
- 
+
     <!-- Site custom CSS -->
     <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
 
@@ -61,54 +61,54 @@
     <script src="@Url.Content("~/Scripts/moment.min.js")"></script>
     <script src="@Url.Content("~/Scripts/moment-with-locales.min.js")"></script>
     <script src="@Url.Content("~/Scripts/DataTables/datetime-moment.js")"></script>
+    <script>kendo.culture("ru-RU");</script>
 
 </head>
 <body>
-<div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            @Html.ActionLink("Портал управления системой ВКС 'СОВА'", "Index", "Home", new {area = ""}, new {@class = "navbar-brand"})
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-menu-left" data-toggle="dropdown">Конференции<b class="caret"></b></a>
-                    <ul class="dropdown-menu top_bar">
-                        <li><span class="fa fa-cogs fa-lg fa-fw" style="color:#3d3d6a;"></span><span>@Html.ActionLink("Управление конференциями", "ControlPanel", "ControlPanel")</span></li>
-                        <li class="divider"></li>
-                        <li><span class="fa fa-youtube-play fa-lg fa-fw" style="color:#3d3d6a;"></span><span>@Html.ActionLink("Просмотр файлов записи", "VideoRecords", "VideoRecords")</span></li>
-                        <li class="divider"></li>
-                        <li><span class="fa fa-calendar fa-lg fa-fw" style="color:#3d3d6a;"></span><span>@Html.ActionLink("Планирование конференций", "Index", "Scheduler")</span></li>
-                        <li class="divider"></li>
-                        <li><span class="fa fa-database fa-lg fa-fw" style="color:#3d3d6a;"></span><span>@Html.ActionLink("Статистика", "Statistics", "Statistics")</span></li>
-                    </ul>
-                </li>
-                <li>@Html.ActionLink("Телефонная книга", "Phonebook", "Phonebook")</li>
-                
-                @{
-                    if (User.IsInRole("Admin"))
-                    {
-                        <li>@Html.ActionLink("Настройки", "Index", "Sets")</li>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Портал управления системой ВКС 'СОВА'", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-menu-left" data-toggle="dropdown">Конференции<b class="caret"></b></a>
+                        <ul class="dropdown-menu top_bar">
+                            <li><span class="fa fa-cogs fa-lg fa-fw" style="color:#3d3d6a;"></span><span>@Html.ActionLink("Управление конференциями", "ControlPanel", "ControlPanel")</span></li>
+                            <li class="divider"></li>
+                            <li><span class="fa fa-youtube-play fa-lg fa-fw" style="color:#3d3d6a;"></span><span>@Html.ActionLink("Просмотр файлов записи", "VideoRecords", "VideoRecords")</span></li>
+                            <li class="divider"></li>
+                            <li><span class="fa fa-calendar fa-lg fa-fw" style="color:#3d3d6a;"></span><span>@Html.ActionLink("Планирование конференций", "Index", "Scheduler")</span></li>
+                            <li class="divider"></li>
+                            <li><span class="fa fa-database fa-lg fa-fw" style="color:#3d3d6a;"></span><span>@Html.ActionLink("Статистика", "Statistics", "Statistics")</span></li>
+                        </ul>
+                    </li>
+                    <li>@Html.ActionLink("Телефонная книга", "Phonebook", "Phonebook")</li>
+
+                    @{
+                        if (User.IsInRole("Admin"))
+                        {
+                            <li>@Html.ActionLink("Настройки", "Index", "Sets")</li>
+                        }
                     }
-                }
-            </ul>
-            @Html.Partial("_LoginPartial")
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
         </div>
     </div>
-</div>
-<div class="container body-content">
-    @RenderBody()
-    <footer>
-        <p>&copy;@DateTime.Now.Year – Портал управления системой "СОВА"</p>
-    </footer>
-</div>
+    <div class="container body-content">
+        @RenderBody()
+        <footer>
+            <p>&copy;@DateTime.Now.Year – Портал управления системой "СОВА"</p>
+        </footer>
+    </div>
 
-@RenderSection("scripts", required: false)
+    @RenderSection("scripts", required: false)
 </body>
 </html>
-

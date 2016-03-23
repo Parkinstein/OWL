@@ -922,7 +922,9 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
@@ -1890,7 +1892,9 @@
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery-2.2.1.min.map" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -2469,7 +2473,9 @@
     <Content Include="Scripts\kendo\2016.1.112\messages\kendo.messages.pt-BR.min.js" />
     <Content Include="Scripts\kendo\2016.1.112\messages\kendo.messages.pt-PT.min.js" />
     <Content Include="Scripts\kendo\2016.1.112\messages\kendo.messages.ro-RO.min.js" />
-    <Content Include="Scripts\kendo\2016.1.112\messages\kendo.messages.ru-RU.min.js" />
+    <Content Include="Scripts\kendo\2016.1.112\messages\kendo.messages.ru-RU.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\kendo\2016.1.112\messages\kendo.messages.sk-SK.min.js" />
     <Content Include="Scripts\kendo\2016.1.112\messages\kendo.messages.sv-SE.min.js" />
     <Content Include="Scripts\kendo\2016.1.112\messages\kendo.messages.tr-TR.min.js" />
