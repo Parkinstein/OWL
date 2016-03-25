@@ -53,7 +53,7 @@
                     <tbody></tbody>
                 </table>
                 <div class="modal-footer">
-                    <button type="button" onclick="add_pb_users()" class="btn btn-primary active">Сохранить</button>
+                    <button type="button" onclick="add_pb_users()" class="btn btn-primary active" data-dismiss="modal">Сохранить</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
                 </div>
             </div>
@@ -243,7 +243,6 @@
                         "data": JSON.stringify({ pbrArray: data }),
                     });
                 }
-                document.getElementById("popup_block").className = "hide";
                 setTimeout(refresh_pb, 500);
             };
 

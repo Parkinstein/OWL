@@ -18,8 +18,10 @@
 </div>
 
 <script>
+    moment.locale('ru');
     var oRecordsTable;
     $(document).ready(function () {
+        $.fn.dataTable.moment('DD.MM.YYYY HH:mm:ss');
         oRecordsTable = $('#table_rec').DataTable({
             "ordering": true,
             "searching": true,
@@ -40,26 +42,22 @@
                 "type": "POST",
                 "url": "/VideoRecords/VideoRecords_Ajax",
                 "contentType": 'application/json; charset=utf-8',
-                "data": function (data) { return data = JSON.stringify(data); }
+                "data": function(data) { return data = JSON.stringify(data); }
             },
 
             "columns": [
-                { "data": "ID", "visible": false, "searchable": false },
-                { "data": "Conf" },
-                { "data": "PName" },
-                { "data": "Tstart", "searchable": false, "render": function (data, type, full, meta) {
+            { "data": "ID", "visible": false, "searchable": false },
+            { "data": "Conf" },
+            { "data": "PName" },
+            { "data": "Tstart", "searchable": false},
+            { "data": "Tfinish", "searchable": false},
+                    
+                
+                /*"render": function (data, type, full, meta) {
                         var t = data.split(/[. :]/);
                         var date = new Date(t[2], t[1], t[0], t[3], t[4], t[5]);
                         return date.toLocaleString("ru");
-                    }
-                },
-                {
-                    "data": "Tfinish", "searchable": false, "render": function (data, type, full, meta) {
-                        var t = data.split(/[. :]/);
-                        var date = new Date(t[2], t[1], t[0], t[3], t[4], t[5]);
-                        return date.toLocaleString("ru");
-                    }
-                },
+                    }*/
                 {
                     "data": "Link", "searchable": false, "render": function (data, type, full, meta) {
                         return '<a href="' + data + '">Скачать</a>';

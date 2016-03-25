@@ -136,11 +136,13 @@ namespace OWL_Site.Controllers
                     // SSH procedure to delete records files
                     var PasswordConnection = new PasswordAuthenticationMethod(MvcApplication.set.CobaRecLogin, MvcApplication.set.CobaRecPass);
                     var KeyboardInteractive = new KeyboardInteractiveAuthenticationMethod(MvcApplication.set.CobaRecLogin);
-
                     var connectionInfo = new ConnectionInfo(MvcApplication.set.CobaRecordsAddress, 22, MvcApplication.set.CobaRecLogin, PasswordConnection, KeyboardInteractive);
+                    Debug.WriteLine("111111111111111");
                     using (SshClient ssh = new SshClient(connectionInfo))
                     {
+                        Debug.WriteLine("2222222222222222");
                         ssh.Connect();
+                        Debug.WriteLine("3333333333333333");
                         var command = ssh.RunCommand("rm -f /home/rerih/public_html" + link.Substring(found));
                         Debug.WriteLine(command.CommandText);
                         ssh.Disconnect();

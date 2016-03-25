@@ -1,15 +1,6 @@
 ﻿<div id="div_stats" class="control_grid">
     <table id="table_stats" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
-        <thead>
-        <tr>
-            <th>Идентификатор конференции</th>
-            <th>Имя конференции (ВПК)</th>
-            <th>Время начала</th>
-            <th>Время окончания</th>
-            <th>Длительность</th>
-            <th>Количество участников</th>
-        </tr>
-        </thead>
+        <thead><tr><th>Идентификатор конференции</th><th>Имя конференции (ВПК)</th><th>Время начала</th><th>Время окончания</th><th>Длительность</th><th>Количество участников</th></tr></thead>
         <tbody></tbody>
     </table>
 </div>
@@ -20,22 +11,7 @@
         <div class="modal-content">
             <div class="modal-body">
                 <table id="table_parts" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
-                    <thead>
-                    <tr>
-                        <th>Имя конференции (ВПК)</th>
-                        <th>Роль</th>
-                        <th>Отображаемое имя</th>
-                        <th>Время начала</th>
-                        <th>Время окончания</th>
-                        <th>Длительность</th>
-                        <th>Протокол</th>
-                        <th>IP-адрес:порт</th>
-                        <th>Причина отключения</th>
-                        <th>Кодеки</th>
-                        <th>Битрет бит/с (Tx/Rx)</th>
-                        <th>Разрешение (Tx/Rx)</th>
-                    </tr>
-                    </thead>
+                    <thead><tr><th>Имя конференции (ВПК)</th><th>Роль</th><th>Отображаемое имя</th><th>Время начала</th><th>Время окончания</th><th>Длительность</th><th>Протокол</th><th>IP-адрес:порт</th><th>Причина отключения</th><th>Кодеки</th><th>Битрет бит/с (Tx/Rx)</th><th>Разрешение (Tx/Rx)</th></tr></thead>
                     <tbody></tbody>
                 </table>
             </div>
@@ -47,14 +23,13 @@
 </div>
 
 <script type="text/javascript">
+    moment.locale('ru');
     var oStatisticsTable;
     var oParticipantsTable;
     var cobaMgntAddress = '@MvcApplication.set.CobaMngAddress';
     var var_id;
 
-    
-
-    setInterval("refresh_stats()", 30000);
+    setInterval("refresh_stats()", 300000);
 
     function refresh_stats() {
         if (oStatisticsTable != null) {
@@ -80,7 +55,7 @@
     });
 
     function stats_table() {
-        //$.fn.dataTable.moment('HH:mm MMM D, YY');
+        $.fn.dataTable.moment('DD.MM.YYYY HH:mm:ss');
         oStatisticsTable = $('#table_stats').DataTable({
             "ordering": true,
             "searching": true,
@@ -92,7 +67,7 @@
             "lengthMenu": [15, 25, 50, 100, 1000],
             "autoWidth": false,
             "processing": true,
-            "order": [[2, 'desc']],
+            "order": [[1, 'desc']],
 
             "ajax": {
                 "type": "POST",
@@ -104,8 +79,14 @@
             "columns": [
                 { "data": "id", "visible": false },
                 { "data": "name" },
-                { "data": "start_time2", "type": "date" },
-                { "data": "end_time2", "type": "date" },
+                { "data": "start_time", "render": function(data, type, full, meta) {
+                        return moment(data).format('DD.MM.YYYY HH:mm:ss');
+                    }
+                },
+                { "data": "end_time", "render": function (data, type, full, meta) {
+                        return moment(data).format('DD.MM.YYYY HH:mm:ss');
+                    }
+                },
                 { "data": "duration", "searchable": false, "render": function (data, type, full, meta) {
                         var secNum = data;
                         var hours = Math.floor(secNum / 3600);
@@ -124,10 +105,6 @@
                 },
             ],
 
-            "columnDefs": [
-                 { "type": "datetime-moment", targets: 2 }
-            ],
-
             "language": {
                 "url": "../../Content/dt_ru.json"
             },
@@ -140,7 +117,7 @@
             "searching": true,
             "autoWidth": false,
             "processing": true,
-            "order": [[4, 'asc']],
+            "order": [[0, 'asc']],
             "scrollY": "55vh",
             "scrollCollapse": "true",
             "paging": true,
@@ -159,9 +136,26 @@
                 { "data": "conference_name" },
                 { "data": "role", "searchable": false },
                 { "data": "display_name" },
-                { "data": "start_time2" },
-                { "data": "end_time2" },
-                { "data": "duration" },
+                { "data": "start_time", "render": function (data, type, full, meta) {
+                    return moment(data).format('DD.MM.YYYY HH:mm:ss');
+                    }
+                },
+                { "data": "end_time", "render": function (data, type, full, meta) {
+                        return moment(data).format('DD.MM.YYYY HH:mm:ss');
+                    }
+                },
+                { "data": "duration", "render": function (data, type, full, meta) {
+                    var secNum = data;
+                    var hours = Math.floor(secNum / 3600);
+                    var minutes = Math.floor((secNum - (hours * 3600)) / 60);
+                    var seconds = secNum - (hours * 3600) - (minutes * 60);
+                    if (hours < 10) { hours = "0" + hours; }
+                    if (minutes < 10) { minutes = "0" + minutes; }
+                    if (seconds < 10) { seconds = "0" + seconds; }
+                    var time = hours + ':' + minutes + ':' + seconds;
+                    return time;
+                    }
+                },
                 { "data": "protocol" },
                 { "data": "remote_address", "render": function (data, type, full, meta) {
                         return full.remote_address + ":" + full.remote_port;
