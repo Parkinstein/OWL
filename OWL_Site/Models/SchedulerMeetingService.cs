@@ -45,7 +45,8 @@ namespace OWL_Site.Models
                 Record = meeting.Record,
                 Recfile = meeting.Recfile,
                 InitName = meeting.InitName,
-                FName = meeting.FName
+                FName = meeting.FName,
+                reminder = meeting.reminder
 
             }).AsQueryable();
         }
@@ -109,6 +110,7 @@ namespace OWL_Site.Models
                 entity.Recfile = meeting.Recfile;
                 entity.InitName = meeting.InitName;
                 entity.FName = meeting.FName;
+                entity.reminder = meeting.reminder;
                 
 
 

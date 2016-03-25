@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="aspnetdbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="aspnetdbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AllVmrs">
           <Key>
             <PropertyRef Name="Id" />
@@ -136,6 +136,7 @@
           <Property Name="InitName" Type="nvarchar(max)" />
           <Property Name="FName" Type="nvarchar(max)" />
           <Property Name="reminder" Type="bit" Nullable="false" />
+          <Property Name="caluid" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PrivatePhBs">
           <Key>
@@ -165,7 +166,7 @@
           <Property Name="CobaRecBdName" Type="nvarchar(max)" />
           <Property Name="CobaRecBdTable" Type="nvarchar(max)" />
           <Property Name="SmtpServer" Type="nvarchar(max)" />
-          <Property Name="SmtpPort" Type="int" />
+          <Property Name="SmtpPort" Type="int" Nullable="false" />
           <Property Name="SmtpSSL" Type="bit" Nullable="false" />
           <Property Name="SmtpLogin" Type="nvarchar(max)" />
           <Property Name="SmtpPassword" Type="nvarchar(max)" />
@@ -334,8 +335,7 @@
             <End Role="Meetings1" EntitySet="Meetings" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="aspnetdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -486,6 +486,7 @@
           <NavigationProperty Name="MeetingAttendees" Relationship="Self.FK_MeetingAtendee_Meeting" FromRole="Meetings" ToRole="MeetingAttendees" />
           <NavigationProperty Name="Meetings1" Relationship="Self.FK_Meetings_Meetings" FromRole="Meetings" ToRole="Meetings1" />
           <NavigationProperty Name="Meeting1" Relationship="Self.FK_Meetings_Meetings" FromRole="Meetings1" ToRole="Meetings" />
+          <Property Name="caluid" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PrivatePhB">
           <Key>
@@ -515,7 +516,7 @@
           <Property Name="CobaRecBdName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CobaRecBdTable" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="SmtpServer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SmtpPort" Type="Int32" />
+          <Property Name="SmtpPort" Type="Int32" Nullable="false" />
           <Property Name="SmtpSSL" Type="Boolean" Nullable="false" />
           <Property Name="SmtpLogin" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="SmtpPassword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -804,6 +805,7 @@
           <EntitySetMapping Name="Meetings">
             <EntityTypeMapping TypeName="aspnetdbModel.Meeting">
               <MappingFragment StoreEntitySet="Meetings">
+                <ScalarProperty Name="caluid" ColumnName="caluid" />
                 <ScalarProperty Name="MeetingID" ColumnName="MeetingID" />
                 <ScalarProperty Name="Start" ColumnName="Start" />
                 <ScalarProperty Name="End" ColumnName="End" />

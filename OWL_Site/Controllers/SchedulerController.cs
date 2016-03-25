@@ -55,6 +55,7 @@ namespace OWL_Site.Controllers
             var init = GetAllPB().FirstOrDefault(m => m.Sammaccount == User.Identity.Name);
             meeting.InitName = init.Id;
             meeting.FName = init.DispName;
+            meeting.reminder = true;
             if (meeting.RoomID == 0)
             {
                 meeting.RoomID = 1;
@@ -255,13 +256,14 @@ namespace OWL_Site.Controllers
             }
             return Json(new[] { meeting }.ToDataSourceResult(request, ModelState));
         }
+
+        
         public JsonResult Meetings_Read([DataSourceRequest] DataSourceRequest request)
         {
             meetings_all = meetingService.GetAll();
             var init = GetAllPB().FirstOrDefault(m => m.Sammaccount == User.Identity.Name);
             
             mettingsFiltered = meetings_all.AsEnumerable().Where(m => m.InitName == init.Id);
-            Debug.WriteLine(mettingsFiltered.GetEnumerator().Current);
             foreach (var all in meetings_all)
             {
                 if (!String.IsNullOrEmpty(all.Recfile))
@@ -337,11 +339,12 @@ namespace OWL_Site.Controllers
                                   TimeSpan.FromHours(3)).ToString("U") +"<br>" + "Инициатор конференции: " + init.DispName + "<br>" + "В указанное время, для участия в конференции, просьба перейти по " + link + "<br><br>" + "<b><i>Данные для самостоятельного входа:<i><b><br> Адрес сервера: " + "https://" + MvcApplication.set.CobaCfgAddress + "/" + "<br>" + "Имя конференции: " + roomalias.alias + "<br>" + gpmail + "<br>" + "SIP-адрес: " + roomalias.alias + "@" + MvcApplication.set.CobaCfgAddress;
                     try
                     {
+
                        Sendmail(mail.Email, "UPD: " + meeting.Title, body, meeting, null);
                     }
                     catch (Exception e)
                     {
-
+                        Debug.WriteLine("!!!");
                         Debug.WriteLine(e.Message);
                         Debug.WriteLine(e.HResult);
                     }
@@ -351,7 +354,7 @@ namespace OWL_Site.Controllers
         }
         public Task<ActionResult> Sendmail(string to, string subj, string body, MeetingViewModel meet, Event nEvent)
         {
-            SmtpClient smtpClient = new SmtpClient(MvcApplication.set.AuthDnAddress, 25)
+            SmtpClient smtpClient = new SmtpClient(MvcApplication.set.AuthDnAddress, MvcApplication.set.SmtpPort)
             {
                 UseDefaultCredentials = false,
                 EnableSsl = false,
@@ -367,11 +370,10 @@ namespace OWL_Site.Controllers
             };
             AlternateView alternateHtml = AlternateView.CreateAlternateViewFromString(body,
                                                                             new ContentType("text/html"));
-            //mailMessage.AlternateViews.Add(alternateHtml);
+            mailMessage.AlternateViews.Add(alternateHtml);
             mailMessage.To.Add(new MailAddress(to));
             mailMessage.Subject = subj;
             mailMessage.Body = body;
-            mailMessage.AddCalendar(new MeetingRequest.Calendar());
 
             //Event myEvent = new Event();
             

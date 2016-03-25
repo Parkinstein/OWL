@@ -1,8 +1,11 @@
 ﻿@using System.Web.Mvc.Html
+@using Telerik.OpenAccess
+@using PepuxFront.Controllers
 @model OWL_Site.Models.MeetingViewModel
 @{
     //required in order to render validation attributes
     ViewContext.FormContext = new FormContext();
+    
 }
 
 @functions{
@@ -25,12 +28,14 @@
         return datePickerAttributes;
     }
 
+
 }
+@(ViewBag.OL = Model.OpLink)
 <div class="k-edit-label">
     @(Html.Label("Тема"))
 </div>
 <div data-container-for="title" class="k-edit-field">
-    @(Html.TextBoxFor(model => model.Title, new {@class = "k-textbox", data_bind = "value:title"}))
+    @(Html.TextBoxFor(model => model.Title, new { @class = "k-textbox", data_bind = "value:title" }))
 </div>
 <div class="k-edit-label">
     @(Html.Label("Начало мероприятия"))
@@ -59,14 +64,14 @@
               "endDateTime",
               "end",
               "value:end,invisible:isAllDay",
-              new Dictionary<string, object>() {{"data-dateCompare-msg", "Дата окончания должна быть позже даты начала"}})))
+              new Dictionary<string, object>() { { "data-dateCompare-msg", "Дата окончания должна быть позже даты начала" } })))
 
     @(Html.Kendo().DatePickerFor(model => model.End)
           .HtmlAttributes(generateDatePickerAttributes(
               "endDate",
               "end",
               "value:end,visible:isAllDay",
-              new Dictionary<string, object>() {{"data-dateCompare-msg", "Дата окончания должна быть позже даты начала"}})))
+              new Dictionary<string, object>() { { "data-dateCompare-msg", "Дата окончания должна быть позже даты начала" } })))
 
     <span data-bind="text: endTimezone"></span>
     <span data-for="end" class="k-invalid-msg"></span>
@@ -75,58 +80,58 @@
     @(Html.Label("Весь день"))
 </div>
 <div data-container-for="isAllDay" class="k-edit-field">
-    <input data-bind="checked: isAllDay" data-val="true" id="IsAllDay" name="IsAllDay" type="checkbox"/>
+    <input data-bind="checked: isAllDay" data-val="true" id="IsAllDay" name="IsAllDay" type="checkbox" />
 </div>
 @*<div class="endTimezoneRow">
-    <div class="k-edit-label"></div>
-    <div class="k-edit-field">
-        <label class="k-check">
-            <input checked="checked" class="k-timezone-toggle" type="checkbox" value="true" />
-            Использовать разные часовые пояса для начала и окончания мероприятия
-        </label>
+        <div class="k-edit-label"></div>
+        <div class="k-edit-field">
+            <label class="k-check">
+                <input checked="checked" class="k-timezone-toggle" type="checkbox" value="true" />
+                Использовать разные часовые пояса для начала и окончания мероприятия
+            </label>
+        </div>
     </div>
-</div>
-<script>
-    $(".k-timezone-toggle").on("click", function () {
-        var isVisible = $(this).is(":checked");
-        var container = $(this).closest(".k-popup-edit-form");
+    <script>
+        $(".k-timezone-toggle").on("click", function () {
+            var isVisible = $(this).is(":checked");
+            var container = $(this).closest(".k-popup-edit-form");
 
-        var endTimezoneRow = container.find("label[for='EndTimezone']").parent().add(container.find("div[data-container-for='endTimezone']"));
-        endTimezoneRow.toggle(isVisible);
+            var endTimezoneRow = container.find("label[for='EndTimezone']").parent().add(container.find("div[data-container-for='endTimezone']"));
+            endTimezoneRow.toggle(isVisible);
 
-        if (!isVisible) {
-            var uid = container.attr("data-uid");
-            var scheduler = $("\#scheduler").data("kendoScheduler");
-            var model = scheduler.dataSource.getByUid(uid);
-            model.set("endTimezone", null);
+            if (!isVisible) {
+                var uid = container.attr("data-uid");
+                var scheduler = $("\#scheduler").data("kendoScheduler");
+                var model = scheduler.dataSource.getByUid(uid);
+                model.set("endTimezone", null);
+            }
+        });
+        var endTimezone = '${data.endTimezone}';
+        if (!endTimezone || endTimezone == "null") {
+            $(".k-timezone-toggle").trigger('click');
         }
-    });
-    var endTimezone = '${data.endTimezone}';
-    if (!endTimezone || endTimezone == "null") {
-        $(".k-timezone-toggle").trigger('click');
-    }
-</script>*@
+    </script>*@
 @*<div class="k-edit-label">
-    @(Html.Label("Часовой пояс"))
-</div>
-<div data-container-for="startTimezone" class="k-edit-field">
-    @(Html.Kendo().TimezoneEditorFor(model => model.StartTimezone)
-        .HtmlAttributes(new { data_bind = "value:startTimezone" }))
-</div>*@
+        @(Html.Label("Часовой пояс"))
+    </div>
+    <div data-container-for="startTimezone" class="k-edit-field">
+        @(Html.Kendo().TimezoneEditorFor(model => model.StartTimezone)
+            .HtmlAttributes(new { data_bind = "value:startTimezone" }))
+    </div>*@
 @*<div class="k-edit-label">
-    @(Html.Label("Часовой пояс окончания мероприятия"))
-</div>
-<div data-container-for="endTimezone" class="k-edit-field">
-    @(Html.Kendo().TimezoneEditorFor(model => model.EndTimezone)
-        .HtmlAttributes(new { data_bind = "value:endTimezone" }))
-</div>*@
+        @(Html.Label("Часовой пояс окончания мероприятия"))
+    </div>
+    <div data-container-for="endTimezone" class="k-edit-field">
+        @(Html.Kendo().TimezoneEditorFor(model => model.EndTimezone)
+            .HtmlAttributes(new { data_bind = "value:endTimezone" }))
+    </div>*@
 
 <div class="k-edit-label">
     @(Html.Label("Настройки повтора"))
 </div>
 <div data-container-for="recurrenceRule" class="k-edit-field">
     @(Html.Kendo().RecurrenceEditorFor(model => model.RecurrenceRule)
-          .HtmlAttributes(new {data_bind = "value:recurrenceRule"}))
+          .HtmlAttributes(new { data_bind = "value:recurrenceRule" }))
 </div>
 <div class="k-edit-label">
     @(Html.Label("Выбор VMR"))
@@ -154,7 +159,7 @@
                           .Total("Total");
                   });
           })
-          )
+    )
     <script>
         function requestData(selector) {
             var combobox = $(selector).data("kendoComboBox"),
@@ -193,39 +198,38 @@
                           .Total("Total");
                   });
           })
-          )
+    )
 </div>
 <div class="k-edit-label">
     @(Html.LabelFor(m => m.AddAttend, "Доп. участники"))
 </div>
 <div data-container-for="AddAttend" class="k-edit-field">
-    @(Html.TextAreaFor(model => model.AddAttend, new {@class = "k-textbox", data_bind = "value:AddAttend"}))
+    @(Html.TextAreaFor(model => model.AddAttend, new { @class = "k-textbox", data_bind = "value:AddAttend" }))
 </div>
 <div class="k-edit-label">
     @(Html.Label("Записывать"))
 </div>
 <div class="k-edit-field">
-    <input data-bind="checked: Record" data-val="true" id="Record" name="Record" type="checkbox"/>
+    <input data-bind="checked: Record" data-val="true" id="Record" name="Record" type="checkbox" />
 </div>
-
+@if ("'#= OpLink #'".Contains("?"))
+{
     <div class="div_oplink" data_bind="value:OpLink" id="OpLink">
-
-        <p><a href='#= OpLink #' target="_blank"><h6>Ссылка Оператора</h6></a>
+        <p>
+            <a href='#= OpLink #' target="_blank"><h6>Ссылка Оператора</h6></a>
         </p>
-
-        @*<a href="javascript:oplink_create()" id="link" target="_blank">Ссылка оператора</a>*@
-
     </div>
+}
 
-
-@*<div class="div_oplink" data_bind="value:FileLink" id="FileLink">
-
-    <p>
-        <a href='#= FileLink #'><h6>Файл встречи</h6></a>
-    </p>
-
-    @*<a href="javascript:filelink_create()" id="link" target="_blank">Файл встречи</a>
-</div>*@<script>
+        @*<div class="div_oplink" data_bind="value:FileLink" id="FileLink">
+        
+                <p>
+                    <a href='#= FileLink #'><h6>Файл встречи</h6></a>
+                </p>
+        
+                @*<a href="javascript:filelink_create()" id="link" target="_blank">Файл встречи</a>
+            </div>*@
+        <script>
             function reccheck() {
 
                 if ($('#= Recfile #').val() != null)
@@ -233,11 +237,6 @@
                 else recdata = false;
             }
         </script>
-
-
-
-
-
 <script>
 
     function oplink_create() {

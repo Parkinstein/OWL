@@ -2,15 +2,13 @@
     ViewBag.Title = "Планировщик";
     @model OWL_Site.Models.AspNetUser
         }
-    <script>
-        
-    </script>
-   
 
-@if (User.IsInRole("Admin"))
-{
-    <div data-container-for="Attendees" class="k-edit-field">
-        @(Html.Kendo().MultiSelectFor(m => m.Id)
+
+
+    <div class="jumbotron">
+        @if (User.IsInRole("Admin"))
+        {
+                @(Html.Kendo().MultiSelectFor(m => m.Id)
               .Name("Filter")
               .DataTextField("name")
               .DataValueField("id")
@@ -36,9 +34,8 @@
                               .Total("Total");
                       });
               })
-              )
-    </div>
-    <script type="text/javascript">
+                )
+            <script type="text/javascript">
         function onClose(e) {
             var multiselect = $("#Filter").data("kendoMultiSelect");
             var checked = multiselect.value();
@@ -56,89 +53,109 @@
             scheduler.dataSource.filter(filter);
         }
 
-        
-    </script>
 
-}
+            </script>
 
-<div class="jumbotron">
-    @(Html.Kendo().Scheduler<OWL_Site.Models.MeetingViewModel>()
-          .Name("scheduler")
-          .Date(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day))
-          .StartTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 10, 00, 00))
-          .EndTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 19, 00, 00))
-          .Height(600)
-          .Timezone("Europe/Moscow")
-          .MinorTickCount(4)
-          .MajorTick(60)
-          .AutoBind(true)
-          .Mobile()
-          //.EventTemplate("<div style='background-color:#:getColor(data)#;height:100%;margin-top: -10px;padding-top:10px;padding-left:5px;box-shadow:0 0 10px rgba(0,0,0,0.9);'>" + "<h6 style='color:#:getColor2(data)#'>#= title #</h6>" + "<h6 style='color:#:getColor2(data)#'>#= InitFullname #</h6>" + "<p><a style='color:#:getColor2(data)#' href = '#= OpLink #'><h6>Ссылка Оператора</h6></a></p>" + "<p><a style='color:#:getColor2(data)#' href = '#= FileLink #'><h6>Файл встречи</h6></a></p>" + "<p><h6 style='color:#:getColor2(data)#'>" + "#= kendo.toString(start, 'HH:mm') #" + " - " + "#= kendo.toString(end, 'HH:mm') #</h6></p>" + "</div>")
-          .EventTemplateId("customEventTemplate")
-          .Views(views =>
-          {
-              views.DayView(v => v.Title("День"));
-              views.WeekView(v => v.Title("Неделя"));
-              views.WorkWeekView(workWeekView => workWeekView.Selected(true).Title("Рабочая неделя"));
-              views.MonthView(v => v.Title("Месяц"));
-              views.AgendaView(v => v.Title("Cписок"));
-          })
-          .Editable(editable =>
-          {
-              editable.TemplateName("CustomEditorTemplate");
+        }
+        @(Html.Kendo().Scheduler<OWL_Site.Models.MeetingViewModel>()
+              .Name("scheduler")
+              .Date(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day))
+              .StartTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 2, 00, 00))
+              .EndTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 19, 00, 00))
+              .Height(800)
 
-          })
-          .DataSource(d => d
-
-              .Model(m =>
+              .Timezone("Europe/Moscow")
+              .MinorTickCount(4)
+              .MajorTick(60)
+              .AutoBind(true)
+              .Mobile()
+              .EventTemplateId("customEventTemplate")
+              .Views(views =>
               {
-                  m.Id(f => f.MeetingID);
-                  m.RecurrenceId(f => f.RecurrenceID);
-                  m.Field(f => f.Title).DefaultValue("Название конференции");
+                  views.DayView(v => v.Title("День"));
+                  views.WeekView(v => v.Title("Неделя"));
+                  views.WorkWeekView(workWeekView => workWeekView.Selected(true).Title("Рабочая неделя"));
+                  views.MonthView(v => v.Title("Месяц"));
+                  views.AgendaView(v => v.Title("Cписок"));
+              })
+              .Editable(editable =>
+              {
+                  editable.TemplateName("CustomEditorTemplate");
 
               })
-                      .ServerOperation(true)
-              .Events(e =>
-              {
-                  e.Error("error_handler");
+              .DataSource(d => d
 
-              })
-              .Read("Meetings_Read", "Scheduler")
-              .Create("Meetings_Create", "Scheduler")
-              .Destroy("Meetings_Destroy", "Scheduler")
-              .Update("Meetings_Update", "Scheduler")
+                  .Model(m =>
+                  {
+                      m.Id(f => f.MeetingID);
+                      m.RecurrenceId(f => f.RecurrenceID);
+                      m.Field(f => f.Title).DefaultValue("Название конференции");
+                  })
+                  .ServerOperation(true)
+                  .Events(e =>
+                  {
+                      e.Error("error_handler");
 
-          ))
+                  })
+                  .Read("Meetings_Read", "Scheduler")
+                  .Create("Meetings_Create", "Scheduler")
+                  .Destroy("Meetings_Destroy", "Scheduler")
+                  .Update("Meetings_Update", "Scheduler")
+
+              ))
 
 
-    @*<script>  $("#export").click(function (e) {
+        @*<script>  $("#export").click(function (e) {
             var scheduler = $("#Home").data("kendoScheduler");
             scheduler.saveAsPDF();
         });  </script>*@
-    <script type="text/javascript">
-        function error_handler(e) {
-            if (e.errors) {
-                var message = "Errors:\n";
-                $.each(e.errors, function (key, value) {
-                    if ('errors' in value) {
-                        $.each(value.errors, function () {
-                            message += this + "\n";
-                        });
-                    }
-                });
-                alert(message);
+        <script type="text/javascript">
+            function error_handler(e) {
+                if (e.errors) {
+                    var message = "Errors:\n";
+                    $.each(e.errors, function(key, value) {
+                        if ('errors' in value) {
+                            $.each(value.errors, function() {
+                                message += this + "\n";
+                            });
+                        }
+                    });
+                    alert(message);
 
-                var scheduler = $("#scheduler").data("kendoScheduler");
-                scheduler.one("dataBinding", function (e) {
-                    //prevent saving if server error is thrown
-                    e.preventDefault();
-                });
+                    var scheduler = $("#scheduler").data("kendoScheduler");
+                    scheduler.one("dataBinding", function(e) {
+                        //prevent saving if server error is thrown
+                        e.preventDefault();
+                    });
+                }
             }
-        }
+        </script>
+        @(Html.Kendo().Tooltip()
+              .For("#scheduler")
+              .Filter(".k-event:not(.k-event-drag-hint) > div, .k-task")
+              .Position(TooltipPosition.Top)
+              .Width(120)
+              .ContentTemplateId("template")
+              )
+        <script id="template" type="text/x-kendo-template">
+        #var element = target.is(".k-task") ? target : target.parent();#
+        #var uid = element.attr("data-uid");#
+        #var scheduler = target.closest("[data-role=scheduler]").data("kendoScheduler");#
+        #var model = scheduler.occurrenceByUid(uid);#
+
+        #if(model) {#
+        <strong>Начало:</strong> #=kendo.format('{0:d}',model.start)#
+        <br />
+        <strong>Окончание:</strong> #=kendo.format('{0:d}',model.end)#
+        <br />
+        <strong>Инициатор:</strong> #:nameret(data)#
+        <br />
+        #} else {#
+        <strong>No event data is available</strong>
+        #}#
     </script>
 
-
-</div>
+    </div>
 
 @*<script>
         window.setInterval(function () { var scheduler = $("#scheduler").data("kendoScheduler");

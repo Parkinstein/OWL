@@ -28,6 +28,8 @@ namespace OWL_Service
         public AllVMRS.VmrParent All_VM_obj;
         public static Setting set;
         static bool mailSent = false;
+        public int count;
+        private string gp, gpmail;
         public static string GetProperty(SearchResult searchResult, string PropertyName)
         {
             if (searchResult.Properties.Contains(PropertyName))
@@ -43,7 +45,6 @@ namespace OWL_Service
         {
             Encoding utf8 = Encoding.GetEncoding("windows-1251");
             Encoding win1251 = Encoding.GetEncoding("utf-8");
-
             byte[] utf8Bytes = win1251.GetBytes(source);
             byte[] win1251Bytes = Encoding.Convert(win1251, utf8, utf8Bytes);
             source = win1251.GetString(win1251Bytes);
@@ -174,7 +175,7 @@ namespace OWL_Service
                     user.Email = domenuser.Email;
                     user.Tel_int = domenuser.Tel_int;
                     user.Tel_mob = domenuser.Tel_mob;
-                    var result = await manager1.UpdateAsync(user);
+                    await manager1.UpdateAsync(user);
                 }
             }
             foreach (var lokuser in locrecords)
@@ -353,7 +354,7 @@ namespace OWL_Service
             var diapmet = soonmeet.Where(s => s.Start < dt2 && s.reminder);
             foreach (var meet in diapmet)
             {
-                List<string> maillist = new List<string>();
+                List<AspNetUser> maillist = new List<AspNetUser>();
                 var attends = databs.MeetingAttendees.Where(m => m.MeetingID == meet.MeetingID);
                 List<string> AddAtt;
                 if (meet.AddAttend != null)
@@ -361,34 +362,72 @@ namespace OWL_Service
                     AddAtt = ((meet.AddAttend.Replace(" ","")).Split((",").ToCharArray())).ToList();
                     foreach (var adat in AddAtt)
                     {
-                        maillist.Add(adat);
+                        maillist.Add(new AspNetUser()
+                        {
+                            Email = adat,
+                            DispName = adat
+                        }
+                                    );
                     }
                 }
                 foreach (var attend in attends)
                 {
                     var reciever = databs.AspNetUsers.FirstOrDefault(u => u.Id == attend.AttendeeID);
-                    maillist.Add(reciever?.Email);
+                    maillist.Add(new AspNetUser()
+                    {
+                        Email = reciever.Email,
+                        DispName = reciever.DispName
+                    });
                 }
-                string body = String.Concat("Напоминиаем, что через ", (meet.Start-dt1).ToString(@"mm"), " минут состоится видеоконференция ", meet.Title);
+                //string body1 = String.Concat("Напоминиаем, что через ", (meet.Start - dt1).ToString(@"mm"), " минут состоится видеоконференция ", "\"", meet.Title, "\"");
+                var roomalias = databs.VmrAliases.FirstOrDefault(m => m.vmid == meet.RoomID);
+                var currentroom = databs.AllVmrs.FirstOrDefault(m => m.Id == meet.RoomID);
+                if (currentroom != null && !String.IsNullOrEmpty(currentroom.guest_pin))
+                {
+                    gpmail = "PIN для входа: " + currentroom.guest_pin;
+                    gp = "&pin=" + currentroom.guest_pin;
+                }
+                if (currentroom != null && String.IsNullOrEmpty(currentroom.guest_pin))
+                {
+                    gpmail = "";
+                    gp = "&role=guest";
+                }
                 foreach (var rcpt in maillist)
                 {
-                    await Sendmail(rcpt, meet.Title, body, meet);
+                    Debug.WriteLine(rcpt.Email);
+                    string link = "<a href =\"" + "https://" + set.CobaCfgAddress + "/webapp/?conference=" +
+                              roomalias.alias + "&name=" + Uri.EscapeDataString(rcpt.DispName) + "&bw=512" + gp +
+                              "&join=1" +
+                              "\">ссылке</a>";
+                    string body = "Уважамый(ая), " + rcpt.DispName + " !<br>" + "Напоминиаем, что через " +
+                                  (meet.Start - dt1).ToString(@"mm")+" минут состоится конференция на тему \"" +
+                                  meet.Title + "\"." + "<br>" + "Инициатор конференции: " + meet.FName + "<br>" +
+                                  "В указанное время, для участия в конференции, просьба перейти по " +
+                                  link + "<br><br>" + "<b><i>Данные для самостоятельного входа:<i><b><br> Адрес сервера: " +
+                                  "https://" + set.CobaCfgAddress + "/" + "<br>" +
+                                  "Имя конференции: " + roomalias.alias + "<br>" + gpmail + "<br>" + "SIP-адрес: " +
+                                  roomalias.alias + "@" + set.CobaCfgAddress;
+                    await Sendmail(rcpt.Email, "Напоминание о конференции", body, meet);
                     if (mailSent)
                     {
-                        var db = new aspnetdbEntities();
-                        meet.reminder = false;
-                        db.Meetings.AddOrUpdate(meet);
-                        db.SaveChanges();
-
+                        count++;
+                        if (count == maillist.Count)
+                        {
+                            var db = new aspnetdbEntities();
+                            meet.reminder = false;
+                            db.Meetings.AddOrUpdate(meet);
+                            db.SaveChanges();
+                            
+                        }
+                        
                     }
                 }
-                
                
             }
         }
         public async Task Sendmail(string to, string subj, string body, Meeting meet)
         {
-            SmtpClient smtpClient = new SmtpClient(set.SmtpServer, (int)set.SmtpPort)
+            SmtpClient smtpClient = new SmtpClient(set.SmtpServer, set.SmtpPort)
             {
                 UseDefaultCredentials = false,
                 EnableSsl = set.SmtpSSL,
