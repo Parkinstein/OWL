@@ -235,8 +235,33 @@
             </div>
         </div>
     </div>
-    </div>
 </div>
+
+<div id="transferModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="transfer">
+                    </div>
+                    <select class="form-control" id="transferrole">
+                        <option value="host">Host</option>
+                        <option value="guest">Guest</option>
+                        <option value="norole"></option>
+                    </select>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="transferpin">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal" onclick="Participant.overlay">Перевести</button>
+                <button class="btn btn-default" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>    
 </body>
 <script type="text/javascript">
     window.onbeforeunload = function(e) {
@@ -456,57 +481,14 @@
         nameInput.className = "form-control input-sm";
         nameInput.id = "currenttext_" + participant_data["uuid"];
         nameInput.type = "text";
+        nameInput.addEventListener('blur', this.overlay.bind(this), false);
         nameInput.setAttribute('size', '30');
         nameInput.value = this.uri;
+        //currentOverlayText.value = participant_data["overlay_text"];
 
         this.name_element.appendChild(nameInput);
         this.element_root.appendChild(this.name_element);
 
-        /*this.overlay_text_element = document.createElement("div");
-        this.overlay_text_element.className = "particpantOverlayText";
-
-        var currentOverlayText = document.createElement("input");
-        currentOverlayText.setAttribute('size', '30');
-        currentOverlayText.className = "currentOverlayText";
-        currentOverlayText.setAttribute('disabled', 'true');
-        currentOverlayText.id = "currenttext_" + participant_data["uuid"];
-        currentOverlayText.value = participant_data["overlay_text"];
-
-        var newOverlayText = document.createElement("input");
-        newOverlayText.setAttribute('size', '30');
-        newOverlayText.className = "form-control newOverlayText";
-        newOverlayText.id = "newtext_" + participant_data["uuid"];
-
-        updateTextButton = document.createElement("div");
-        updateTextButton.className = "buttonOverlayText fa fa-check white";
-        updateTextButton.addEventListener('click', this.overlay.bind(this), false);
-
-        this.overlay_text_element.appendChild(currentOverlayText);
-        this.overlay_text_element.appendChild(newOverlayText);
-        this.overlay_text_element.appendChild(updateTextButton);*/
-
-
-
-        /*if (participant_data["protocol"] != "mssip") {
-
-            var transferText = document.createElement("input");
-            transferText.className = "form-control newTransferText";
-            transferText.id = "transfer_" + participant_data["uuid"];
-
-            var transferButton = document.createElement("div");
-            transferButton.className = "buttonOverlayText fa fa-mail-forward white";
-            transferButton.addEventListener('click', this.transfer.bind(this), false);
-
-            this.overlay_text_element.appendChild(transferText);
-            this.overlay_text_element.appendChild(transferButton);
-        }
-        */
-
-        /*this.element_root.appendChild(this.uri_element);
-        this.element_root.appendChild(this.overlay_text_element);
-        if (this.transfer_element != undefined) {
-            this.element_root.appendChild(this.transfer_element);
-        }*/
 
         // Add control button
         this.div_user_control = document.createElement("div");
@@ -590,10 +572,13 @@
                 this.list_user_control.appendChild(this.unlock_element);
 
                 // Add transfer
-                this.transfer_element = document.createElement("li");
-                this.transfer_element.className = class_transfer;
-                /*this.transfer_element.addEventListener('click', this.transfer_element.bind(this), false);*/
-                this.list_user_control.appendChild(this.transfer_element);
+                if (participant_data["protocol"] !== "mssip") {
+                    this.transfer_element = document.createElement("li");
+                    this.transfer_element.className = class_transfer;
+                    this.transfer_element.setAttribute('data-toggle', 'modal');
+                    this.transfer_element.setAttribute('data-target', 'transferModal');
+                    this.list_user_control.appendChild(this.transfer_element);
+                }
 
         // compile user control
         this.element_root.appendChild(this.div_user_control);
@@ -859,8 +844,14 @@
 
     Participant.prototype.transfer = function () {
         console.log("participant transfer" + this);
-        var target = document.getElementById("transfer_" + this.uuid).value;
+        var target = document.getElementById("transfer").value;
+        var role = document.getElementById("transferrole").value;
+        var pin = document.getElementById("transferpin").value;
         var text_data = { "conference_alias": target };
+        if (role != "norole") {
+            text_data["role"] = role;
+            text_data["pin"] = pin;
+        }
         var response = user.post_request("participants/" + this.uuid + "/transfer", text_data);
     };
 
