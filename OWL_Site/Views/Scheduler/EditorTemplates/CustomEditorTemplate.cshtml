@@ -1,11 +1,7 @@
 ﻿@using System.Web.Mvc.Html
-@using Telerik.OpenAccess
-@using PepuxFront.Controllers
 @model OWL_Site.Models.MeetingViewModel
 @{
-    //required in order to render validation attributes
     ViewContext.FormContext = new FormContext();
-    
 }
 
 @functions{
@@ -30,7 +26,6 @@
 
 
 }
-@(ViewBag.OL = Model.OpLink)
 <div class="k-edit-label">
     @(Html.Label("Тема"))
 </div>
@@ -139,11 +134,11 @@
 <div data-container-for="RoomID" class="k-edit-field">
     @(Html.Kendo().DropDownListFor(m => m.RoomID)
           .AutoBind(true)
-          .DataTextField("name")
+          .DataTextField("description")
           .DataValueField("Id")
           .SelectedIndex(0)
           .Filter(FilterType.Contains)
-          .Height(400)
+          .Height(300)
           .DataSource(source =>
           {
               source.Custom()
@@ -212,40 +207,39 @@
 <div class="k-edit-field">
     <input data-bind="checked: Record" data-val="true" id="Record" name="Record" type="checkbox" />
 </div>
-@if ("'#= OpLink #'".Contains("?"))
-{
-    <div class="div_oplink" data_bind="value:OpLink" id="OpLink">
-        <p>
-            <a href='#= OpLink #' target="_blank"><h6>Ссылка Оператора</h6></a>
-        </p>
-    </div>
-}
-
-        @*<div class="div_oplink" data_bind="value:FileLink" id="FileLink">
-        
-                <p>
-                    <a href='#= FileLink #'><h6>Файл встречи</h6></a>
-                </p>
-        
-                @*<a href="javascript:filelink_create()" id="link" target="_blank">Файл встречи</a>
-            </div>*@
+<div class="div_oplink" data_bind="value:OpLink" id="oplink">
+    <p>
+        <a href='#: OpLink #'><h6>Вход</h6></a>
+    </p>
+</div>
+<script>
+    var opl = '${data.OpLink}';
+    var divsToHide = document.getElementById("oplink");
+    if (opl === "")
+        divsToHide.style.visibility="hidden";
+    else divsToHide.style.visibility = "visible";
+</script>
+@*<div class="div_oplink" data_bind="value:FileLink" id="FileLink">
+    <p>
+        <a href='#= FileLink #'><h6>Файл встречи</h6></a>
+    </p>
+@*<a href="javascript:filelink_create()" id="link" target="_blank">Файл встречи</a>
+</div>*@
         <script>
-            function reccheck() {
-
+            function reccheck()
+            {
                 if ($('#= Recfile #').val() != null)
                     var recdata = true;
                 else recdata = false;
             }
         </script>
 <script>
-
     function oplink_create() {
-        var valtext = $('#= start #').val();
+        var valtext = $('#= OpLink #').val();
         console.debug(valtext);
+        return valtext;
     }
 </script>
-
-
 <style>
     .div_oplink {
         width: 80%;

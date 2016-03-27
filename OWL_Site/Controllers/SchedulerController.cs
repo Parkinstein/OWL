@@ -62,7 +62,6 @@ namespace OWL_Site.Controllers
             }
             var roomalias = db.VmrAliases.FirstOrDefault(m => m.vmid == meeting.RoomID);
             var currentroom = db.AllVmrs.FirstOrDefault(m => m.Id == meeting.RoomID);
-            meeting.OpLink = string.Concat("https://", MvcApplication.set.CobaCfgAddress, "/webapp/?conference=", roomalias.alias, "&name=Operator&bw=512&join=1");
             List<AspNetUser> emaillist = new List<AspNetUser>();
             //emaillist.Add(init);
             StringBuilder strB = new StringBuilder();
@@ -74,7 +73,7 @@ namespace OWL_Site.Controllers
                     emaillist.Add(attemail);
                 }
             }
-            
+            meeting.OpLink = string.Concat("https://", MvcApplication.set.CobaCfgAddress, "/webapp/?conference=", roomalias.alias, "&name=Operator&pin=",currentroom.pin,"&bw=512&join=1");
             List<string> AddAtt = new List<string>();
             if (meeting.AddAttend != null) { AddAtt = (meeting.AddAttend.Split((",").ToCharArray())).ToList(); }
             if (!String.IsNullOrEmpty(currentroom.guest_pin))

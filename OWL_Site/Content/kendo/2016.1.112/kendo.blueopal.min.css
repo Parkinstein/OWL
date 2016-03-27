@@ -318,7 +318,7 @@ html .km-pane-wrapper .k-header {
 .k-pager-numbers .k-current-page .k-link:after,
 .k-scheduler-toolbar>ul.k-scheduler-views>li.k-current-view>.k-link:after,
 .k-tool-icon {
-    background-image: url(BlueOpal/sprite.png);
+    background-image: url(Moonlight/sprite.png);
     border-color: transparent
 }
 .k-mobile-list .k-check:checked,
@@ -399,7 +399,7 @@ html .km-pane-wrapper .k-header {
 .k-task-complete {
     border-color: #3D3D6A;
     background: #1ea4dd 0 -257px url(textures/highlight.png) repeat-x;
-    color: #003f59
+    color: #FFFFFF;
 }
 .k-event-inverse {
     color: #fff
@@ -801,8 +801,8 @@ div.k-filebrowser-dropzone em {
     background-image: none, -webkit-linear-gradient(top, rgba(255, 255, 255, .45) 0, rgba(255, 255, 255, 0) 100%);
     background-image: none, linear-gradient(to bottom, rgba(255, 255, 255, .45) 0, rgba(255, 255, 255, 0) 100%);
     background-position: 50% 50%;
-    background-color: #d9ecf5;
-    color: #00435e;
+    background-color: #3D3D67;
+    color: #FFFFFF;
     border-color: transparent;
     -webkit-box-shadow: 0 4px 6px rgba(0, 0, 0, .3);
     box-shadow: 0 4px 6px rgba(0, 0, 0, .3)

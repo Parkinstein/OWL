@@ -12,6 +12,7 @@
               .Name("Filter")
               .DataTextField("name")
               .DataValueField("id")
+              .Height(600)
               .Placeholder("Выбор инициаторов")
               .Filter(FilterType.Contains)
               .ValuePrimitive(true)
@@ -36,22 +37,22 @@
               })
                 )
             <script type="text/javascript">
-        function onClose(e) {
-            var multiselect = $("#Filter").data("kendoMultiSelect");
-            var checked = multiselect.value();
-            var scheduler = $("#scheduler").data("kendoScheduler");
-            var filter = {
-                logic: "or",
-                filters: $.map(checked, function (value) {
-                    return {
-                        operator: "eq",
-                        field: "InitName",
-                        value: value
+                function onClose(e) {
+                    var multiselect = $("#Filter").data("kendoMultiSelect");
+                    var checked = multiselect.value();
+                    var scheduler = $("#scheduler").data("kendoScheduler");
+                    var filter = {
+                        logic: "or",
+                        filters: $.map(checked, function (value) {
+                            return {
+                                operator: "eq",
+                                field: "InitName",
+                                value: value
+                            };
+                        })
                     };
-                })
-            };
-            scheduler.dataSource.filter(filter);
-        }
+                    scheduler.dataSource.filter(filter);
+                }
 
 
             </script>
@@ -133,7 +134,7 @@
         @(Html.Kendo().Tooltip()
               .For("#scheduler")
               .Filter(".k-event:not(.k-event-drag-hint) > div, .k-task")
-              .Position(TooltipPosition.Top)
+              .Position(TooltipPosition.Left)
               .Width(120)
               .ContentTemplateId("template")
               )
@@ -144,11 +145,11 @@
         #var model = scheduler.occurrenceByUid(uid);#
 
         #if(model) {#
-        <strong>Начало:</strong> #=kendo.format('{0:d}',model.start)#
+        <strong>Начало:</strong> #=kendo.format('{0:HH:mm}',model.start)#
         <br />
-        <strong>Окончание:</strong> #=kendo.format('{0:d}',model.end)#
+        <strong>Окончание:</strong> #=kendo.format('{0:HH:mm}',model.end)#
         <br />
-        <strong>Инициатор:</strong> #:nameret(data)#
+        <strong>Инициатор:</strong> #=model.FName#
         <br />
         #} else {#
         <strong>No event data is available</strong>
@@ -186,13 +187,13 @@
     </div>
 </script>
     <script>
-        
+
         function dateformattingst(data) {
-            return kendo.toString(data.start, 'H:mm  ddd, dd-MMM-yyyy');
+            return kendo.toString(data.start, 'HH:mm  ddd, dd-MMM-yyyy');
         }
 
         function dateformattingnd(data) {
-            return kendo.toString(data.end, 'H:mm  ddd, dd-MMM-yyyy');
+            return kendo.toString(data.end, 'HH:mm  ddd, dd-MMM-yyyy');
         }
 
         function nameret(data) {
@@ -249,6 +250,8 @@
             }
         }
     </script>
+    
+
 <style>
     .moreinfo {
         padding-left: 5px;
@@ -273,7 +276,7 @@
     }
 
         .btn-primary:hover {
-            background-color: transparent;
+            background-color: #3D3D6A;
             border-color: #ffffff;
         }
 
