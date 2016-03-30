@@ -56,13 +56,6 @@ namespace PepuxFront.Controllers
                 ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
                 HistoryVmrFull = JsonConvert.DeserializeObject<VmrStatsResponse>(Win1251ToUTF8(client.DownloadString(historyapi)));
                 HistoryVmrData = HistoryVmrFull.objects;
-                foreach (var historyRecords in HistoryVmrData)
-                {
-                    historyRecords.start_time2 =
-                        (DateTime.Parse(historyRecords.start_time) + TimeSpan.FromHours(3)).ToString("dd-MMM-yyyy  HH:mm:ss");
-                    historyRecords.end_time2 =
-                        (DateTime.Parse(historyRecords.end_time) + TimeSpan.FromHours(3)).ToString("dd-MMM-yyyy  HH:mm:ss");
-                }
                 return HistoryVmrData;
             }
             catch (Exception errException)
@@ -90,12 +83,6 @@ namespace PepuxFront.Controllers
                 HistoryParticipantsData = HistoryParticipantsFull.objects;
                 foreach (var participantsRecords in HistoryParticipantsData)
                 {
-                    participantsRecords.start_time2 =
-                        (DateTime.Parse(participantsRecords.start_time) + TimeSpan.FromHours(3)).ToString(
-                            "dd-MMM-yyyy  HH:mm:ss");
-                    participantsRecords.end_time2 =
-                        (DateTime.Parse(participantsRecords.end_time) + TimeSpan.FromHours(3)).ToString(
-                            "dd-MMM-yyyy  HH:mm:ss");
                     foreach (var mediastreamsRecords in participantsRecords.media_streams)
                     {
                         if (mediastreamsRecords.stream_type == "video")
