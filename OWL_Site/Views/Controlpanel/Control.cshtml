@@ -21,6 +21,7 @@
                     <li class="active"><a data-toggle="tab" href="#active_room">Активная комната</a></li>
                     <li><a data-toggle="tab" href="#waiting_room">Комната ожидания</a></li>
                     <li><a data-toggle="tab" href="#connect_user">Подключение участника</a></li>
+                    <li><a data-toggle="tab" href="#liveviewdiv">Текущая картинка</a></li>
                 </ul>
                 <div class="tab-content conference_pane">
                     <div id="active_room" class="tab-pane fade in active height100">
@@ -61,18 +62,48 @@
                                     <input class="form-control input-sm" id="remotealias">
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row top-buffer">
                                 <div class="col-lg-12">
                                     <button type="submit" onclick="user.dial()" class="btn btn-primary">Вызвать</button>
                                 </div>
                             </div>
                             <hr>
-                            <div>
+                            <div class="row">
                                 <table id="table_pb" class="table table-striped table-bordered table-hover">
                                     <thead><tr><th>Id</th><th>Имя</th><th>Фамилия</th><th>SIP</th><th>H.323</th><th>Группа</th></tr></thead>
                                     <tbody></tbody>
                                 </table>
+                            </div>
+                            <div class="row top-buffer">
                                 <button type="submit" onclick="add_pb_user()" class="btn btn-primary">Добавить из телефонной книги</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="liveviewdiv" class="tab-pane fade height100">
+                        <div class="well height100">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <h4 class="text-center">Видео в комнате</h4>
+                                    <div id="liveviewplayer" class="height180"></div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <h4 class="text-center">Презентация</h4>
+                                    <div id="liveviewpresplayer" class="height180"></div>
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <input id="liveview" type="button" class="btn btn-primary center-block" onclick="user.liveview()" value="Запустить видео">
+                                <div id="dual_live" class="checkbox text-center">
+                                    <label><input type="checkbox" value="" id="dual_live_sel" value="dual">Двумя потоками</label>
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-lg-9">
+                                    <input id="rtmpaddress" type="text" class="form-control">
+                                </div>
+                                <div class="col-lg-3">
+                                    <input id="getrtmpaddress" type="button" class="btn btn-primary" onclick="user.getrtmpaddress()" value="RTMP-ссылка">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -115,14 +146,21 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-4">
+                            <div class="col-lg-4 hide">
                                 <div class="checkbox">
-                                    <label><input type="checkbox" value="" id="vadbackfill">Выход со сцены</label>
+                                    <label><input type="checkbox" value="" id="vadbackfill" checked="checked">Выход со сцены</label>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <label for="overlay_text">Экранные подписи</label>
                                 <select id="overlay_text" value="off" class="form-control">
+                                    <option value="off">откл</option>
+                                    <option value="auto">авто</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="indicators">Индикаторы</label>
+                                <select id="indicators" value="off" class="form-control">
                                     <option value="off">откл</option>
                                     <option value="auto">авто</option>
                                 </select>
@@ -161,14 +199,21 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 hide">
                                     <div class="checkbox">
-                                        <label><input type="checkbox" value="" id="guest_vadbackfill">Выход со сцены</label>
+                                        <label><input type="checkbox" value="" id="guest_vadbackfill" checked="checked">Выход со сцены</label>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <label for="guest_overlay_text">Экранные подписи</label>
                                     <select id="guest_overlay_text" value="off" class="form-control">
+                                        <option value="off">откл</option>
+                                        <option value="auto">авто</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="guest_indicators">Индикаторы</label>
+                                    <select id="guest_indicators" value="off" class="form-control">
                                         <option value="off">откл</option>
                                         <option value="auto">авто</option>
                                     </select>
@@ -181,16 +226,23 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row top-buffer">
+                            <div class="col-lg-4">
+                                <button type="submit" onclick="user.overridelayout()" class="btn btn-primary">Обновить раскладку</button>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="submit" onclick="user.resetlayout()" class="btn btn-info">Вернуть исходную раскладку</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
                 <div class="panel panel-info">
                     <div class="panel-heading">Чат</div>
                     <div id="chatdiv" class="panel-body">
                         <form onsubmit="return user.send_message()">
                             <div class="row">
-                                <div class="col-lg-12">
-                                    <textarea id="chatbox" class="form-control" rows="8"></textarea>
+                                <div id = "chatarea" class="col-lg-12">
+                                    <div id="chatbox" class="chatbox"></div>
                                 </div>
                             </div>
                             <div class="row">
@@ -200,68 +252,14 @@
                                 <div class="col-lg-3">
                                     <input id="chatsend" type="button" class="btn btn-primary" onclick="user.send_message()" value="Отправить">
                                 </div>
-
                             </div>
                         </form>
                     </div>
                 </div>
-                <div class="panel panel-info">
-                    <div class="panel-heading">Видео</div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <h4>Видео в комнате</h4>
-                                <div id="liveviewplayer" class="embed-responsive embed-responsive-16by9">
-                                    <iframe class="embed-responsive-item"></iframe>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <h4>Презентация</h4>
-                                <div id="presentation" class="embed-responsive embed-responsive-16by9">
-                                    <iframe class="embed-responsive-item"></iframe>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-9">
-                                <input id="rtmpaddress" type="text" class="form-control">
-                            </div>
-                            <div class="col-lg-3">
-                                <input id="getrtmpaddress" type="button" class="btn btn-primary" onclick="user.getrtmpaddress()" value="RTMP-ссылка">
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
-</div>
-
-<div id="transferModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <form role="form">
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="transfer">
-                    </div>
-                    <select class="form-control" id="transferrole">
-                        <option value="host">Host</option>
-                        <option value="guest">Guest</option>
-                        <option value="norole"></option>
-                    </select>
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="transferpin">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" data-dismiss="modal" onclick="Participant.overlay">Перевести</button>
-                <button class="btn btn-default" data-dismiss="modal">Закрыть</button>
-            </div>
-        </div>
-    </div>
-</div>    
+</div>   
 </body>
 <script type="text/javascript">
     window.onbeforeunload = function(e) {
@@ -349,14 +347,22 @@
         distance: '1px',
     });
 
-    $('#chatbox').slimScroll({
-        height: '100%',
-        width: '100%',
-        size: '7px',
-        position: 'right',
-        color: '#337AB7',
-        distance: '1px',
-    });
+
+    /*var popOverSettings = {
+        placement: 'bottom',
+        container: 'body',
+        html: true,
+        selector: '[rel="popover"]',
+        content: function () {
+            return $('#popover-content').html();
+        }
+    }
+
+    $('body').popover(popOverSettings);
+    $('.fa-share').click(function (e) {
+        e.stopPropagation();
+    });*/
+
 
     // Mainscript
     // className strings
@@ -445,6 +451,7 @@
     function Participant(participant_data) {
         this.uuid = participant_data["uuid"];
         this.speaking = false;
+
         this.element_root = document.createElement("li");
         if (participant_data["role"] === "chair") {
             this.element_root.className = "list-group-item list-group-item-info";
@@ -571,14 +578,61 @@
                 this.unlock_element.addEventListener('click', this.unlock.bind(this), false);
                 this.list_user_control.appendChild(this.unlock_element);
 
-                // Add transfer
+                // Add  popover transfer
+                /*
                 if (participant_data["protocol"] !== "mssip") {
                     this.transfer_element = document.createElement("li");
                     this.transfer_element.className = class_transfer;
-                    this.transfer_element.setAttribute('data-toggle', 'modal');
-                    this.transfer_element.setAttribute('data-target', 'transferModal');
+                    this.transfer_element.setAttribute('rel', 'popover');
                     this.list_user_control.appendChild(this.transfer_element);
-                }
+
+                    this.transfer_popover_element = document.createElement("div");
+                    this.transfer_popover_element.id = "popover-content";
+                    this.transfer_popover_element.className = "hide popover_width";
+                    this.list_user_control.appendChild(this.transfer_popover_element);
+
+                    this.transfer_form_element = document.createElement("form");
+                    this.transfer_form_element.className = "form-inline";
+                    this.transfer_form_element.setAttribute('role', 'form');
+                    this.transfer_popover_element.appendChild(this.transfer_form_element);
+
+                    this.transfer_formgroup_element = document.createElement("div");
+                    this.transfer_formgroup_element.className = "form-group";
+                    this.transfer_form_element.appendChild(this.transfer_formgroup_element);
+
+                    this.transfer_name_element = document.createElement("input");
+                    this.transfer_name_element.className = "transfer_name_width form-control input-sm";
+                    this.transfer_name_element.setAttribute('type', 'text');
+                    this.transfer_name_element.setAttribute('placeholder', 'Имя конференции');
+                    this.transfer_formgroup_element.appendChild(this.transfer_name_element);
+
+                    this.transfer_pin_element = document.createElement("input");
+                    this.transfer_pin_element.className = "form-control input-sm";
+                    this.transfer_pin_element.classList.add("transfer_pin_width");
+                    this.transfer_pin_element.setAttribute('type', 'text');
+                    this.transfer_pin_element.setAttribute('placeholder', 'ПИН');
+                    this.transfer_formgroup_element.appendChild(this.transfer_pin_element);
+
+                    this.transfer_role_element = document.createElement("select");
+                    this.transfer_role_element.className = "transfer_select_width form-control input-sm";
+                    this.transfer_formgroup_element.appendChild(this.transfer_role_element);
+
+                    this.transfer_option1_element = document.createElement("option");
+                    this.transfer_option1_element.innerHTML = "Хост";
+                    this.transfer_option1_element.setAttribute('value', 'host');
+                    this.transfer_role_element.appendChild(this.transfer_option1_element);
+
+                    this.transfer_option2_element = document.createElement("option");
+                    this.transfer_option2_element.innerHTML = "Гость";
+                    this.transfer_option2_element.setAttribute('value', 'guest');
+                    this.transfer_role_element.appendChild(this.transfer_option2_element);                    
+
+                    this.transfer_submit_element = document.createElement("span");
+                    //this.transfer_submit_element.className = "btn btn-primary btn-sm";
+                    this.transfer_submit_element.innerHTML = "Перевести";
+                    this.transfer_submit_element.addEventListener('click', this.transfer.bind(this), false);
+                    this.transfer_popover_element.appendChild(this.transfer_submit_element);
+               }*/
 
         // compile user control
         this.element_root.appendChild(this.div_user_control);
@@ -606,7 +660,7 @@
             this.hold_element.classList.add("disabled_action");
             this.unlock_element.classList.add("disabled_action");
             this.see_presentation_element.classList.add("disabled_action");
-            this.transfer_element.classList.add("disabled_action");
+            //this.transfer_element.classList.add("disabled_action");
             this.layout.classList.add("invisible");
         }
 
@@ -652,7 +706,7 @@
             this.element_root.className = "list-group-item list-group-item-warning";
         }
 
-        if (participant_data["has_media"] && user.role == 'HOST' && this.uuid !== user.participant_uuid) {
+        if (participant_data["has_media"] && user.role === 'HOST' && this.uuid !== user.participant_uuid) {
             this.enable_media_buttons = true;
         console.log("enable_media_buttons " + this.enable_media_buttons);
         }
@@ -661,7 +715,7 @@
         document.getElementById("currenttext_" + this.uuid).value = this.overlay_text;
 
         // Update mute status
-        this.mute_state = participant_data["is_muted"] == "YES";
+        this.mute_state = participant_data["is_muted"] === "YES";
         if (this.mute_state) {
             this.mute_element.className = class_mute_on;
         } else {
@@ -698,13 +752,14 @@
             this.hold_element.classList.add("disabled_action");
             this.unlock_element.classList.add("disabled_action");
             this.see_presentation_element.classList.add("disabled_action");
-            this.transfer_element.classList.add("disabled_action");
+            //this.transfer_element.classList.add("disabled_action");
             this.layout.classList.add("invisible");
         } else {
             this.chair_role_element.classList.remove("disabled_action");
             this.spotlight_element.classList.remove("disabled_action");
             this.mute_element.classList.remove("disabled_action");
             this.hold_element.classList.remove("disabled_action");
+            //this.transfer_element.classList.remove("disabled_action");
             this.layout.classList.remove("hide");
         }
     };
@@ -830,30 +885,31 @@
     Participant.prototype.overlay = function () {
         console.log("participant overlay " + this);
         if (this.enable_media_buttons) {
-            var overlay = document.getElementById("newtext_" + this.uuid).value;
+            var overlay = document.getElementById("currenttext_" + this.uuid).value;
             var text_data = { "text": overlay };
             var response = user.post_request("participants/" + this.uuid + "/overlaytext", text_data);
             if (response["status"] == 200) {
                 document.getElementById("currenttext_" + this.uuid).value = overlay;
-                document.getElementById("newtext_" + this.uuid).value = "";
-            } else {
-                document.getElementById("newtext_" + this.uuid).value = "FAILED";
             }
         }
     };
 
     Participant.prototype.transfer = function () {
         console.log("participant transfer" + this);
-        var target = document.getElementById("transfer").value;
-        var role = document.getElementById("transferrole").value;
-        var pin = document.getElementById("transferpin").value;
+        var target = this.transfer_name_element.value;
+        var role = this.transfer_role_element.value;
+        var pin = this.transfer_pin_element.value;
         var text_data = { "conference_alias": target };
         if (role != "norole") {
             text_data["role"] = role;
             text_data["pin"] = pin;
         }
         var response = user.post_request("participants/" + this.uuid + "/transfer", text_data);
+        if (response["status"] === 200) {
+            console.log("participant transfered");
+        }
     };
+
 
     Participant.prototype.see_presentation = function () {
         console.log("participant see presentation " + this);
@@ -943,9 +999,8 @@
                         document.getElementById("record").classList.add("disabled_action");
                     }
 
-                    document.getElementById("confcontrol").className = "control_panel";
                     if (typeof jwplayer !== 'undefined') {
-                        document.getElementById("liveviewdiv").className = "liveviewdiv";
+                        document.getElementById("liveviewdiv").className = "tab-pane fade height100";
                     }
                     console.log("Joined " + this);
                 } else {
@@ -985,23 +1040,15 @@
 
             this.conference_participants = {};
 
+            this.reset_players();
+
             this.release_token();
             if (this.recorded === true) {
                 this.record();
             }
 
-            document.getElementById("presentation").className = "hide";
-
-            var player_wrapper = document.getElementById("liveviewplayer_wrapper");
-            if (player_wrapper != null) {
-                player_wrapper.innerHTML = "";
-                player_wrapper.removeAttribute("style");
-                console.log("Reset innerHTML and style");
-                player_wrapper.id = "liveviewplayer";
-            }
-            document.getElementById("liveviewdiv").className = "hide";
-            document.getElementById("rtmpaddress").value = "";
-            document.getElementById("confcontrol").className = "hide";
+            var chatbox_element = document.getElementById("chatbox");
+            chatbox_element.innerHTML = "";
 
             return false;
         },
@@ -1059,48 +1106,77 @@
         liveview: function () {
             if (this.token) {
                 console.log("live_active " + this.live_active);
-                if (this.live_active == false) {
+                if (this.live_active === false) {
+                    dual_live = document.getElementById("dual_live_sel").checked;
                     var call_data = { "call_type": "rtmp", "streaming": "true" };
+                    if (!dual_live) {
+                        call_data['present'] = "main";
+                    }
                     var response = user.post_request("participants/" + this.participant_uuid + "/calls", call_data);
-                    if (response["status"] == 200) {
+                    if (response["status"] === 200) {
                         var url = response["data"]["result"]["url"] + "-stream";
                         this.live_active_call = response["data"]["result"]["call_uuid"];
                         console.log("url: " + url);
-                        this.live_active = true;
-                        document.getElementById("liveview").value = "Отключить просмотр";
-                        jwplayer("liveviewplayer").setup({
-                            file: url,
-                            height: 198,
-                            width: 352,
+                        if (dual_live) {
+                            var pres_url = response["data"]["result"]["url"] + "-presentation";
+                            console.log("pres_url: " + pres_url);
+                            jwplayer("liveviewpresplayer").setup({
+                                file: pres_url,
+                                height: 180,
+                                width: 320,
+                                aspectratio: "16:9",
+                                controls: false,
+                                stretching: "exactfit",
+                                stagevideo: true,
+                                rtmp: { bufferlength: 0.1 }
+                            });
+                            jwplayer("liveviewpresplayer").play(true);
+                        }
+                        jwplayer("liveviewplayer").setup({file: url,
+                            height: 180,
+                            width: 320,
                             aspectratio: "16:9",
                             controls: false,
                             stretching: "exactfit",
-                        });
+                            stagevideo: true,
+                            rtmp: {bufferlength: 0.1}});
                         jwplayer("liveviewplayer").play(true);
-                        setTimeout(user.player_wrapper, 300);
+                        this.live_active = true;
+                        document.getElementById("dual_live").className = "hide";
+                        document.getElementById("liveview").value = "Отключить просмотр";
                     }
                 } else {
-                    this.live_active = false;
-                    document.getElementById("liveview").value = "Просмотр видео";
-                    var player_wrapper = document.getElementById("liveviewplayer_wrapper");
-                    if (player_wrapper != null) {
-                        player_wrapper.innerHTML = "";
-                        player_wrapper.removeAttribute("style");
-                        player_wrapper.id = "liveviewplayer";
-                        player_wrapper.setAttribute("class", "liveviewdiv_player");
-                    }
-                    var response = user.post_request("participants/" + this.participant_uuid + "/calls/" + this.live_active_call + "/disconnect", null);
-                    this.live_active_call = null;
+                    this.reset_players();
                 }
             }
         },
 
-        player_wrapper: function (){
+        reset_players : function() {
+            this.live_active = false;
+
             var player_wrapper = document.getElementById("liveviewplayer_wrapper");
             if (player_wrapper != null) {
+                player_wrapper.innerHTML = "";
                 player_wrapper.removeAttribute("style");
-                player_wrapper.setAttribute("class", "liveviewdiv_player");
+                player_wrapper.className = "height180";
+                player_wrapper.id = "liveviewplayer";
             }
+            var presplayer_wrapper = document.getElementById("liveviewpresplayer_wrapper");
+            if (presplayer_wrapper != null) {
+                presplayer_wrapper.innerHTML = "";
+                presplayer_wrapper.removeAttribute("style");
+                player_wrapper.className = "height180";
+                presplayer_wrapper.id = "liveviewpresplayer";
+            }
+
+            document.getElementById("liveview").value = "Запустить видео";
+            document.getElementById("dual_live").className = "checkbox text-center";
+
+            if (this.live_active_call != null) {
+                var response = user.post_request("participants/" + this.participant_uuid + "/calls/" + this.live_active_call + "/disconnect", null);
+                this.live_active_call = null;
+            }
+
         },
 
         getrtmpaddress: function () {
@@ -1399,6 +1475,7 @@
             var plusn_element = document.getElementById("plusn");
             var vadbackfill_element = document.getElementById("vadbackfill");
             var overlaytext_element = document.getElementById("overlay_text");
+            var indicators_element = document.getElementById("indicators");
             var audience_element = document.getElementById("audience");
             var actors_value = participant_ids;
             if (actors_element.value == "everyone") {
@@ -1416,6 +1493,7 @@
                 "plus_n": plusn_element.value,
                 "vad_backfill": vadbackfill_element.checked,
                 "actors_overlay_text": overlaytext_element.value,
+                "indicators": indicators_element.value,
                 "audience": audience_value
             });
 
@@ -1426,6 +1504,7 @@
                 var guest_plusn_element = document.getElementById("guest_plusn");
                 var guest_vadbackfill_element = document.getElementById("guest_vadbackfill");
                 var guest_overlaytext_element = document.getElementById("guest_overlay_text");
+                var guest_indicators_element = document.getElementById("guest_indicators");
                 var guest_audience_element = document.getElementById("guest_audience");
                 var guest_actors_value = participant_ids;
                 if (guest_actors_element.value == "everyone") {
@@ -1437,6 +1516,7 @@
                     "plus_n": guest_plusn_element.value,
                     "vad_backfill": guest_vadbackfill_element.checked,
                     "actors_overlay_text": guest_overlaytext_element.value,
+                    "indicators": indicators_element.value,
                     "audience": []
                 });
             }
@@ -1488,7 +1568,7 @@
         resetlayout: function (event) {
             var call_data = { "layouts": [] };
             var response = user.post_request("override_layout", call_data);
-            if (response["status"] == 200) {
+            if (response["status"] === 200) {
                 console.log("Reset layout!");
             }
         },
