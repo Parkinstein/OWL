@@ -22,9 +22,7 @@ namespace OWL_Site.Models
         public string id { get; set; }
         public string name { get; set; }
         public string start_time { get; set; }
-        public string start_time2 { get; set; }
         public string end_time { get; set; }
-        public string end_time2 { get; set; }
         public string duration { get; set; }
         public int participant_count { get; set; }
         public string[] participants { get; set; }
@@ -43,9 +41,7 @@ namespace OWL_Site.Models
         public string local_alias { get; set; }
         public string remote_alias { get; set; }
         public string start_time { get; set; }
-        public string start_time2 { get; set; }
         public string end_time { get; set; }
-        public string end_time2 { get; set; }
         public string duration { get; set; }
         public string display_name { get; set; }
         public string protocol { get; set; }

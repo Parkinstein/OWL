@@ -1,69 +1,108 @@
 ﻿<body onload="user.join()">
 <div id="div_stats" class="control_grid">
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading clearfix">
-                    <h4 class="pull-left">Видеоконференция</h4>
-                    <div class="dropdown conference_control pull-right">
-                        <button class="btn btn-warning dropdown-toggle pull-right" type="button" data-toggle="dropdown">
-                            Управление конференцией<span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li id="conflock" onclick="user.lock()">Заблокировать конференцию</li>
-                            <li id="guestsmuted" onclick="user.muteallguests()">Отключить микрофоны</li>
-                            <li id="disconnectall" onclick="user.disconnect_all()">Закончить конференцию</li>
-                            <li id="record" onclick="user.record()">Включить запись</li>
-                        </ul>
-                    </div>
+    <div class="col-lg-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <h4 class="pull-left">Видеоконференция</h4>
+                <div class="dropdown conference_control pull-right">
+                    <button class="btn btn-warning dropdown-toggle pull-right" type="button" data-toggle="dropdown">
+                        Управление конференцией<span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right conference_control">
+                        <li id="conflock" onclick="user.lock()"></li>
+                        <li id="guestsmuted" onclick="user.muteallguests()"></li>
+                        <li id="disconnectall" onclick="user.disconnect_all()"></li>
+                        <li id="record" onclick="user.record()"></li>
+                    </ul>
                 </div>
-                <div class="panel-body conference_panel">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#active_room">Активная комната</a></li>
-                        <li><a data-toggle="tab" href="#waiting_room">Комната ожидания</a></li>
-                        <li><a data-toggle="tab" href="#connect_user">Подключение участника</a></li>
-                    </ul>                                                                 
-                    <div class="tab-content conference_pane">
-                        <div id="active_room" class="tab-pane fade in active" style="height: 100%;">
-                            <div id="roster" class="well">
-                                <ul id="roster_list" class="list-group" style="height: 100%;">
-                                </ul>
+            </div>
+            <div class="panel-body conference_panel">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#active_room">Активная комната</a></li>
+                    <li><a data-toggle="tab" href="#waiting_room">Комната ожидания</a></li>
+                    <li><a data-toggle="tab" href="#connect_user">Подключение участника</a></li>
+                    <li><a data-toggle="tab" href="#liveviewdiv">Текущая картинка</a></li>
+                </ul>
+                <div class="tab-content conference_pane">
+                    <div id="active_room" class="tab-pane fade in active height100">
+                        <div id="roster" class="well">
+                            <ul id="roster_list" class="list-group height100">
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="waiting_room" class="tab-pane fade height100">
+                        <div id="waiting" class="well">
+                            <ul id="waitingroom" class="list-group height100">
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="connect_user" class="tab-pane fade height100">
+                        <div class="well height100">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label for="protocol">Выберите протокол:</label>
+                                    <select class="form-control input-sm" id="protocol">
+                                        <option value="sip">SIP</option>
+                                        <option value="h323">H.323</option>
+                                        <option value="mssip">Lync</option>
+                                        <option value="rtmp">RTMP</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="protocol">Роль:</label>
+                                    <select class="form-control input-sm" id="protocol">
+                                        <option value="guest">гость</option>
+                                        <option value="host">хост</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <label for="remotealias">Адрес вызываемого абонента:</label>
+                                    <input class="form-control input-sm" id="remotealias">
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-lg-12">
+                                    <button type="submit" onclick="user.dial()" class="btn btn-primary">Вызвать</button>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <table id="table_pb" class="table table-striped table-bordered table-hover">
+                                    <thead><tr><th>Id</th><th>Имя</th><th>Фамилия</th><th>SIP</th><th>H.323</th><th>Группа</th></tr></thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <div class="row top-buffer">
+                                <button type="submit" onclick="add_pb_user()" class="btn btn-primary">Добавить из телефонной книги</button>
                             </div>
                         </div>
-                        <div id="waiting_room" class="tab-pane fade" style="height: 100%;">
-                            <div id="waiting" class="well">
-                                <ul id="waitingroom" class="list-group">
-                                </ul>
+                    </div>
+                    <div id="liveviewdiv" class="tab-pane fade height100">
+                        <div class="well height100">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <h4 class="text-center">Видео в комнате</h4>
+                                    <div id="liveviewplayer" class="height180"></div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <h4 class="text-center">Презентация</h4>
+                                    <div id="liveviewpresplayer" class="height180"></div>
+                                </div>
                             </div>
-                        </div>
-                        <div id="connect_user" class="tab-pane fade">
-                            <div class="well">
-                                <div id="dialdiv" class="dialdiv">
-                                    <fieldset>
-                                        <legend class="dialdiv_legend">Подключить участника</legend>
-                                        <div class="dialdiv_container">
-                                            <div class="dialdiv_protocol">
-                                                <label class="dialdiv_header">Протокол </label>
-                                                <select id="protocol" value="sip" class="form-control dial_protocol">
-                                                    <option value="sip">SIP</option>
-                                                    <option value="h323">H.323</option>
-                                                    <option value="mssip">Lync</option>
-                                                    <option value="rtmp">RTMP</option>
-                                                </select>
-                                                <br/>
-                                                <label class="dialdiv_header">Роль </label>
-                                                <select id="role" value="guest" class="form-control dial_protocol">
-                                                    <option value="guest">гость</option>
-                                                    <option value="host">хост</option>
-                                                </select>
-                                                <br/>
-                                                <label class="dialdiv_header">Адрес вызываемого абонента</label>
-                                                <input id="remotealias" value="" class="form-control dial_alias">
-                                            </div>
-                                            <input id="dial" type="button" onclick="user.dial()" value="Вызвать" class="dialdiv_button"/>
-                                            <input id="dial" type="button" onclick="display_pb()" value="Добавить из адресной книги" class="dialdiv_button"/>
-                                        </div>
-                                    </fieldset>
+                            <div class="row top-buffer">
+                                <input id="liveview" type="button" class="btn btn-primary center-block" onclick="user.liveview()" value="Запустить видео">
+                                <div id="dual_live" class="checkbox text-center">
+                                    <label><input type="checkbox" value="" id="dual_live_sel" value="dual">Двумя потоками</label>
+                                </div>
+                            </div>
+                            <div class="row top-buffer">
+                                <div class="col-lg-9">
+                                    <input id="rtmpaddress" type="text" class="form-control">
+                                </div>
+                                <div class="col-lg-3">
+                                    <input id="getrtmpaddress" type="button" class="btn btn-primary" onclick="user.getrtmpaddress()" value="RTMP-ссылка">
                                 </div>
                             </div>
                         </div>
@@ -71,188 +110,208 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">Управление</div>
-                <div class="panel-body">Panel Content</div>
-            </div>
-        </div>
     </div>
-    <div id="confcontrol" class="control_panel">
-        <table class="controltable">
-            <tr>
-                <td class="controlcol">
-                    
-                    <div style="min-height: 10px; width: 100%"></div>
-                    
-                    <div style="min-height: 10px; width: 100%"></div>
-                    
-                </td>
-                <td class="controlcol">
-                    <div id="layoutdiv" class="layoutdiv">
-                        <fieldset>
-                            <legend class="layoutdiv_legend">Управление раскладкой видео</legend>
-                            <div class="layout_layout_1">
-                                <label class="layoutdiv_header">Участники </label>
-                                <label class="layoutdiv_header">Управление раскладками </label>
-                                <label class="layoutdiv_header">Показ +N окошка</label>
-                            </div>
-                            <div class="layout_layout_2">
-                                <select id="actors" value="everyone" class="form-control layoutdiv_select">
+    <div class="col-lg-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <h4 class="pull-left">Управление</h4>
+            </div>
+            <div class="panel-body conference_panel">
+                <div class="panel panel-info">
+                    <div class="panel-heading">Управление раскладкой видео</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <label for="actors">Участники</label>
+                                <select class="form-control" id="actors">
                                     <option value="everyone">все</option>
                                     <option value="selected">выбранные</option>
                                 </select>
-                                <select id="layout" value="1:7" class="form-control layoutdiv_select">
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="layout">Управление раскладками</label>
+                                <select id="layout" value="1:7" class="form-control">
                                     <option value="1:0">1 основной</option>
                                     <option value="4:0">2 на 2</option>
                                     <option value="1:7">1 основной + 7 дополнительных</option>
                                     <option value="1:21">1 основной + 21 дополнительных</option>
                                 </select>
-                                <select id="plusn" value="auto" class="form-control layoutdiv_select">
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="plusn">Показ +N окошка</label>
+                                <select id="plusn" value="auto" class="form-control">
                                     <option value="auto">авто</option>
                                     <option value="off">откл.</option>
                                 </select>
-                                <!--<input id="plusn" list="plusnvalues" value="auto" class="form-control layoutdiv_select"/>
-                                <datalist id="plusnvalues"><option id="auto_option" value="auto"><option value="off"/></datalist>-->
-
                             </div>
-                            <div class="layout_layout_3">
-                                <label class="layoutdiv_header">Выход со сцены</label>
-                                <label class="layoutdiv_header">Экранные подписи</label>
-                                <label class="layoutdiv_header">Для участников:</label>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 hide">
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="" id="vadbackfill" checked="checked">Выход со сцены</label>
+                                </div>
                             </div>
-                            <div class="layout_layout_4">
-                                <input type="checkbox" id="vadbackfill" checked/>
-                                <select id="overlay_text" value="off" class="form-control layoutdiv_select">
+                            <div class="col-lg-4">
+                                <label for="overlay_text">Экранные подписи</label>
+                                <select id="overlay_text" value="off" class="form-control">
                                     <option value="off">откл</option>
                                     <option value="auto">авто</option>
                                 </select>
-                                <select id="audience" value="everyone" onchange="update_audience()" class="form-control layoutdiv_select">
-                                    <option value="everyone">всех</option>
-                                    <option value="hosts">только для гостей</option>
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="indicators">Индикаторы</label>
+                                <select id="indicators" value="off" class="form-control">
+                                    <option value="off">откл</option>
+                                    <option value="auto">авто</option>
                                 </select>
                             </div>
-                            <br/>
-                            <div id="guestlayout" class="hide">
-                                <div class="layout_layout_1">
-                                    <label class="layoutdiv_header">Участники </label>
-                                    <label class="layoutdiv_header">Управление раскладками </label>
-                                    <label class="layoutdiv_header">PlusN (откл/авто/n)</label>
-                                </div>
-                                <br/>
-                                <div class="layout_layout_2">
-                                    <select id="guest_actors" value="everyone" class="form-control layoutdiv_select">
+                            <div class="col-lg-4">
+                                <label for="audience">Для участников</label>
+                                <select id="audience" value="everyone" onchange="update_audience()" class="form-control">
+                                    <option value="everyone">всех</option>
+                                    <option value="hosts">только для хостов</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="guestlayout" class="well hide">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <label for="guest_actors">Участники</label>
+                                    <select class="form-control" id="guest_actors">
                                         <option value="everyone">все</option>
                                         <option value="selected">выбранные</option>
                                     </select>
-                                    <select id="guest_layout" value="1:7" class="form-control layoutdiv_select">
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="guest_layout">Управление раскладками</label>
+                                    <select id="guest_layout" value="1:7" class="form-control">
                                         <option value="1:0">1 основной</option>
-                                        <option value="4:0">ОдинаковоеEqual layout</option>
+                                        <option value="4:0">2 на 2</option>
                                         <option value="1:7">1 основной + 7 дополнительных</option>
                                         <option value="1:21">1 основной + 21 дополнительных</option>
                                     </select>
-                                    <input id="plusn" list="plusnvalues" value="auto" class="form-control layoutdiv_select"/>
-                                    <datalist id="plusnvalues"><option id="auto_option" value="auto"><option value="off"></datalist>
                                 </div>
-                                <div class="layout_layout_3">
-                                    <label class="layoutdiv_header">VAD backfill </label>
-                                    <label class="layoutdiv_header">Экранные надписи </label>
-                                    <label class="layoutdiv_header">Для участников:</label>
+                                <div class="col-lg-4">
+                                    <label for="guest_plusn">Показ +N окошка</label>
+                                    <select id="guest_plusn" value="auto" class="form-control">
+                                        <option value="auto">авто</option>
+                                    </select>
                                 </div>
-                                <br/>
-                                <div class="layout_layout_4">
-                                    <input type="checkbox" id="guest_vadbackfill" checked/>
-                                    <select id="guest_overlay_text" value="off" class="form-control layoutdiv_select">
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 hide">
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" value="" id="guest_vadbackfill" checked="checked">Выход со сцены</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="guest_overlay_text">Экранные подписи</label>
+                                    <select id="guest_overlay_text" value="off" class="form-control">
                                         <option value="off">откл</option>
                                         <option value="auto">авто</option>
                                     </select>
-                                    <select id="guest_audience" value="guests" class="form-control layoutdiv_select">
-                                        <option value="guests">гостей</option>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="guest_indicators">Индикаторы</label>
+                                    <select id="guest_indicators" value="off" class="form-control">
+                                        <option value="off">откл</option>
+                                        <option value="auto">авто</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="guest_audience">Для участников</label>
+                                    <select id="guest_audience" value="everyone" class="form-control">
+                                        <option value="hosts">только для гостей</option>
                                     </select>
                                 </div>
                             </div>
-                            <input id="overridelayout" type="button" onclick="user.overridelayout()" value="Изменить раскладку" class="layoutdiv_button"/>
-                            <input id="resetlayout" type="button" onclick="user.resetlayout()" value="Вернуть исходное состояние" class="layoutdiv_button"/><br/>
-                        </fieldset>
-                    </div>
-                    <div style="min-height: 10px; width: 100%"></div>
-                    <div id="liveviewdiv" class="liveviewdiv">
-                        <fieldset>
-                            <legend class="liveviewdiv_legend">Сейчас транслируется в комнате</legend>
-                            <div id="liveviewplayer" class="liveviewdiv_player"></div>
-                            <img id="presentation" class="liveviewdiv_player"><br/>
-                            <input id="liveview" type="button" onclick="user.liveview()" value="Просмотр видео" class="liveviewdiv_livebutton"/>
-                            <br/>
-                            <div class="liveviewdiv_rtmp">
-                                <input id="rtmpaddress" class="form-control liveviewdiv_rtmptext"/>
-                                <input id="getrtmpaddress" type="button" onclick="user.getrtmpaddress()" value="Получить RTMP ссылку" class="liveviewdiv_rtmpbutton"/>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-lg-4">
+                                <button type="submit" onclick="user.overridelayout()" class="btn btn-primary">Обновить раскладку</button>
                             </div>
-                        </fieldset>
+                            <div class="col-lg-4">
+                                <button type="submit" onclick="user.resetlayout()" class="btn btn-info">Вернуть исходную раскладку</button>
+                            </div>
+                        </div>
                     </div>
-                    <div style="min-height: 10px; width: 100%"></div>
-                    <div id="chatdiv" class="chatdiv">
-                        <fieldset>
-                            <legend class="chatdiv_legend">Чат вирутальной переговорной комнаты</legend>
-                            <form onsubmit="return user.send_message()">
-                                <div id="chatbox" class="chatbox"></div><br/>
-                                <input id="chatinput" style="width: 70%;" class="form-control chatdiv_text"/>
-                                <input id="chatsend" type="button" onclick="user.send_message()" value="Отправить" class="chatdiv_button"/>
-                            </form>
-                        </fieldset>
+                </div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">Чат</div>
+                    <div id="chatdiv" class="panel-body">
+                        <form onsubmit="return user.send_message()">
+                            <div class="row">
+                                <div id = "chatarea" class="col-lg-12">
+                                    <div id="chatbox" class="chatbox"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <input id="chatinput" type="text" class="form-control">
+                                </div>
+                                <div class="col-lg-3">
+                                    <input id="chatsend" type="button" class="btn btn-primary" onclick="user.send_message()" value="Отправить">
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div id="popup_block" class="hide">
-        <div id="popup_content" class="b-popup b-popup-content">
-            <table id="table_du">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Имя</th>
-                    <th>Фамилия</th>
-                    <th>Должность</th>
-                    <th>Телефон (внут.)</th>
-                    <th>Email</th>
-                    <th>Группа</th>
-                    <th>SIP-адрес</th>
-                    <th>H.323-адрес</th>
-                </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-            <div class="phonebook_buttons">
-                <input id="save" type="button" onclick="add_pb_user()" value="Подключить" class="phonebook_button_add"/>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</div>   
 </body>
 <script type="text/javascript">
-    var oPhonebookTable;
-
-    function display_pb() {
-        event.stopPropagation();
-        document.getElementById("popup_block").className = "b-popup b-popup-content";
-        if (oPhonebookTable == null) {
-            popup_pb_table();
-        } else {
-            setTimeout(refresh_pb, 500);
-        }
-
+    window.onbeforeunload = function(e) {
+        user.leave();
     };
 
-    $(document).on("click", function (e) {
-        if (!$("#popup_content").is(e.target) && $("#popup_content").has(e.target).length == 0 && document.getElementById("popup_block").className == "b-popup b-popup-content") {
-            document.getElementById("popup_block").className = "hide";
-        };
+    $(document).ready(function() {
+        $('#table_pb').DataTable({
+            "ordering": true,
+            "searching": true,
+            "scrollY": "50vh",
+            "scrollCollapse": "true",
+            "paging": false,
+            "autoWidth": true,
+            "processing": true,
+            "order": [[1, 'asc']],
+            "select": {
+                "style": 'multi',
+            },
+            "serverSide": false,
+            "fixedColumns": true,
+
+            "ajax": {
+                "type": "POST",
+                "url": "/Phonebook/Phonebook_Ajax",
+                "contentType": 'application/json; charset=utf-8',
+                "data": function(data) { return data = JSON.stringify(data); }
+            },
+
+            "columns": [
+                { "data": "PrivatePhBs.Id", "visible": false },
+                { "data": "AspNetUsers.Name" },
+                { "data": "AspNetUsers.Surname" },
+                { "data": "AspNetUsers.Sip_addr", "visible": false },
+                { "data": "AspNetUsers.H323_addr", "visible": false },
+                { "data": "PrivatePhBs.UsersGroup", "searchable": false }
+            ],
+
+            "language": {
+                "url": "../../Content/dt_ru.json",
+                "select": {
+                    "rows": {
+                        _: "Выделено %d записей",
+                        1: "Выделена 1 запись",
+                        2: "Выделено 2 записи",
+                        3: "Выделено 3 записи",
+                        4: "Выделено 4 записи",
+                    }
+                },
+            },
+        });
     });
-
-    function refresh_pb() {
-        if (oPhonebookTable != null)
-            oPhonebookTable.ajax.reload();
-    };
 
     function add_pb_user() {
         var sip_add = oPhonebookTable.cells('.selected', 7, { page: 'current' }).data();
@@ -266,64 +325,7 @@
             } else {
                 user.dial_pb(h323_add[i], "h323", name);
             }
-
         }
-        document.getElementById("popup_block").className = "hide";
-    };
-
-    function popup_pb_table() {
-        oPhonebookTable = $('#table_du').DataTable({
-            "ordering": true,
-            "searching": true,
-            "paging": true,
-            "autoWidth": true,
-            "processing": true,
-            "lengthChange": false,
-            "order": [[2, 'asc']],
-            "pageLength": 30,
-            "select": {
-                "style": 'multi',
-            },
-
-            "ajax": {
-                "type": "POST",
-                "url": "/Phonebook/Phonebook_Ajax",
-                "contentType": 'application/json; charset=utf-8',
-                "data": function (data) { return data = JSON.stringify(data); }
-            },
-
-            "columns": [
-                { "data": "id", "visible": false },
-                { "data": "name" },
-                { "data": "surname" },
-                { "data": "position", "searchable": false },
-                { "data": "tel_int" },
-                { "data": "email" },
-                { "data": "group", "searchable": false },
-                { "data": "sip_add", "searchable": false },
-                { "data": "h323_add", "searchable": false },
-            ],
-
-            "drawCallback": function (settings) {
-                var api = this.api();
-                var rows = api.rows({ page: 'current' }).nodes();
-                var last = null;
-
-                api.column(6, { page: 'current' }).data().each(function (group, i) {
-                    if (last !== group) {
-                        $(rows).eq(i).before(
-                            '<tr class="phonebook_groups"><td colspan="12">' + group + '</td></tr>'
-                        );
-                        last = group;
-                    }
-                });
-            },
-
-            "language": {
-                "url": "../../Content/dt_ru.json"
-            },
-
-        });
     };
 
 
@@ -335,24 +337,34 @@
         color: '#337AB7',
         distance: '1px',
     });
-    $('#waitingroom').slimScroll({
+
+    $('#waiting').slimScroll({
         height: '100%',
         width: '100%',
-        size: '7px',
+        size: '12px',
         position: 'right',
-        color: '#332383',
-        distance: '1px',
-    });
-    $('#chatbox').slimScroll({
-        height: '280px',
-        width: '100%',
-        size: '7px',
-        position: 'right',
-        color: '#332383',
+        color: '#337AB7',
         distance: '1px',
     });
 
 
+    /*var popOverSettings = {
+        placement: 'bottom',
+        container: 'body',
+        html: true,
+        selector: '[rel="popover"]',
+        content: function () {
+            return $('#popover-content').html();
+        }
+    }
+
+    $('body').popover(popOverSettings);
+    $('.fa-share').click(function (e) {
+        e.stopPropagation();
+    });*/
+
+
+    // Mainscript
     // className strings
     var class_disconnect = "participant_action fa fa-eject fa-fw red";
     var class_mute_on = "participant_action fa fa-microphone-slash fa-fw red";
@@ -372,7 +384,7 @@
     var class_conference_disconnect_all = "conference_action fa fa-eject fa-fw red";
     var class_overlay_text_commit = "participant_action fa fa-check fa-fw white";
     var class_conference_record_off = "participant_action fa fa-circle fa-fw red";
-    var class_conference_record_on = "participant_action fa fa-circle-blink fa-fw red";
+    var class_conference_record_on = "participant_action fa fa-circle fa-fw red blink";
     var class_role_chair = "participant_action fa fa-user-plus fa-fw blue";
     var class_role_guest = "participant_action fa fa-user fa-fw grey";
     var class_transfer = "participant_action fa fa-share fa-fw black";
@@ -420,29 +432,26 @@
     }
 
     function update_audience() {
-        // Audience drop down updated
-        // If hosts is selected, make sure auto is removed from plus_n
-        // and show guest view params and add it back if everyone selected
-        // and hide guest view params
-        var auto_option = document.getElementById("auto_option");
         var plus_n_element = document.getElementById("plusn");
         var audience_element = document.getElementById("audience");
         var guestlayout_element = document.getElementById("guestlayout");
-        if (audience_element.value == 'hosts') {
-            auto_option.disabled = true;
-            if (plus_n_element.value == 'auto') {
+        if (audience_element.value === 'hosts') {
+            if (plus_n_element.value === 'auto') {
                 plus_n_element.value = 'off';
             }
-            guestlayout_element.className = "";
+            plus_n_element.disabled;
+            plus_n_element.options[0].disabled = true;
+            guestlayout_element.className = "well";
         } else {
-            auto_option.disabled = false;
             guestlayout_element.className = "hide";
+            plus_n_element.options[1].disabled = false;
         }
     }
 
     function Participant(participant_data) {
         this.uuid = participant_data["uuid"];
         this.speaking = false;
+
         this.element_root = document.createElement("li");
         if (participant_data["role"] === "chair") {
             this.element_root.className = "list-group-item list-group-item-info";
@@ -479,57 +488,14 @@
         nameInput.className = "form-control input-sm";
         nameInput.id = "currenttext_" + participant_data["uuid"];
         nameInput.type = "text";
+        nameInput.addEventListener('blur', this.overlay.bind(this), false);
         nameInput.setAttribute('size', '30');
         nameInput.value = this.uri;
+        //currentOverlayText.value = participant_data["overlay_text"];
 
         this.name_element.appendChild(nameInput);
         this.element_root.appendChild(this.name_element);
 
-        /*this.overlay_text_element = document.createElement("div");
-        this.overlay_text_element.className = "particpantOverlayText";
-
-        var currentOverlayText = document.createElement("input");
-        currentOverlayText.setAttribute('size', '30');
-        currentOverlayText.className = "currentOverlayText";
-        currentOverlayText.setAttribute('disabled', 'true');
-        currentOverlayText.id = "currenttext_" + participant_data["uuid"];
-        currentOverlayText.value = participant_data["overlay_text"];
-
-        var newOverlayText = document.createElement("input");
-        newOverlayText.setAttribute('size', '30');
-        newOverlayText.className = "form-control newOverlayText";
-        newOverlayText.id = "newtext_" + participant_data["uuid"];
-
-        updateTextButton = document.createElement("div");
-        updateTextButton.className = "buttonOverlayText fa fa-check white";
-        updateTextButton.addEventListener('click', this.overlay.bind(this), false);
-
-        this.overlay_text_element.appendChild(currentOverlayText);
-        this.overlay_text_element.appendChild(newOverlayText);
-        this.overlay_text_element.appendChild(updateTextButton);*/
-
-
-
-        /*if (participant_data["protocol"] != "mssip") {
-
-            var transferText = document.createElement("input");
-            transferText.className = "form-control newTransferText";
-            transferText.id = "transfer_" + participant_data["uuid"];
-
-            var transferButton = document.createElement("div");
-            transferButton.className = "buttonOverlayText fa fa-mail-forward white";
-            transferButton.addEventListener('click', this.transfer.bind(this), false);
-
-            this.overlay_text_element.appendChild(transferText);
-            this.overlay_text_element.appendChild(transferButton);
-        }
-        */
-
-        /*this.element_root.appendChild(this.uri_element);
-        this.element_root.appendChild(this.overlay_text_element);
-        if (this.transfer_element != undefined) {
-            this.element_root.appendChild(this.transfer_element);
-        }*/
 
         // Add control button
         this.div_user_control = document.createElement("div");
@@ -543,7 +509,7 @@
 
             // Add drop-down list
             this.list_user_control = document.createElement("ul");
-            this.list_user_control.className = "dropdown-menu";
+            this.list_user_control.className = "dropdown-menu user_control";
             this.div_user_control.appendChild(this.list_user_control);
 
                 // Add chair/guest toggle
@@ -612,11 +578,61 @@
                 this.unlock_element.addEventListener('click', this.unlock.bind(this), false);
                 this.list_user_control.appendChild(this.unlock_element);
 
-                // Add transfer
-                this.transfer_element = document.createElement("li");
-                this.transfer_element.className = class_transfer;
-                /*this.transfer_element.addEventListener('click', this.transfer_element.bind(this), false);*/
-                this.list_user_control.appendChild(this.transfer_element);
+                // Add  popover transfer
+                /*
+                if (participant_data["protocol"] !== "mssip") {
+                    this.transfer_element = document.createElement("li");
+                    this.transfer_element.className = class_transfer;
+                    this.transfer_element.setAttribute('rel', 'popover');
+                    this.list_user_control.appendChild(this.transfer_element);
+
+                    this.transfer_popover_element = document.createElement("div");
+                    this.transfer_popover_element.id = "popover-content";
+                    this.transfer_popover_element.className = "hide popover_width";
+                    this.list_user_control.appendChild(this.transfer_popover_element);
+
+                    this.transfer_form_element = document.createElement("form");
+                    this.transfer_form_element.className = "form-inline";
+                    this.transfer_form_element.setAttribute('role', 'form');
+                    this.transfer_popover_element.appendChild(this.transfer_form_element);
+
+                    this.transfer_formgroup_element = document.createElement("div");
+                    this.transfer_formgroup_element.className = "form-group";
+                    this.transfer_form_element.appendChild(this.transfer_formgroup_element);
+
+                    this.transfer_name_element = document.createElement("input");
+                    this.transfer_name_element.className = "transfer_name_width form-control input-sm";
+                    this.transfer_name_element.setAttribute('type', 'text');
+                    this.transfer_name_element.setAttribute('placeholder', 'Имя конференции');
+                    this.transfer_formgroup_element.appendChild(this.transfer_name_element);
+
+                    this.transfer_pin_element = document.createElement("input");
+                    this.transfer_pin_element.className = "form-control input-sm";
+                    this.transfer_pin_element.classList.add("transfer_pin_width");
+                    this.transfer_pin_element.setAttribute('type', 'text');
+                    this.transfer_pin_element.setAttribute('placeholder', 'ПИН');
+                    this.transfer_formgroup_element.appendChild(this.transfer_pin_element);
+
+                    this.transfer_role_element = document.createElement("select");
+                    this.transfer_role_element.className = "transfer_select_width form-control input-sm";
+                    this.transfer_formgroup_element.appendChild(this.transfer_role_element);
+
+                    this.transfer_option1_element = document.createElement("option");
+                    this.transfer_option1_element.innerHTML = "Хост";
+                    this.transfer_option1_element.setAttribute('value', 'host');
+                    this.transfer_role_element.appendChild(this.transfer_option1_element);
+
+                    this.transfer_option2_element = document.createElement("option");
+                    this.transfer_option2_element.innerHTML = "Гость";
+                    this.transfer_option2_element.setAttribute('value', 'guest');
+                    this.transfer_role_element.appendChild(this.transfer_option2_element);                    
+
+                    this.transfer_submit_element = document.createElement("span");
+                    //this.transfer_submit_element.className = "btn btn-primary btn-sm";
+                    this.transfer_submit_element.innerHTML = "Перевести";
+                    this.transfer_submit_element.addEventListener('click', this.transfer.bind(this), false);
+                    this.transfer_popover_element.appendChild(this.transfer_submit_element);
+               }*/
 
         // compile user control
         this.element_root.appendChild(this.div_user_control);
@@ -644,7 +660,7 @@
             this.hold_element.classList.add("disabled_action");
             this.unlock_element.classList.add("disabled_action");
             this.see_presentation_element.classList.add("disabled_action");
-            this.transfer_element.classList.add("disabled_action");
+            //this.transfer_element.classList.add("disabled_action");
             this.layout.classList.add("invisible");
         }
 
@@ -690,7 +706,7 @@
             this.element_root.className = "list-group-item list-group-item-warning";
         }
 
-        if (participant_data["has_media"] && user.role == 'HOST' && this.uuid !== user.participant_uuid) {
+        if (participant_data["has_media"] && user.role === 'HOST' && this.uuid !== user.participant_uuid) {
             this.enable_media_buttons = true;
         console.log("enable_media_buttons " + this.enable_media_buttons);
         }
@@ -699,7 +715,7 @@
         document.getElementById("currenttext_" + this.uuid).value = this.overlay_text;
 
         // Update mute status
-        this.mute_state = participant_data["is_muted"] == "YES";
+        this.mute_state = participant_data["is_muted"] === "YES";
         if (this.mute_state) {
             this.mute_element.className = class_mute_on;
         } else {
@@ -736,13 +752,14 @@
             this.hold_element.classList.add("disabled_action");
             this.unlock_element.classList.add("disabled_action");
             this.see_presentation_element.classList.add("disabled_action");
-            this.transfer_element.classList.add("disabled_action");
+            //this.transfer_element.classList.add("disabled_action");
             this.layout.classList.add("invisible");
         } else {
             this.chair_role_element.classList.remove("disabled_action");
             this.spotlight_element.classList.remove("disabled_action");
             this.mute_element.classList.remove("disabled_action");
             this.hold_element.classList.remove("disabled_action");
+            //this.transfer_element.classList.remove("disabled_action");
             this.layout.classList.remove("hide");
         }
     };
@@ -868,24 +885,31 @@
     Participant.prototype.overlay = function () {
         console.log("participant overlay " + this);
         if (this.enable_media_buttons) {
-            var overlay = document.getElementById("newtext_" + this.uuid).value;
+            var overlay = document.getElementById("currenttext_" + this.uuid).value;
             var text_data = { "text": overlay };
             var response = user.post_request("participants/" + this.uuid + "/overlaytext", text_data);
             if (response["status"] == 200) {
                 document.getElementById("currenttext_" + this.uuid).value = overlay;
-                document.getElementById("newtext_" + this.uuid).value = "";
-            } else {
-                document.getElementById("newtext_" + this.uuid).value = "FAILED";
             }
         }
     };
 
     Participant.prototype.transfer = function () {
         console.log("participant transfer" + this);
-        var target = document.getElementById("transfer_" + this.uuid).value;
+        var target = this.transfer_name_element.value;
+        var role = this.transfer_role_element.value;
+        var pin = this.transfer_pin_element.value;
         var text_data = { "conference_alias": target };
+        if (role != "norole") {
+            text_data["role"] = role;
+            text_data["pin"] = pin;
+        }
         var response = user.post_request("participants/" + this.uuid + "/transfer", text_data);
+        if (response["status"] === 200) {
+            console.log("participant transfered");
+        }
     };
+
 
     Participant.prototype.see_presentation = function () {
         console.log("participant see presentation " + this);
@@ -930,6 +954,8 @@
         last_message_origin: null,
         record_server: "@MvcApplication.set.CobaRecordsAddress",
         recorded: false,
+        streamed: false,
+        rec_call_uuid: null,
         record_pid: null,
         record_id: null,
 
@@ -973,9 +999,8 @@
                         document.getElementById("record").classList.add("disabled_action");
                     }
 
-                    document.getElementById("confcontrol").className = "control_panel";
                     if (typeof jwplayer !== 'undefined') {
-                        document.getElementById("liveviewdiv").className = "liveviewdiv";
+                        document.getElementById("liveviewdiv").className = "tab-pane fade height100";
                     }
                     console.log("Joined " + this);
                 } else {
@@ -1015,23 +1040,15 @@
 
             this.conference_participants = {};
 
+            this.reset_players();
+
             this.release_token();
             if (this.recorded === true) {
                 this.record();
             }
 
-            document.getElementById("presentation").className = "hide";
-
-            var player_wrapper = document.getElementById("liveviewplayer_wrapper");
-            if (player_wrapper != null) {
-                player_wrapper.innerHTML = "";
-                player_wrapper.removeAttribute("style");
-                console.log("Reset innerHTML and style");
-                player_wrapper.id = "liveviewplayer";
-            }
-            document.getElementById("liveviewdiv").className = "hide";
-            document.getElementById("rtmpaddress").value = "";
-            document.getElementById("confcontrol").className = "hide";
+            var chatbox_element = document.getElementById("chatbox");
+            chatbox_element.innerHTML = "";
 
             return false;
         },
@@ -1089,48 +1106,77 @@
         liveview: function () {
             if (this.token) {
                 console.log("live_active " + this.live_active);
-                if (this.live_active == false) {
+                if (this.live_active === false) {
+                    dual_live = document.getElementById("dual_live_sel").checked;
                     var call_data = { "call_type": "rtmp", "streaming": "true" };
+                    if (!dual_live) {
+                        call_data['present'] = "main";
+                    }
                     var response = user.post_request("participants/" + this.participant_uuid + "/calls", call_data);
-                    if (response["status"] == 200) {
+                    if (response["status"] === 200) {
                         var url = response["data"]["result"]["url"] + "-stream";
                         this.live_active_call = response["data"]["result"]["call_uuid"];
                         console.log("url: " + url);
-                        this.live_active = true;
-                        document.getElementById("liveview").value = "Отключить просмотр";
-                        jwplayer("liveviewplayer").setup({
-                            file: url,
-                            height: 198,
-                            width: 352,
+                        if (dual_live) {
+                            var pres_url = response["data"]["result"]["url"] + "-presentation";
+                            console.log("pres_url: " + pres_url);
+                            jwplayer("liveviewpresplayer").setup({
+                                file: pres_url,
+                                height: 180,
+                                width: 320,
+                                aspectratio: "16:9",
+                                controls: false,
+                                stretching: "exactfit",
+                                stagevideo: true,
+                                rtmp: { bufferlength: 0.1 }
+                            });
+                            jwplayer("liveviewpresplayer").play(true);
+                        }
+                        jwplayer("liveviewplayer").setup({file: url,
+                            height: 180,
+                            width: 320,
                             aspectratio: "16:9",
                             controls: false,
                             stretching: "exactfit",
-                        });
+                            stagevideo: true,
+                            rtmp: {bufferlength: 0.1}});
                         jwplayer("liveviewplayer").play(true);
-                        setTimeout(user.player_wrapper, 300);
+                        this.live_active = true;
+                        document.getElementById("dual_live").className = "hide";
+                        document.getElementById("liveview").value = "Отключить просмотр";
                     }
                 } else {
-                    this.live_active = false;
-                    document.getElementById("liveview").value = "Просмотр видео";
-                    var player_wrapper = document.getElementById("liveviewplayer_wrapper");
-                    if (player_wrapper != null) {
-                        player_wrapper.innerHTML = "";
-                        player_wrapper.removeAttribute("style");
-                        player_wrapper.id = "liveviewplayer";
-                        player_wrapper.setAttribute("class", "liveviewdiv_player");
-                    }
-                    var response = user.post_request("participants/" + this.participant_uuid + "/calls/" + this.live_active_call + "/disconnect", null);
-                    this.live_active_call = null;
+                    this.reset_players();
                 }
             }
         },
 
-        player_wrapper: function (){
+        reset_players : function() {
+            this.live_active = false;
+
             var player_wrapper = document.getElementById("liveviewplayer_wrapper");
             if (player_wrapper != null) {
+                player_wrapper.innerHTML = "";
                 player_wrapper.removeAttribute("style");
-                player_wrapper.setAttribute("class", "liveviewdiv_player");
+                player_wrapper.className = "height180";
+                player_wrapper.id = "liveviewplayer";
             }
+            var presplayer_wrapper = document.getElementById("liveviewpresplayer_wrapper");
+            if (presplayer_wrapper != null) {
+                presplayer_wrapper.innerHTML = "";
+                presplayer_wrapper.removeAttribute("style");
+                player_wrapper.className = "height180";
+                presplayer_wrapper.id = "liveviewpresplayer";
+            }
+
+            document.getElementById("liveview").value = "Запустить видео";
+            document.getElementById("dual_live").className = "checkbox text-center";
+
+            if (this.live_active_call != null) {
+                var response = user.post_request("participants/" + this.participant_uuid + "/calls/" + this.live_active_call + "/disconnect", null);
+                this.live_active_call = null;
+            }
+
         },
 
         getrtmpaddress: function () {
@@ -1147,12 +1193,14 @@
         },
 
         record: function () {
-            if (this.recorded == false) {
+            if (this.recorded === false && this.streamed === false) {
                 if (this.token) {
-                    var call_data = { "call_type": "rtmp", "streaming": "true" };
+                    var call_data = { "call_type": "rtmp", "present": "send", "streaming": "true" };
                     var response = user.post_request("participants/" + this.participant_uuid + "/calls", call_data);
                     if (response["status"] == 200) {
                         var url = response["data"]["result"]["url"] + "-stream";
+                        this.rec_call_uuid = response["data"]["result"]["call_uuid"];
+                        this.streamed = true;
                         console.log("url: " + url);
                     }
                 }
@@ -1163,22 +1211,36 @@
                 xhr.ontimeout = function () { this.onError(this.trans.ERROR_CONNECTING); };
                 console.log(params);
                 xhr.setRequestHeader('Content-type', 'application/json;charset=UTF-8"');
-                xhr.send(JSON.stringify(params));
-                console.log("Response: " + xhr.responseText);
-                var msg = {};
                 try {
-                    msg = JSON.parse(xhr.responseText);
+                    xhr.send(JSON.stringify(params));
+                    console.log("Response: " + xhr.responseText);
+                    var msg = {};
+                    try {
+                        msg = JSON.parse(xhr.responseText);
+                    } catch (error) {
+                        msg.reason = xhr.status + " " + xhr.statusText;
+                    }
+                    msg.http_status = xhr.status;
+                    if (msg["http_status"] == 200) {
+                        this.record_pid = msg.pid;
+                        this.record_id = msg.ID_rec;
+                        this.recorded = true;
+                        document.getElementById("record").className = class_conference_record_on;
+                    }
                 } catch (error) {
-                    msg.reason = xhr.status + " " + xhr.statusText;
+                    console.log("Catch error '" + error + "' during connection to record server. Check network connectivity.");
+                    alert("Check network connectivity and installed SSL certificate");
                 }
-                msg.http_status = xhr.status;
-                if (msg["http_status"] == 200) {
-                    this.record_pid = msg.pid;
-                    this.record_id = msg.ID_rec;
-                    this.recorded = true;
-                    document.getElementById("record").className = class_conference_record_on;
+                
+            } else if (this.recorded === false && this.streamed === true) {
+                if (this.token) {
+                    var call_data = "";
+                    var response = user.post_request("participants/" + this.participant_uuid + "/calls/" + this.rec_call_uuid + "/disconnect", call_data);
+                    if (response["status"] == 200) {
+                        this.streamed = false;
+                    }
                 }
-            } else {
+            } else if (this.recorded === true && this.streamed === true) {
                 var params = { "pid": this.record_pid, "ID_rec": this.record_id, };
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "https://" + this.record_server + "/recordstop.php", false);
@@ -1186,18 +1248,24 @@
                 xhr.ontimeout = function () { this.onError(this.trans.ERROR_CONNECTING); };
                 console.log(params);
                 xhr.setRequestHeader('Content-type', 'application/json');
-                xhr.send(JSON.stringify(params));
-                console.log("Response: " + xhr.responseText);
-                var msg = {};
                 try {
-                    msg = JSON.parse(xhr.responseText);
+                    xhr.send(JSON.stringify(params));
+                    console.log("Response: " + xhr.responseText);
+                    var msg = {};
+                    try {
+                        msg = JSON.parse(xhr.responseText);
+                    } catch (error) {
+                        msg.reason = xhr.status + " " + xhr.statusText;
+                    }
+                    msg.http_status = xhr.status;
+                    if (msg.ok == "ok") {
+                        this.recorded = false;
+                        this.streamed = false;
+                        document.getElementById("record").className = class_conference_record_off;
+                    }
                 } catch (error) {
-                    msg.reason = xhr.status + " " + xhr.statusText;
-                }
-                msg.http_status = xhr.status;
-                if (msg.ok == "ok") {
-                    this.recorded = false;
-                    document.getElementById("record").className = class_conference_record_off;
+                    console.log("Catch error '" + error + "' during connection to record server. Check network connectivity.");
+                    alert("Check network connectivity and installed SSL certificate");
                 }
             }
         },
@@ -1250,7 +1318,7 @@
 
         display_message: function (origin, message) {
             var chatbox_element = document.getElementById("chatbox");
-            if (this.last_message_origin != origin) {
+            if (this.last_message_origin !== origin) {
                 this.last_message_origin = origin;
                 var origin_element = document.createElement("span");
                 origin_element.className = "message_origin";
@@ -1290,7 +1358,8 @@
             disconnect_data = JSON.parse(event.data);
             console.log("disconnect");
             this.leave();
-            alert("You have been disconnected: " + disconnect_data["reason"]);
+            alert("Вы были отключены.");
+            window.location = "/ControlPanel/ControlPanel";
         },
 
         refer: function (event) {
@@ -1406,6 +1475,7 @@
             var plusn_element = document.getElementById("plusn");
             var vadbackfill_element = document.getElementById("vadbackfill");
             var overlaytext_element = document.getElementById("overlay_text");
+            var indicators_element = document.getElementById("indicators");
             var audience_element = document.getElementById("audience");
             var actors_value = participant_ids;
             if (actors_element.value == "everyone") {
@@ -1423,6 +1493,7 @@
                 "plus_n": plusn_element.value,
                 "vad_backfill": vadbackfill_element.checked,
                 "actors_overlay_text": overlaytext_element.value,
+                "indicators": indicators_element.value,
                 "audience": audience_value
             });
 
@@ -1433,6 +1504,7 @@
                 var guest_plusn_element = document.getElementById("guest_plusn");
                 var guest_vadbackfill_element = document.getElementById("guest_vadbackfill");
                 var guest_overlaytext_element = document.getElementById("guest_overlay_text");
+                var guest_indicators_element = document.getElementById("guest_indicators");
                 var guest_audience_element = document.getElementById("guest_audience");
                 var guest_actors_value = participant_ids;
                 if (guest_actors_element.value == "everyone") {
@@ -1444,6 +1516,7 @@
                     "plus_n": guest_plusn_element.value,
                     "vad_backfill": guest_vadbackfill_element.checked,
                     "actors_overlay_text": guest_overlaytext_element.value,
+                    "indicators": indicators_element.value,
                     "audience": []
                 });
             }
@@ -1495,7 +1568,7 @@
         resetlayout: function (event) {
             var call_data = { "layouts": [] };
             var response = user.post_request("override_layout", call_data);
-            if (response["status"] == 200) {
+            if (response["status"] === 200) {
                 console.log("Reset layout!");
             }
         },
