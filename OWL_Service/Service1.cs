@@ -26,6 +26,8 @@ namespace OWL_Service
         aspnetdbEntities databs = new aspnetdbEntities();
         public List<AllVMRS.AllVmrs> All_Vmrs;
         public AllVMRS.VmrParent All_VM_obj;
+        public List<ActiveConfsModel.AConfs> AllConfs;
+        public ActiveConfsModel.ResponseParent AllConfs_wm;
         public static Setting set;
         static bool mailSent = false;
         public int count;
@@ -68,6 +70,7 @@ namespace OWL_Service
             GetPhonebookUsers();
             GetVmrList();
             GetNowMeeting();
+            CheckForRecord();
         }
         public Setting Settings_Read()
         {
@@ -256,7 +259,8 @@ namespace OWL_Service
             Uri confapi = new Uri("https://" + set.CobaMngAddress + "/api/admin/configuration/v1/conference/");
             WebClient client = new WebClient();
             client.Credentials = new NetworkCredential(set.CobaMngLogin, set.CobaMngPass);
-            client.Headers.Add("auth", "admin,ciscovoip");
+            string auth = String.Concat(set.CobaMngLogin,",", set.CobaMngPass);
+            client.Headers.Add("auth", auth);
             client.Headers.Add("veryfy", "False");
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             string reply = client.DownloadString(confapi);
@@ -344,7 +348,6 @@ namespace OWL_Service
         #endregion
 
         #region CheckTimeMeeting
-
         public async void GetNowMeeting()
         {
             
@@ -476,6 +479,80 @@ namespace OWL_Service
 
         #endregion
 
+        public void CheckForRecord()
+        {
+            DateTime dt1 = DateTime.Now - TimeSpan.FromMinutes(180);
+            DateTime dt2 = DateTime.Now - TimeSpan.FromMinutes(175);
+            var soonmeet = databs.Meetings.Where(t => t.Start > dt1);
+            var diapmet = soonmeet.Where(s => s.Start < dt2 && s.Record);
+            var allcon = new List<AllVMRS.AllVmrs>();
+            aspnetdbEntities dtbs = new aspnetdbEntities();
+            Uri confapi = new Uri("https://" + set.CobaMngAddress + "/api/admin/configuration/v1/conference/");
+            WebClient client = new WebClient();
+            client.Credentials = new NetworkCredential(set.CobaMngLogin, set.CobaMngPass);
+            string auth = String.Concat(set.CobaMngLogin, ",", set.CobaMngPass);
+            client.Headers.Add("auth", auth);
+            client.Headers.Add("veryfy", "False");
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+            string reply = Win1251ToUTF8(client.DownloadString(confapi));
+            if (!String.IsNullOrEmpty(reply))
+            {
+                allcon = JsonConvert.DeserializeObject<AllVMRS.VmrParent>(reply).obj;
+            }
+            var actcon = GetActiveConfs();
+            List<string> ids = new List<string>();
+            foreach (Meeting meet in diapmet)
+            {
+                ids.Add((allcon.Where(m => m.id == meet.RoomID)).GetEnumerator().Current.name);
+            }
+            foreach (var id in ids)
+            {
+                
+            }
+        }
+        public List<ActiveConfsModel.AConfs> GetActiveConfs()
+        {
+            try
+            {
+                AllConfs = new List<ActiveConfsModel.AConfs>();
+                Uri statusapi = new Uri("https://" + set.CobaMngAddress + "/api/admin/status/v1/conference/");
+
+                WebClient client = new WebClient();
+                client.Credentials = new NetworkCredential(set.CobaMngLogin, set.CobaMngPass);
+                client.Headers.Add("auth", set.CobaMngLogin + "," + set.CobaMngPass);
+                client.Headers.Add("veryfy", "False");
+                ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+                string reply = client.DownloadString(statusapi);
+                string reply1 = Win1251ToUTF8(reply);
+                if (!String.IsNullOrEmpty(reply))
+                {
+                    AllConfs_wm = JsonConvert.DeserializeObject<ActiveConfsModel.ResponseParent>(reply1);
+                    AllConfs = AllConfs_wm.obj;
+                    foreach (var conf in AllConfs)
+                    {
+                        DateTime dt = DateTime.Parse(conf.start_time);
+                        DateTime dt2 = dt + TimeSpan.FromHours(3);
+                        string result = dt2.ToString("dd-MMM-yyyy  HH:mm:ss");
+                        conf.start_time2 = result;
+                        if (conf.is_locked)
+                        {
+                            conf.lock_path = "<img src=\"../images/lock.png\")\" style=\"max-width: 28px; max-height: 28px;\" />";
+                        }
+                        if (!conf.is_locked)
+                        {
+                            conf.lock_path = "<img src=\"../images/unlock.png\")\" style=\"max-width: 28px; max-height: 28px;\" />";
+                        }
+
+                    }
+                }
+                return AllConfs;
+            }
+            catch (Exception errException)
+            {
+                Debug.WriteLine(errException.Message);
+            }
+            return AllConfs;
+        }
         protected override void OnStop()
         {
             polling.Dispose();

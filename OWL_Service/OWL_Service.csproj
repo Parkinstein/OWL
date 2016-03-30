@@ -140,6 +140,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActiveConfsModel.cs" />
     <Compile Include="AllVmr.cs">
       <DependentUpon>SystemData.tt</DependentUpon>
     </Compile>
