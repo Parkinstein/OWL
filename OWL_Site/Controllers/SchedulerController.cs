@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
@@ -237,17 +235,21 @@ namespace OWL_Site.Controllers
                     }
                     else { }
                 }
+                Event nevent = new Event()
+                {
+                    UID = meeting.MeetingID.ToString(),
+                    Status = EventStatus.CANCELLED,
+                };
                 foreach (var mail in emaillist)
                 {
                     string body = "Уважамый(ая), " + mail.DispName + " !<br>" + "Конференция \"" + meeting.Title +
                                   "\" была отменена пользователем " + init.DispName + ". <br>";
                     try
                     {
-                        Sendmail(mail.Email, "DEL: " + meeting.Title, body,meeting, null);
+                        Sendmail(mail.Email, "DEL: " + meeting.Title, body,null, nevent);
                     }
                     catch (Exception e)
                     {
-
                         Debug.WriteLine(e.Message);
                         Debug.WriteLine(e.HResult);
                     }
@@ -365,12 +367,13 @@ namespace OWL_Site.Controllers
             MailMessage mailMessage = new MailMessage()
             {
                 Priority = MailPriority.High,
-                From = new MailAddress("bparkin@gmail.com", "Планировщик системы видео-конференц-связи 'Сова'")
+                From = new MailAddress(MvcApplication.set.MailFrom_email, "Планировщик системы видео-конференц-связи 'Сова'")
             };
             AlternateView alternateHtml = AlternateView.CreateAlternateViewFromString(body,
                                                                             new ContentType("text/html"));
             mailMessage.AlternateViews.Add(alternateHtml);
             mailMessage.To.Add(new MailAddress(to));
+          
             mailMessage.Subject = subj;
             mailMessage.Body = body;
 

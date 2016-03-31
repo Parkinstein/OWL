@@ -1,14 +1,14 @@
 ﻿@{
     ViewBag.Title = "Планировщик";
     @model OWL_Site.Models.AspNetUser
-        }
+}
 
 
 
-    <div class="jumbotron">
-        @if (User.IsInRole("Admin"))
-        {
-                @(Html.Kendo().MultiSelectFor(m => m.Id)
+<div class="jumbotron">
+    @if (User.IsInRole("Admin"))
+    {
+        @(Html.Kendo().MultiSelectFor(m => m.Id)
               .Name("Filter")
               .DataTextField("name")
               .DataValueField("id")
@@ -35,36 +35,37 @@
                               .Total("Total");
                       });
               })
-                )
-            <script type="text/javascript">
-                function onClose(e) {
-                    var multiselect = $("#Filter").data("kendoMultiSelect");
-                    var checked = multiselect.value();
-                    var scheduler = $("#scheduler").data("kendoScheduler");
-                    var filter = {
-                        logic: "or",
-                        filters: $.map(checked, function (value) {
-                            return {
-                                operator: "eq",
-                                field: "InitName",
-                                value: value
-                            };
-                        })
-                    };
-                    scheduler.dataSource.filter(filter);
-                }
+        )
+        <script type="text/javascript">
+            function onClose(e) {
+                var multiselect = $("#Filter").data("kendoMultiSelect");
+                var checked = multiselect.value();
+                var scheduler = $("#scheduler").data("kendoScheduler");
+                var filter = {
+                    logic: "or",
+                    filters: $.map(checked, function (value) {
+                        return {
+                            operator: "eq",
+                            field: "InitName",
+                            value: value
+                        };
+                    })
+                };
+                scheduler.dataSource.filter(filter);
+            }
 
 
-            </script>
+        </script>
 
-        }
-        @(Html.Kendo().Scheduler<OWL_Site.Models.MeetingViewModel>()
+    }
+    @(Html.Kendo().Scheduler<OWL_Site.Models.MeetingViewModel>()
               .Name("scheduler")
               .Date(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day))
-              .StartTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 2, 00, 00))
-              .EndTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 19, 00, 00))
+              .StartTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 00, 00))
+              .EndTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59))
               .Height(800)
-
+              .WorkDayStart(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 10, 00, 00))
+              .WorkDayEnd(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 19, 00, 00))
               .Timezone("Europe/Moscow")
               .MinorTickCount(4)
               .MajorTick(60)
@@ -106,39 +107,39 @@
               ))
 
 
-        @*<script>  $("#export").click(function (e) {
+    @*<script>  $("#export").click(function (e) {
             var scheduler = $("#Home").data("kendoScheduler");
             scheduler.saveAsPDF();
         });  </script>*@
-        <script type="text/javascript">
-            function error_handler(e) {
-                if (e.errors) {
-                    var message = "Errors:\n";
-                    $.each(e.errors, function(key, value) {
-                        if ('errors' in value) {
-                            $.each(value.errors, function() {
-                                message += this + "\n";
-                            });
-                        }
-                    });
-                    alert(message);
+    <script type="text/javascript">
+        function error_handler(e) {
+            if (e.errors) {
+                var message = "Errors:\n";
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                            message += this + "\n";
+                        });
+                    }
+                });
+                alert(message);
 
-                    var scheduler = $("#scheduler").data("kendoScheduler");
-                    scheduler.one("dataBinding", function(e) {
-                        //prevent saving if server error is thrown
-                        e.preventDefault();
-                    });
-                }
+                var scheduler = $("#scheduler").data("kendoScheduler");
+                scheduler.one("dataBinding", function (e) {
+                    //prevent saving if server error is thrown
+                    e.preventDefault();
+                });
             }
-        </script>
-        @(Html.Kendo().Tooltip()
+        }
+    </script>
+    @(Html.Kendo().Tooltip()
               .For("#scheduler")
               .Filter(".k-event:not(.k-event-drag-hint) > div, .k-task")
               .Position(TooltipPosition.Left)
               .Width(120)
               .ContentTemplateId("template")
-              )
-        <script id="template" type="text/x-kendo-template">
+    )
+    <script id="template" type="text/x-kendo-template">
         #var element = target.is(".k-task") ? target : target.parent();#
         #var uid = element.attr("data-uid");#
         #var scheduler = target.closest("[data-role=scheduler]").data("kendoScheduler");#
@@ -156,7 +157,7 @@
         #}#
     </script>
 
-    </div>
+</div>
 
 @*<script>
         window.setInterval(function () { var scheduler = $("#scheduler").data("kendoScheduler");
@@ -167,8 +168,8 @@
 
 
 <script id="customEventTemplate" type="text/x-kendo-template">
-    
-    
+
+
     <div class="btn-group">
         <button type="button" title="Подробнее..." class="btn btn-primary btn-block dropdown-toggle" data-toggle="dropdown">
             #= title #  <span class="caret"></span>
@@ -176,81 +177,81 @@
         <ul class="dropdown-menu" role="menu" style="z-index:9999;">
             <li class="moreinfo">Инициатор - #:nameret(data) #</li>
             <li class="divider"></li>
-            <li class ="moreinfo">Начало - #:dateformattingst(data)#</li>
-            <li class ="moreinfo">Окончание - #:dateformattingnd(data)#</li>
-            <li class ="moreinfo"></li>
+            <li class="moreinfo">Начало - #:dateformattingst(data)#</li>
+            <li class="moreinfo">Окончание - #:dateformattingnd(data)#</li>
+            <li class="moreinfo"></li>
             <li class="divider"></li>
             <li class="moreinfo">Участников: #:attquant(data)#</li>
             <li class="divider"></li>
-            <li class ="moreinfo"><a href="#= OpLink #">Ссылка оператора</a></li>
+            <li class="moreinfo"><a href="#= OpLink #">Ссылка оператора</a></li>
         </ul>
     </div>
 </script>
-    <script>
+<script>
 
-        function dateformattingst(data) {
-            return kendo.toString(data.start, 'HH:mm  ddd, dd-MMM-yyyy');
-        }
+    function dateformattingst(data) {
+        return kendo.toString(data.start, 'HH:mm  ddd, dd-MMM-yyyy');
+    }
 
-        function dateformattingnd(data) {
-            return kendo.toString(data.end, 'HH:mm  ddd, dd-MMM-yyyy');
-        }
+    function dateformattingnd(data) {
+        return kendo.toString(data.end, 'HH:mm  ddd, dd-MMM-yyyy');
+    }
 
-        function nameret(data) {
+    function nameret(data) {
 
-            return kendo.toString(data.FName);
-        }
+        return kendo.toString(data.FName);
+    }
 
-        function attquant(data) {
-            var addquan;
-            var res;
-            if (!data.AddAttend) {
-                addquan = 0;
+    function attquant(data) {
+        var addquan;
+        var res;
+        if (!data.AddAttend) {
+            addquan = 0;
+        } else {
+
+            var str = data.AddAttend;
+
+            if (str.search(" ") > 0) {
+                res = str.replace(" ", "");
             } else {
-
-                var str = data.AddAttend;
-
-                if (str.search(" ") > 0) {
-                    res = str.replace(" ", "");
-                } else {
-                    res = str;
-                }
                 res = str;
-                var quan = res.split(",");
-                addquan = quan.length;
             }
-            if (typeof data.Attendees === 'undefined') {
-                return 0;
-            } else {
-                return addquan + data.Attendees.length;
-            }
-        };
-
-        function getColor(data) {
-            var date = new Date();
-            var datenow = kendo.toString(date, 'yyyy/MM/dd HH:mm:ss.fff');
-            if (kendo.toString(data.start, 'yyyy/MM/dd HH:mm:ss.fff') < datenow && datenow < kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff')) {
-                return "green";
-            } else if (kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff') < datenow) {
-                return "gray";
-            } else {
-                return "blur";
-            }
+            res = str;
+            var quan = res.split(",");
+            addquan = quan.length;
         }
-
-        function getColor2(data) {
-            var date = new Date();
-            var datenow = kendo.toString(date, 'yyyy/MM/dd HH:mm:ss.fff');
-            if (kendo.toString(data.start, 'yyyy/MM/dd HH:mm:ss.fff') < datenow && datenow < kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff')) {
-                return "white";
-            } else if (kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff') < datenow) {
-                return "white";
-            } else {
-                return "blur";
-            }
+        if (typeof data.Attendees === 'undefined') {
+            return 0;
+        } else {
+            return addquan + data.Attendees.length;
         }
-    </script>
-    
+    };
+
+    function getColor(data) {
+        var date = new Date();
+        var datenow = kendo.toString(date, 'yyyy/MM/dd HH:mm:ss.fff');
+        if (kendo.toString(data.start, 'yyyy/MM/dd HH:mm:ss.fff') < datenow && datenow < kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff')) {
+            return "green";
+        } else if (kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff') < datenow) {
+            return "gray";
+        } else {
+            return "blur";
+        }
+    }
+
+    function getColor2(data) {
+        var date = new Date();
+        var datenow = kendo.toString(date, 'yyyy/MM/dd HH:mm:ss.fff');
+        if (kendo.toString(data.start, 'yyyy/MM/dd HH:mm:ss.fff') < datenow && datenow < kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff')) {
+            return "white";
+        } else if (kendo.toString(data.end, 'yyyy/MM/dd HH:mm:ss.fff') < datenow) {
+            return "white";
+        } else {
+            return "blur";
+        }
+    }
+</script>
+
 
 <style>
     .moreinfo {
@@ -266,7 +267,7 @@
         text-align: left;
         overflow: visible;
         border-color: #ffffff;
-        background-color:  #3D3D6A;
+        background-color: #3D3D6A;
     }
 
     .btn-primary {
