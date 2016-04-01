@@ -4,10 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 using Newtonsoft.Json;
 using OWL_Site.Context;
 using OWL_Site.Models;
@@ -34,9 +32,7 @@ namespace OWL_Site.Controllers
         // GET: Controlpanel
         public ActionResult ControlPanel()
         {
-            GetCurrentUserSAM();
             return View();
-            
         }
 
         public ActionResult ActiveParts_Ajax(ActiveConference.DTResult param, string confname)
@@ -59,24 +55,7 @@ namespace OWL_Site.Controllers
                 data = filteredresult,
             }, JsonRequestBehavior.AllowGet);
         }
-        [ChildActionOnly]
-        public string GetCurrentUserSAM()
-        {
-            //ApplicationUser currentUser = Session["CurrentUser"] as ApplicationUser;
-            ApplicationUser currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
 
-            if (currentUser == null)
-            {
-                ApplicationDbContext db = new ApplicationDbContext();
-                string idd = User.Identity.GetUserId();
-                currentUser = db.Users.FirstOrDefault(m => m.Id == idd);
-                Session["CurrentUser"] = currentUser;
-                Debug.WriteLine(currentUser.Sammaccount);
-            }
-            Debug.WriteLine(currentUser.Sammaccount);
-
-            return currentUser.Sammaccount;
-        }
 
         List<ActivePartsModel.AParts> GetActiveParts(string confname)
         {
@@ -118,36 +97,45 @@ namespace OWL_Site.Controllers
         public ActionResult ActiveConf_Ajax(ActiveConference.DTResult param)
         {
             IEnumerable<ActiveConfsModel.AConfs> filteredresult;
-
-            if (!string.IsNullOrEmpty(param.Search.Value))
+            aspnetdbEntities db = new aspnetdbEntities();
+            Debug.WriteLine(GetCurrentUserSAM());
+            if (User.IsInRole("Admin"))
             {
-                filteredresult = GetData().Where(c => c.name.Contains(param.Search.Value));
+                filteredresult = !string.IsNullOrEmpty(param.Search.Value) ? GetActiveConfs().Where(m => m.name.Contains(param.Search.Value)) : GetActiveConfs();
             }
-            else
+            else if (User.IsInRole("Operator"))
             {
-                filteredresult = GetData();
-            }
 
+            }
+            {
+                filteredresult = !string.IsNullOrEmpty(param.Search.Value) ? GetActiveConfs().Where(m => m.name == GetCurrentUserSAM() && m.name.Contains(param.Search.Value)) : GetActiveConfs().Where(m => m.name == GetCurrentUserSAM());
+            }
             return Json(new
             {
-                recordsTotal = GetData().Count(),
+                recordsTotal = GetActiveConfs().Count(),
                 recordsFiltered = filteredresult.Count(),
                 data = filteredresult,
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<ActiveConfsModel.AConfs> GetData()
+        public string GetCurrentUserSAM()
         {
-            var data = GetActiveConfs();
+            ApplicationUser currentUser = Session["CurrentUser"] as ApplicationUser;
+            if (currentUser == null)
+            {
+                ApplicationDbContext db = new ApplicationDbContext();
+                string idd = User.Identity.GetUserId();
+                currentUser = db.Users.FirstOrDefault(m => m.Id == idd);
+                Session["CurrentUser"] = currentUser;
 
-            return data;
+            }
+            return currentUser.Sammaccount;
         }
-
+        
         public List<ActiveConfsModel.AConfs> GetActiveConfs()
         {
             try
             {
-
                 AllConfs = new List<ActiveConfsModel.AConfs>();
                 Uri statusapi = new Uri("https://" + MvcApplication.set.CobaMngAddress + "/api/admin/status/v1/conference/");
 
