@@ -4,8 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Newtonsoft.Json;
+using OWL_Site.Context;
 using OWL_Site.Models;
 
 namespace OWL_Site.Controllers
@@ -30,7 +34,9 @@ namespace OWL_Site.Controllers
         // GET: Controlpanel
         public ActionResult ControlPanel()
         {
+            GetCurrentUserSAM();
             return View();
+            
         }
 
         public ActionResult ActiveParts_Ajax(ActiveConference.DTResult param, string confname)
@@ -53,7 +59,24 @@ namespace OWL_Site.Controllers
                 data = filteredresult,
             }, JsonRequestBehavior.AllowGet);
         }
+        [ChildActionOnly]
+        public string GetCurrentUserSAM()
+        {
+            //ApplicationUser currentUser = Session["CurrentUser"] as ApplicationUser;
+            ApplicationUser currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
 
+            if (currentUser == null)
+            {
+                ApplicationDbContext db = new ApplicationDbContext();
+                string idd = User.Identity.GetUserId();
+                currentUser = db.Users.FirstOrDefault(m => m.Id == idd);
+                Session["CurrentUser"] = currentUser;
+                Debug.WriteLine(currentUser.Sammaccount);
+            }
+            Debug.WriteLine(currentUser.Sammaccount);
+
+            return currentUser.Sammaccount;
+        }
 
         List<ActivePartsModel.AParts> GetActiveParts(string confname)
         {
