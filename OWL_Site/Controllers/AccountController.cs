@@ -16,7 +16,7 @@ namespace OWL_Site.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private ApplicationUserManager _userManager;
+        static ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
 
 
@@ -38,7 +38,7 @@ namespace OWL_Site.Controllers
             {
                 return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
-            private set
+             set
             {
                 _userManager = value;
             }
@@ -125,34 +125,22 @@ namespace OWL_Site.Controllers
             await UserManager.DeleteAsync(userdel);
             return null;
         }
-
         [ChildActionOnly]
-        public string GetCurrentUserName()
+        public  string GetCurrentUserName()
         {
-            ApplicationUser currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
-            if (currentUser == null)
-            {
-                ApplicationDbContext db = new ApplicationDbContext();
-                string idd = User.Identity.GetUserId();
-                currentUser = db.Users.FirstOrDefault(m => m.Id == idd);
-                Session["CurrentUser"] = currentUser;
-            }
-            Response.AppendHeader("Cache-Control", "no-cache");
-            return currentUser.DispName;
+            ApplicationDbContext db = new ApplicationDbContext();
+            string currentUserId = User.Identity.GetUserId();
+            ApplicationUser currentUser = db.Users.FirstOrDefault(x => x.Id == currentUserId);
+            Session["CurrentUser"] = currentUser;
+            return currentUser?.DispName;
         }
-        [ChildActionOnly]
         public string GetCurrentUserSAM()
         {
-            ApplicationUser currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
-            if (currentUser == null)
-            {
-                ApplicationDbContext db = new ApplicationDbContext();
-                string idd = User.Identity.GetUserId();
-                currentUser = db.Users.FirstOrDefault(m => m.Id == idd);
-                Session["CurrentUser"] = currentUser;
-                
-            }
-            return currentUser.Sammaccount;
+            ApplicationDbContext db = new ApplicationDbContext();
+            string currentUserId = User.Identity.GetUserId();
+            ApplicationUser currentUser = db.Users.FirstOrDefault(x => x.Id == currentUserId);
+            Session["CurrentUser"] = currentUser;
+            return currentUser?.Sammaccount;
         }
 
         public bool AuthenticateAD(string username, string password)

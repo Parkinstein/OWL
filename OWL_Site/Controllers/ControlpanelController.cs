@@ -20,6 +20,8 @@ namespace OWL_Site.Controllers
         public ActiveConfsModel.ResponseParent AllConfs_wm;
         public List<ActivePartsModel.AParts> AllParts;
         public ActivePartsModel.ResponseParent AllParts_wm;
+        private ApplicationUserManager UserManager;
+        private ApplicationSignInManager _signInManager;
 
         private string Win1251ToUTF8(string source)
         {
@@ -122,18 +124,13 @@ namespace OWL_Site.Controllers
 
         public string GetCurrentUserSAM()
         {
-            ApplicationUser currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
-            if (currentUser == null)
-            {
-                ApplicationDbContext db = new ApplicationDbContext();
-                string idd = User.Identity.GetUserId();
-                currentUser = db.Users.FirstOrDefault(m => m.Id == idd);
-                Session["CurrentUser"] = currentUser;
-
-            }
-            return currentUser.Sammaccount;
+            ApplicationDbContext db = new ApplicationDbContext();
+            string currentUserId = User.Identity.GetUserId();
+            ApplicationUser currentUser = db.Users.FirstOrDefault(x => x.Id == currentUserId);
+            Session["CurrentUser"] = currentUser;
+            return currentUser?.Sammaccount;
         }
-        
+
         public List<ActiveConfsModel.AConfs> GetActiveConfs()
         {
             try
