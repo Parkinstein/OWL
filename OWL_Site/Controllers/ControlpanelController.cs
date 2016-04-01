@@ -96,7 +96,7 @@ namespace OWL_Site.Controllers
         #region GetActiveConfs
         public ActionResult ActiveConf_Ajax(ActiveConference.DTResult param)
         {
-            IEnumerable<ActiveConfsModel.AConfs> filteredresult;
+            IEnumerable<ActiveConfsModel.AConfs> filteredresult = null;
             aspnetdbEntities db = new aspnetdbEntities();
             Debug.WriteLine(GetCurrentUserSAM());
             if (User.IsInRole("Admin"))
@@ -105,8 +105,9 @@ namespace OWL_Site.Controllers
             }
             else if (User.IsInRole("Operator"))
             {
-
+                filteredresult = GetActiveConfs();
             }
+            else
             {
                 filteredresult = !string.IsNullOrEmpty(param.Search.Value) ? GetActiveConfs().Where(m => m.name == GetCurrentUserSAM() && m.name.Contains(param.Search.Value)) : GetActiveConfs().Where(m => m.name == GetCurrentUserSAM());
             }

@@ -2,7 +2,7 @@
   "sEmptyTable": "В таблице отсутствуют данные",
   "sInfo": "Записи c _START_ по _END_ из _TOTAL_ записей",
   "sInfoEmpty": "Записи с 0 по 0 из 0 записей",
-  "sInfoFiltered": "(отфильтровано от _MAX_ всего записей)",
+  "sInfoFiltered": "(отфильтровано из _MAX_ записей)",
   "sInfoPostFix": "",
   "srowSelected": "0 рядов выделено",
   "sInfoThousands": ",",
