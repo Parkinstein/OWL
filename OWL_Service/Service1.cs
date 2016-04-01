@@ -5,6 +5,7 @@ using System.Data.Entity.Migrations;
 using System.Diagnostics;
 using System.DirectoryServices;
 using System.Linq;
+using System.Management;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -143,6 +144,7 @@ namespace OWL_Service
             List<string> adusr = new List<string>();
             List<ApplicationUser> locrecords = new List<ApplicationUser>();
             var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            
             foreach (var locuser in localusers)
             {
                 locusr.Add(locuser.Sammaccount);
@@ -168,6 +170,7 @@ namespace OWL_Service
                     var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
                     var manager1 = new UserManager<ApplicationUser>(store);
                     var user =  manager1.FindByName(domenuser.Sammaccount);
+                    await manager1.RemoveFromRolesAsync(user.Id, new string[] { "Admin", "User" });
                     user.DispName = domenuser.DispName;
                     user.Group = domenuser.Group;
                     user.H323_addr = domenuser.H323_addr;
@@ -179,6 +182,14 @@ namespace OWL_Service
                     user.Tel_int = domenuser.Tel_int;
                     user.Tel_mob = domenuser.Tel_mob;
                     await manager1.UpdateAsync(user);
+                    if (user.Group == "Admins")
+                    {
+                        await manager1.AddToRoleAsync(user.Id, "Admin");
+                    }
+                    if (user.Group == "User")
+                    {
+                        await manager1.AddToRoleAsync(user.Id, "User");
+                    }
                 }
             }
             foreach (var lokuser in locrecords)
@@ -219,11 +230,13 @@ namespace OWL_Service
                 IdentityResult result = await manager.CreateAsync(user,"1Q2w3e4r!");
                 if (result.Succeeded)
                 {
+                    Debug.WriteLine("Есть!!   " + model.Group);
                     if (model.Group == "Admins")
                     {
                         try
                         {
                            await manager.AddToRoleAsync(user.Id,"Admin");
+                            Debug.WriteLine("Добавлен в админы");
                         }
                         catch (Exception e)
                         {
@@ -235,6 +248,7 @@ namespace OWL_Service
                         try
                         {
                             await manager.AddToRoleAsync(user.Id, "User");
+                            Debug.WriteLine("Добавлен в юзвери");
                         }
                         catch (Exception e1)
                         {
@@ -246,6 +260,7 @@ namespace OWL_Service
                 }
                 else
                 {
+                    Debug.WriteLine("Хрень какая-то");
                 }
             }
             return null;

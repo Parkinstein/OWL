@@ -4,8 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Newtonsoft.Json;
 using OWL_Site.Context;
 using OWL_Site.Models;
@@ -121,7 +123,7 @@ namespace OWL_Site.Controllers
 
         public string GetCurrentUserSAM()
         {
-            ApplicationUser currentUser = Session["CurrentUser"] as ApplicationUser;
+            ApplicationUser currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
             if (currentUser == null)
             {
                 ApplicationDbContext db = new ApplicationDbContext();

@@ -129,7 +129,7 @@ namespace OWL_Site.Controllers
         [ChildActionOnly]
         public string GetCurrentUserName()
         {
-            ApplicationUser currentUser = Session["CurrentUser"] as ApplicationUser;
+            ApplicationUser currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
             if (currentUser == null)
             {
                 ApplicationDbContext db = new ApplicationDbContext();
@@ -143,7 +143,7 @@ namespace OWL_Site.Controllers
         [ChildActionOnly]
         public string GetCurrentUserSAM()
         {
-            ApplicationUser currentUser = Session["CurrentUser"] as ApplicationUser;
+            ApplicationUser currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
             if (currentUser == null)
             {
                 ApplicationDbContext db = new ApplicationDbContext();
