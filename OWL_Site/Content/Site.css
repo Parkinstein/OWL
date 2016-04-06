@@ -1,15 +1,14 @@
-﻿html {
+﻿/*General properties*/
+html {
   height: 100%;
 }
 body {
   font-family: 'Calibri', sans-serif;
-  font-size: 17px;
   font-size: 1.6vh;
   height: 100%;
   background-color: #fff;
   padding-top: 3%;
   background: url('/images/background.png') 0 0 no-repeat;
-  font-family: 'Calibri', sans-serif;
 }
 .body-content {
     padding: 0px;
@@ -20,6 +19,20 @@ body {
 }
 .brand-color {
     color: #3d3d6a;
+}
+
+/* top bar buttons*/
+.top_bar {
+    min-width: 240px;
+}
+.top_bar>li {
+    font-size: 1.6vh;
+    color: #3D3D6A;
+}
+
+/* Login page */
+.row_index {
+    margin: 0px;
 }
 .dl-horizontal dt {
     white-space: normal;
@@ -33,26 +46,7 @@ select {
     height: 100%;
   }
 }
-.conference_control_button {
-    background-color: #FFFFFF;
-}
-.conference_panel {
-    height: 80vh;
-}
 
-.conference_pane {
-    height: 72vh;
-}
-.table {
-  width: 97%;
-  max-width: 97%;
-}
-legend {
-  margin-bottom: 0px;
-}
-label {
-  margin-bottom: 0px;
-}
 .form-control {
   -webkit-box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075);
           box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075);
@@ -82,7 +76,7 @@ label {
   }
 }
 .navbar-nav {
-    margin: 0 0 0 100px;
+    margin: 0 0 0 10vh;
 }
 .navbar-inverse {
   background-color: #3D3D6A;
@@ -96,10 +90,10 @@ label {
 }
 .navbar-brand {
     background: url(/images/coba_logo_inverted.png) no-repeat center center;
-    background-size: 50px;
+    background-size: 5vh;
     text-indent: -9999px;
 }
-.login {
+/*.login {
   position: relative;
   margin: 150px auto 0 auto;
   padding: 20px 20px 20px;
@@ -179,7 +173,7 @@ label {
 }
 .login-help a:hover {
   text-decoration: underline;
-}
+}*/
 .username {
     margin-right: 12px;
     margin-top: 12px;
@@ -204,7 +198,6 @@ input[type=text], input[type=password], input[type=search] {
   font: inherit;
   padding: 0;
   width: 100%;
-  height: 29px;
   color: #212121;
   background: white;
   border: 1px;
@@ -220,10 +213,10 @@ input[type=text]:focus, input[type=password]:focus, input[type=search]:focus {
 }
 
 input[type=submit] {
-  padding: 0px 0px 0px 0px;
-  width: 10em;
-  margin: 0px 0px 0px 15em;
-  height: 35px;
+  padding: 0px;
+  width: 100%;
+  margin: 0px;
+  height: 4vh;
   font-size: 14px;
   font-weight: bold;
   color: #fff;
@@ -253,9 +246,9 @@ input[type=submit]:active {
     background-position: center 16px;
     background-color: #fff;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
-    margin: 12.4em auto auto auto;
-    max-width: 632px;
-    padding: 225px 25px 25px 25px;
+    margin: 15vh auto;
+    max-width: 65vh;
+    padding: 20vh 2vh 2vh 2vh;
 }
 .form__input, .form__select, .form__submit, .popup__input {
     background: none repeat scroll 0 0 #ccc;
@@ -276,9 +269,6 @@ input[type=submit]:active {
     float: left;
     width: 100%;
 }
-.username {
-    margin-top: 10px;
-}
 .remember {
     margin-left: 6px;
 }
@@ -288,44 +278,19 @@ footer {
     text-align: left;
 }
 
-
-
-/* !!!!!!!!!!!!!! CONTROL PANEL CSS !!!!!!!!!!!!!!! */
+/* Control Panel CSS */
+.conference_panel {
+    height: 80vh;
+}
+.conference_pane {
+    height: 72vh;
+}
 .participant_action {
-    /*padding: 0.2em;*/
     font-size: 14px;
     margin: 0 5px 0 5px;
 }
-
-.clabel {
-    display: inline-block;
-    float: left;
-    clear: left;
-    width: 100px;
-    text-align: right;
-    font-weight: bold;
-    padding-right: 5px;
-}
-.cinput {
-    display: inline-block;
-    float: left;
-}
-.ia {
-    display: inline-block;
-    float: left;
-}
-#fixed-div {
-    position: fixed;
-    top: 1em;
-    right: 1em;
-}
-.colcontainer {
-    column-count: 2;
-    column-gap: 10px;
-    -moz-column-count: 2;
-    -moz-column-gap: 10px;
-    -webkit-column-count: 2;
-    -webkit-column-gap: 10px;
+label {
+  margin-bottom: 0px;
 }
 .green {
     color: #198b16;
@@ -351,14 +316,9 @@ footer {
 .disabled_action {
     color: lightgrey;
 }
-.message {
-}
 .message_origin {
     background-color: lightgrey;
-    /*display: inline-block;*/
-    /*padding-right: 3px;*/
 }
-/* DataTables 1.10.8 */
 .control_grid {
     width: 80vw;
     height: 90vh;
@@ -370,7 +330,6 @@ footer {
     border-radius: 10px;
     overflow: hidden;
 }
-
 #modal_block .modal-dialog {
     width:95vw;
 }
@@ -427,61 +386,52 @@ input.participants_check {
 .height180 {
     height: 180px;
 }
-/* End of DataTables CSS */
-    .conference_control {
-        min-width: 150px;
-    }    
-    .user_control {
-        min-width: 220px;
-    }
-    .top_bar {
-        min-width: 240px;
-    }
-    .top_bar>li {
-        font-size: 1.6vh;
-        color: #3D3D6A;
+.conference_control {
+    min-width: 150px;
+}    
+.user_control {
+    min-width: 220px;
+}
+.blink {
+-webkit-animation-name: blinker;
+-webkit-animation-duration: 1s;
+-webkit-animation-timing-function: linear;
+-webkit-animation-iteration-count: infinite;
+-moz-animation-name: blinker;
+-moz-animation-duration: 1s;
+-moz-animation-timing-function: linear;
+-moz-animation-iteration-count: infinite;
+animation-name: blinker;
+animation-duration: 1s;
+animation-timing-function: linear;
+animation-iteration-count: infinite;
+}
+@-moz-keyframes blinker {  
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+}
+@-webkit-keyframes blinker {  
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+}
+@keyframes blinker {  
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+}
 
-    }
-    .blink {
-	-webkit-animation-name: blinker;
-	-webkit-animation-duration: 1s;
-	-webkit-animation-timing-function: linear;
-	-webkit-animation-iteration-count: infinite;
-	-moz-animation-name: blinker;
-	-moz-animation-duration: 1s;
-	-moz-animation-timing-function: linear;
-	-moz-animation-iteration-count: infinite;
-	animation-name: blinker;
-	animation-duration: 1s;
-	animation-timing-function: linear;
-	animation-iteration-count: infinite;
-    }
+/* scheduler */
+.jumbotron {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    color: inherit;
+    background-color: transparent;
+}
 
-    @-moz-keyframes blinker {  
-        0% { opacity: 1.0; }
-        50% { opacity: 0.0; }
-        100% { opacity: 1.0; }
-    }
-
-    @-webkit-keyframes blinker {  
-        0% { opacity: 1.0; }
-        50% { opacity: 0.0; }
-        100% { opacity: 1.0; }
-    }
-
-    @keyframes blinker {  
-        0% { opacity: 1.0; }
-        50% { opacity: 0.0; }
-        100% { opacity: 1.0; }
-    }
-    .jumbotron {
-        padding-top: 30px;
-        padding-bottom: 30px;
-        margin-bottom: 30px;
-        color: inherit;
-        background-color: transparent;
-    }
-
+/* Carousel on index */
 .carousel-indicators li {
     background-color: rgba(61,61,106,0.5);
     border: 0px;

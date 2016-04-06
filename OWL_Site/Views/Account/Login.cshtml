@@ -5,7 +5,7 @@
     ViewBag.Title = "Вход";
 }
 
-<div class="row">
+<div class="row row_index">
     <div class="form__container ng-scope">
         <section id="loginForm">
             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-10">
+                    <div class="col-md-12">
                         <input type="submit" value="Выполнить вход" class="form__submit" />
                     </div>
                 </div>
